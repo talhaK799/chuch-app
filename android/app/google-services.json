@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "909594108501",
+    "project_id": "churchhappenings",
+    "storage_bucket": "churchhappenings.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909594108501:android:9896194ecfcf96bcfdeadc",
+        "android_client_info": {
+          "package_name": "com.churchappenings.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "909594108501-bioh8ku1jl0cts7qt4q73hhmiulupoqi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.churchappenings.app",
+            "certificate_hash": "d45aedb5c44f7c10bc2e16681553a16ac616dd66"
+          }
+        },
+        {
+          "client_id": "909594108501-c2jsqb6vi0a299ub5j2emkmrc6jln015.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKQVx7OcSvUD6U9RsN6r_KXl9Um80Baxw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "909594108501-c2jsqb6vi0a299ub5j2emkmrc6jln015.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "909594108501-cldqe565t6dado4te8tsehaimcr9rskj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.churchappenings.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

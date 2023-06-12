@@ -3,6 +3,7 @@ import 'package:churchappenings/pages/departments/departments-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 class DepartmentsPage extends StatelessWidget {
@@ -44,13 +45,36 @@ class DepartmentsPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Your departments',
+                    'My departments',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w300,
                       height: 1.5,
                     ),
                   ),
+                  SizedBox(height: 20),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      itemCount: _.departments.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            ListTile(
+                              title: Text("Name: ${_.departments[index].name}"),
+                              subtitle:
+                                  Html(data: "${_.departments[index].desc}"),
+                              // trailing: TextButton(
+                              //     onPressed: () {
+                              //       _.sendJoinRequest(_.departments[index].id!);
+                              //     },
+                              //     child: Text("Leave",
+                              //         style: TextStyle(color: Colors.red))),
+                            ),
+                            Divider()
+                          ],
+                        );
+                      })
                 ],
               ),
             ),

@@ -20,6 +20,7 @@ class AnnouncementAPI {
         }
       }
     """;
+    
 
     Map<String, dynamic> variables = {
       "id": profileApi.selectedChurchId,

@@ -26,25 +26,26 @@ class ProfileController extends GetxController {
 
     var data = await profileAPI.getProfileData();
     var tempSkills = await profileAPI.getSkills();
+    name = profileAPI.name;
+    email = profileAPI.email;
+    selectedDate = profileAPI.dob;
+    if (data != null) {
+      print(data);
+      selectedSkill = data["occupation"] == null ? "None" : data["occupation"];
+      isNewJobNoti =
+          data["new_job_noti"] == null ? false : data["new_job_noti"];
+      String employmentStatuss = data["emplymentStatus"] == null
+          ? "Unemployed"
+          : data["emplymentStatus"];
+      if (employmentStatuss == "Unemployed") {
+        isUnemployed = 1;
+      } else {
+        isEmployed = 1;
+      }
+      print("isEmployed => $isEmployed");
 
-    print(data);
-    selectedSkill = data["occupation"] == null ? "None" : data["occupation"];
-    isNewJobNoti = data["new_job_noti"] == null ? false : data["new_job_noti"];
-    String employmentStatuss = data["emplymentStatus"] == null
-        ? "Unemployed"
-        : data["emplymentStatus"];
-    if (employmentStatuss == "Unemployed") {
-      isUnemployed = 1;
-    } else {
-      isEmployed = 1;
+      dateController.text = DateFormat.yMMMd().format(selectedDate!).toString();
     }
-    print("isEmployed => $isEmployed");
-    name = data["user"]["name"] != null ? data["user"]["name"] : "Ali Khan";
-    email = data["user"]["email"] != null ? data["user"]["email"] : "None";
-    data["user"]["birthdate"] != null
-        ? selectedDate = DateTime.parse(data["user"]["birthdate"])
-        : print("no data");
-    dateController.text = DateFormat.yMMMd().format(selectedDate!).toString();
 
     for (var i = 0; i < tempSkills.length; i++) {
       skills.add(tempSkills[i]["title"]);

@@ -19,9 +19,9 @@ class MemberOfModel {
   String logo;
 
   factory MemberOfModel.fromJson(Map<String, dynamic> json) => MemberOfModel(
-        id: json["id"],
-        name: json["name"],
-        logo: json["logo"],
+        id: json["id"] != null ? json["id"] : null,
+        name: json["name"] != null ? json["name"] : "",
+        logo: json["logo"] != null ? json["logo"] : "",
       );
 
   Map<String, dynamic> toJson() => {

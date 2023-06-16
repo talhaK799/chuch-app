@@ -1,3 +1,4 @@
+import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/pages/more/more-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
@@ -43,15 +44,24 @@ class MorePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 30),
-                    Column(
-                      children: _.churches.map(
-                        (church) {
-                          bool selected = false;
-                          if (church.id == _.selectedChurch) selected = true;
-                          return buildEnrolledChurches(church, selected);
-                        },
-                      ).toList(),
-                    ),
+                    // Column(
+                    //   children: _.churches.map(
+                    //     (church) {
+                    //       bool selected = false;
+                    //       if (church.id == _.selectedChurch) selected = true;
+                    //       return buildEnrolledChurches(church, selected);
+                    //     },
+                    //   ).toList(),
+                    // ),
+                    _.churches.length > 0
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: 1,
+                            itemBuilder: (context, index) {
+                              return buildEnrolledChurches(
+                                  _.selectedChurchObj!, true);
+                            })
+                        : Container()
                   ],
                 );
               },

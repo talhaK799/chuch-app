@@ -30,12 +30,13 @@ class HasuraService extends GetxController {
       await FirebaseFunctions.instanceFor(region: "us-central1")
           .httpsCallable('getJWT')
           .call();
-
+      print("INITIALIZED");
       final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
       String token = await _firebaseAuth.currentUser!.getIdToken();
-
       final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-      pattern.allMatches(token).forEach((match) => print(match.group(0)));
+      pattern
+          .allMatches(token)
+          .forEach((match) => print("match group => ${match.group(0)}"));
 
       hasuraConnect = HasuraConnect(
         HASURA_READER_ENDPOINT,
@@ -44,6 +45,7 @@ class HasuraService extends GetxController {
           "Authorization": "Bearer " + token,
         },
       );
+      print("hasuraConnect => ${hasuraConnect.url}");
     } on FirebaseFunctionsException catch (e) {
       print("Code :" + e.code);
       // print("Details :" + e.details);
@@ -81,6 +83,7 @@ class HasuraService extends GetxController {
 
   Future hasuraQuery(String query,
       [Map<String, dynamic>? variables, context]) async {
+    print("@hasuraQueryCalled");
     if (context != null) await processIndicator.show(context);
 
     try {
@@ -100,6 +103,7 @@ class HasuraService extends GetxController {
 
   Future hasuraMutation(String query, Map<String, dynamic> variables,
       [context]) async {
+    print("@hasuraMutationCalled");
     if (context != null) await processIndicator.show(context);
 
     try {

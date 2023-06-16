@@ -29,12 +29,11 @@ class DepartmentAPI {
     if (id != null) {
       String query = """
         query MyQuery {
-          department_member(where: {member_id: {_eq: $id}}) {
-            member_id
-            dept_id
+          department_join_req(where: {status: {_eq: "APPROVED"}, member_id: {_eq: $id}}) {
             department {
               name
               desc
+              id
             }
           }
         }
@@ -43,9 +42,9 @@ class DepartmentAPI {
       // Map<String, dynamic> variables = {"uuid": id};
 
       var res = await hasura.hasuraQuery(query);
-      print("**** Response ==== >>> $res");
+      // print("**** Response ==== >>> $res");
 
-      return res["data"]["department_member"];
+      return res["data"]["department_join_req"];
     }
   }
 

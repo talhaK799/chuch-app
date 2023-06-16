@@ -65,108 +65,148 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Date of birth: ",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        _.dateController.text,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Email: ",
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        _.email,
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Skill: ",
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                      Text(
-                        _.selectedSkill,
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Employment Status: ",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        _.isEmployed == true ? "Employed" : "Unemployed",
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "My Churchs: ",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 5),
-                  ListView.builder(
-                    primary: false,
-                    shrinkWrap: true,
-                    itemCount: _.profileAPI.churches.length,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Text(
-                              "${index + 1}) ${_.profileAPI.churches[index].name}",
+                  Container(
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 2.0,
+                              spreadRadius: 3,
+                              color: Colors.grey.withOpacity(0.1),
+                              offset: Offset(0, 0))
+                        ]),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Date of birth: ",
                               style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
                                 fontSize: 17,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
+                            Text(
+                              _.dateController.text,
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Email: ",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              _.email,
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Skill: ",
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w500),
+                            ),
+                            Text(
+                              _.selectedSkill,
+                              style: TextStyle(
+                                  fontSize: 17, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Employment Status: ",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              _.isEmployed == true ? "Employed" : "Unemployed",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
+                  SizedBox(height: 20),
+
+                  ///
+                  /// my churches
+                  ///
+                  Container(
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 2.0,
+                              spreadRadius: 3,
+                              color: Colors.grey.withOpacity(0.1),
+                              offset: Offset(0, 0))
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "My Churchs: ",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        ListView.builder(
+                          primary: false,
+                          shrinkWrap: true,
+                          itemCount: _.profileAPI.churches.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(
+                                  child: Text(
+                                    "${index + 1}) ${_.profileAPI.churches[index].name}",
+                                    style: TextStyle(
+                                      overflow: TextOverflow.ellipsis,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+
                   SizedBox(height: 20),
                   Text(
                     "My Departments: ",

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:churchappenings/api/members.dart';
-import '../../../api/search_facilities.dart';
-import '../../../models/facility.dart';
+import '../../../api/search-church.dart';
+import '../../../models/church.dart';
 import '../../../services/hasura.dart';
 
 class MemberTransferController extends GetxController {
   final HasuraService hasura = HasuraService.to;
-  SearchFacilities serachFacilities = SearchFacilities();
+
+  SearchChurchAPI searchChurchApi = SearchChurchAPI();
   String? selectedCountry;
   List<String> countries = [
     'Andorra',
@@ -24,11 +25,16 @@ class MemberTransferController extends GetxController {
 
   MembersAPI api = MembersAPI();
   var churches = [];
-  List<Facility> facilities = [];
+  List<ChurchModel> churchList = [];
 
   getFacilities() async {
-    await serachFacilities.fetchFacilities(selectedCountry.toString());
+    var res =
+        await searchChurchApi.fetchChurchByCountry(selectedCountry.toString());
+    res.forEach((value) {
+      churchList.add(ChurchModel.fromSearchChurchJson(value));
+    });
 
+    print("Churches length => ${churchList.length}");
     update();
   }
 

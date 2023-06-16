@@ -38,7 +38,7 @@ Widget buildChurchCard(ChurchModel church) {
                   TextStyle(color: Colors.amber, fontWeight: FontWeight.w700),
             ),
             RatingBar.builder(
-              initialRating: church.rating,
+              initialRating: church.rating ?? 0.0,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,

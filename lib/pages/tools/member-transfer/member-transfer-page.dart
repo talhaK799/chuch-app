@@ -43,6 +43,7 @@ class MemberTransferPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
+
                   DropdownButtonFormField<String>(
                     hint: Text('Select a country'),
                     value: _.selectedCountry,
@@ -59,6 +60,19 @@ class MemberTransferPage extends StatelessWidget {
                         child: Text(country),
                       );
                     }).toList(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onChanged: (value) {},
+                    ),
                   ),
                   // Text("aa ${_.facilities.address}"),
                   // TextFormField(

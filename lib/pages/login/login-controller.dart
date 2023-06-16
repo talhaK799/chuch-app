@@ -14,10 +14,12 @@ class LoginController extends GetxController {
   bool get showPassword => _showPassword;
 
   onSignIn() async {
-    print(await auth.signIn(
+    var result = await auth.signIn(
       email: email.value.text,
       password: password.value.text,
-    ));
+    );
+
+    print("SignIN Result => $result");
   }
 
   onResetPassword() async {

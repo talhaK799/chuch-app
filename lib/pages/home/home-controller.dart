@@ -196,10 +196,12 @@ class HomeController extends GetxController {
     //   // print("${await deviceInfo.iosInfo}");
     // });
     for (var i = 0; i < churches.length; i++) {
+      print("logo$i => ${churches[i].logo}");
       if (churches[i].id == profileApi.selectedChurchId) {
         if (churches[i].logo != '') {
-          churchLogo = churches[i].logo;
-          print(churchLogo);
+          churchLogo =
+              "https://d35ottccmnskmu.cloudfront.net/churches/church-58/1661135900048-logo.png"; //churches[i].logo;
+          // print("churchLogo => $churchLogo");
         }
       }
     }

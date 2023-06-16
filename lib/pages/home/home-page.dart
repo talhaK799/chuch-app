@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        width: 50,
+                        width: 20,
                       ),
                       Expanded(
                           child: _.churchLogo != null

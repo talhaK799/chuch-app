@@ -14,7 +14,9 @@ class MoreController extends GetxController {
   final localData = LocalData();
 
   String name = '';
+  String church = "";
   List<MemberOfModel> churches = [];
+  MemberOfModel? selectedChurchObj;
   int selectedChurch = 9999999;
 
   @override
@@ -22,6 +24,12 @@ class MoreController extends GetxController {
     name = profileApi.name;
     churches = profileApi.churches;
     selectedChurch = profileApi.selectedChurchId;
+    for (int i = 0; i < churches.length; i++) {
+      if (selectedChurch == churches[i].id) {
+        selectedChurchObj = churches[i];
+      }
+    }
+
     update();
     super.onInit();
   }

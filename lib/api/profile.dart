@@ -13,16 +13,20 @@ class ProfileAPI {
   int selectedChurchId = 0;
   String name = '';
   String email = '';
+  String selectedChurchName = "";
+  DateTime dob = DateTime.now();
   int? memberId;
   late String uuid;
 
   Future storeProfileInLocal(String uuidarg) async {
+    print("@storeProfileLocally => $uuidarg");
     try {
       String query = """
           query MyQuery(\$uuid: String!) {
             user(where: {uuid: {_eq: \$uuid}}) {
               name
               email
+              birthdate
             }
 
             facility {
@@ -40,14 +44,20 @@ class ProfileAPI {
       uuid = uuidarg;
       Map<String, dynamic> variables = {"uuid": uuid};
       var res = await hasura.hasuraQuery(query, variables);
-
+      // print("res => $res");
       // Set member Id
-      memberId = res["data"]["member"][0]["id"];
+      memberId = res["data"]["member"][0]["id"] != null
+          ? res["data"]["member"][0]["id"]
+          : null;
 
       // Set User name
-      name = res["data"]["user"][0]["name"];
-      email = res["data"]["user"][0]["email"];
-
+      name = res["data"]["user"][0]["name"] != null
+          ? res["data"]["user"][0]["name"]
+          : null;
+      email = res["data"]["user"][0]["email"] != null
+          ? res["data"]["user"][0]["email"]
+          : null;
+      // print(res["data"]["facility"]);
       // Set MemberOfChurches
       churches = memberOfModelFromJson(
         json.encode(res["data"]["facility"]),
@@ -57,10 +67,13 @@ class ProfileAPI {
       int getSelectedChurchId = await localData.getInt('selected_church_id');
       if (getSelectedChurchId != 99999999)
         selectedChurchId = getSelectedChurchId;
-      else if (res["data"]["facility"].length > 0)
+      else if (res["data"]["facility"] !=
+          null) if (res["data"]["facility"].length > 0) {
         selectedChurchId = res["data"]["facility"][0]["id"];
+        selectedChurchName = res["data"]["facility"][0]["name"];
+      }
     } catch (e) {
-      print(e);
+      print("Error => $e");
     }
   }
 
@@ -85,11 +98,6 @@ class ProfileAPI {
           occupation,
           emplymentStatus,
           new_job_noti
-          user {
-            birthdate,
-            name,
-            email
-          }
         }
       }
     """;
@@ -97,9 +105,11 @@ class ProfileAPI {
     Map<String, dynamic> variables = {"uuid": memberId};
 
     var res = await hasura.hasuraQuery(query, variables);
-    print("**** Response ==== >>> ${res["data"]["member"]}");
-
-    return res["data"]["member"][0];
+    print("**** Response ==== >>> $res");
+    if (res == null) {
+      return null;
+    } else
+      return res["data"]["member"][0];
   }
 
   Future saveData(

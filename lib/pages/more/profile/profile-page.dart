@@ -5,6 +5,7 @@ import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -186,18 +187,23 @@ class ProfilePage extends StatelessWidget {
                           shrinkWrap: true,
                           itemCount: _.profileAPI.churches.length,
                           itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            return Column(
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    "${index + 1}) ${_.profileAPI.churches[index].name}",
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.w500,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        "${index + 1}) ${_.profileAPI.churches[index].name}",
+                                        style: TextStyle(
+                                          overflow: TextOverflow.ellipsis,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             );
@@ -208,21 +214,60 @@ class ProfilePage extends StatelessWidget {
                   ),
 
                   SizedBox(height: 20),
-                  Text(
-                    "My Departments: ",
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w500,
+
+                  ///
+                  /// my churches
+                  ///
+                  Container(
+                    padding: EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                              blurRadius: 2.0,
+                              spreadRadius: 3,
+                              color: Colors.grey.withOpacity(0.1),
+                              offset: Offset(0, 0))
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "My Departments: ",
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        ListView.builder(
+                          primary: false,
+                          shrinkWrap: true,
+                          itemCount: _.departments.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                ListTile(
+                                  title: Text(
+                                      "Name: ${_.departments[index].name}"),
+                                  subtitle: Html(
+                                      data: "${_.departments[index].desc}"),
+                                  // trailing: TextButton(
+                                  //     onPressed: () {
+                                  //       _.sendJoinRequest(_.departments[index].id!);
+                                  //     },
+                                  //     child: Text("Leave",
+                                  //         style: TextStyle(color: Colors.red))),
+                                ),
+                                Divider()
+                              ],
+                            );
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  // Text(
-                  //             _.profileAPI.,
-                  //             style: TextStyle(
-                  //               overflow: TextOverflow.ellipsis,
-                  //               fontSize: 17,
-                  //               fontWeight: FontWeight.w500,
-                  //             ),
-                  //           ),
                 ],
               ),
             ),

@@ -50,7 +50,7 @@ class ChurchModel {
         name: json["name"],
         address: json["address"],
         country: json["country"],
-        // createdAt: DateTime.parse(json['created_at']),
+        createdAt: DateTime.parse(json['created_at']),
         description: json["description"],
         id: "",
       );

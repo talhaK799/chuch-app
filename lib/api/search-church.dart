@@ -30,6 +30,7 @@ class SearchChurchAPI {
   query MyQuery(\$country: String!) {
   facility(where: {country: {_eq: \$country}}) {
     id
+    name
     address
     country
     created_at

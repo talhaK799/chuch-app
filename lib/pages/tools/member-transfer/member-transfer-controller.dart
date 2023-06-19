@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:churchappenings/api/members.dart';
@@ -10,6 +12,7 @@ class MemberTransferController extends GetxController {
 
   SearchChurchAPI searchChurchApi = SearchChurchAPI();
   String? selectedCountry;
+  String? search;
   List<String> countries = [
     'Andorra',
     'Austria',
@@ -21,13 +24,17 @@ class MemberTransferController extends GetxController {
     'Ascension Island',
   ];
 
+  bool? serached = false;
+
   TextEditingController nameController = TextEditingController();
 
   MembersAPI api = MembersAPI();
   var churches = [];
   List<ChurchModel> churchList = [];
+  List<ChurchModel> serachList = [];
 
   getFacilities() async {
+    churchList = [];
     var res =
         await searchChurchApi.fetchChurchByCountry(selectedCountry.toString());
     res.forEach((value) {
@@ -35,6 +42,23 @@ class MemberTransferController extends GetxController {
     });
 
     print("Churches length => ${churchList.length}");
+
+    update();
+  }
+
+  filteredChurchList(String search) {
+    if (search.isEmpty) {
+      serachList = [];
+      serached = false;
+    } else {
+      serachList = [];
+      serachList = churchList
+          .where((church) =>
+              church.name.toLowerCase().contains(search.toLowerCase()))
+          .toList();
+      serached = true;
+      log("SEARCH:: $serached");
+    }
     update();
   }
 
@@ -44,6 +68,7 @@ class MemberTransferController extends GetxController {
           snackPosition: SnackPosition.BOTTOM);
     } else {
       churches = await api.getAllChurches(nameController.text);
+
       update();
     }
   }

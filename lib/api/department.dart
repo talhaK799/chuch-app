@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/services/hasura.dart';
 
@@ -19,6 +21,8 @@ class DepartmentAPI {
     """;
 
     var res = await hasura.hasuraQuery(query);
+    log('AAAAAAAAAA::: $id');
+    print("AAA:: $res");
     return res["data"]["department"];
   }
 
@@ -42,7 +46,7 @@ class DepartmentAPI {
       // Map<String, dynamic> variables = {"uuid": id};
 
       var res = await hasura.hasuraQuery(query);
-      // print("**** Response ==== >>> $res");
+      print("**** Response ==== >>> $res");
 
       return res["data"]["department_join_req"];
     }
@@ -61,6 +65,34 @@ class DepartmentAPI {
 
     var res = await hasura.hasuraMutation(mutation, variables);
     print("**** Response ==== >>> $res");
+  }
+
+  Future<dynamic> getPublicDepartment(String deptId) async {
+    String query = """
+query MyQuery {
+  dept_public_posting(where: {sender_dept_id: {_eq: $deptId}}) {
+    id
+    message
+    sender_name
+    bulletin {
+      name
+      image
+      subtitle
+    }
+  }
+}
+""";
+    // Map<String, String> variables = {
+    //   "id": deptId,
+    // };
+    print(query);
+    // print(variables);
+    log("PP: $deptId");
+    var result = await hasura.hasuraQuery(query);
+
+    print("ABB:: $result");
+
+    return result["data"]["dept_public_posting"];
   }
 
   Future getPrivateChatOfDepartment(String deptId) async {}

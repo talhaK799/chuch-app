@@ -16,11 +16,11 @@ class DepartmentController extends GetxController {
   }
 
   getMyDepartments() async {
-    await departmentApi.getDepartmentsYourMemberOff();
-    response = await departmentApi.getAllDepartments();
+    response = await departmentApi.getDepartmentsYourMemberOff();
+    // response = await departmentApi.getAllDepartments();
     print("**** Response ==== >>> $response");
     for (int i = 0; i < response.length; i++) {
-      departments.add(Departments.fromJson(response[i]));
+      departments.add(Departments.fromJson(response[i]["department"]));
     }
     loading = false;
     update();

@@ -1,4 +1,6 @@
+import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/api/profile.dart';
+import 'package:churchappenings/models/department.dart';
 import 'package:churchappenings/utils/date-picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,9 @@ class ProfileController extends GetxController {
   var profileAPI = ProfileAPI.to;
   String selectedSkill = "None";
   String email = "None";
-
+  DepartmentAPI departmentApi = DepartmentAPI();
+  var response;
+  List<Departments> departments = [];
   int isEmployed = 0;
   int isUnemployed = 0;
   bool isNewJobNoti = false;
@@ -26,6 +30,7 @@ class ProfileController extends GetxController {
 
     var data = await profileAPI.getProfileData();
     var tempSkills = await profileAPI.getSkills();
+    await getMyDepartments();
     name = profileAPI.name;
     email = profileAPI.email;
     selectedDate = profileAPI.dob;
@@ -58,6 +63,17 @@ class ProfileController extends GetxController {
     print(employmentStatus);
     profileAPI.saveData(
         selectedDate!, selectedSkill, employmentStatus, isNewJobNoti);
+  }
+
+  getMyDepartments() async {
+    response = await departmentApi.getDepartmentsYourMemberOff();
+    // response = await departmentApi.getAllDepartments();
+    print("**** Response ==== >>> $response");
+    for (int i = 0; i < response.length; i++) {
+      departments.add(Departments.fromJson(response[i]["department"]));
+    }
+    loading = false;
+    update();
   }
 
   void onChangeSelectedSkill(String? value) {

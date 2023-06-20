@@ -27,7 +27,7 @@ class AddDepartmentPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       navigateToWidget(),
-                      IconButton(onPressed: () {}, icon: Icon(Icons.add))
+                      // IconButton(onPressed: () {}, icon: Icon(Icons.add))
                     ],
                   ),
                   SizedBox(height: 10),

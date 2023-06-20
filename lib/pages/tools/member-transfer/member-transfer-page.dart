@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/pages/tools/member-transfer/member-transfer-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
@@ -41,20 +43,145 @@ class MemberTransferPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20),
-                  TextFormField(
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      labelText: 'Seach Church Name',
-                      border: OutlineInputBorder(),
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () {
-                          _.onSubmit();
-                        },
-                      ),
-                    ),
-                    controller: _.nameController,
+
+                  DropdownButtonFormField<String>(
+                    hint: Text('Select a country'),
+                    value: _.selectedCountry,
+                    onChanged: (newValue) {
+                      _.selectedCountry = newValue!;
+                      if (_.selectedCountry != null) {
+                        _.getFacilities();
+                      }
+                      log("Drop Down Value: ${_.selectedCountry}");
+                    },
+                    items: _.countries.map((String country) {
+                      return DropdownMenuItem<String>(
+                        value: country,
+                        child: Text(country),
+                      );
+                    }).toList(),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.search),
+                        hintText: 'Search',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        _.filteredChurchList(value);
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Container(
+                    // width: 200,
+                    // height: 200,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _.serached == false
+                          ? _.churchList.length
+                          : _.serachList.length,
+                      clipBehavior: Clip.none,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(top: 10),
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 5,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Name:',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    child: Text(
+                                      _.serachList.isEmpty
+                                          ? _.churchList[index].name
+                                          : _.serachList[index].name,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Text(
+                                    'Address:',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Flexible(
+                                    child: Text(
+                                      _.serachList.isEmpty
+                                          ? _.churchList[index].address
+                                          : _.serachList[index].address,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Text('created_at:'),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    _.serachList.isEmpty
+                                        ? _.churchList[index].createdAt
+                                            .toString()
+                                        : _.serachList[index].createdAt
+                                            .toString(),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  // Text("aa ${_.facilities.address}"),
+                  // TextFormField(
+                  //   autocorrect: true,
+                  //   decoration: InputDecoration(
+                  //     labelText: 'Seach Church Name',
+                  //     border: OutlineInputBorder(),
+                  //     suffixIcon: IconButton(
+                  //       icon: Icon(Icons.send),
+                  //       onPressed: () {
+                  //         _.onSubmit();
+                  //       },
+                  //     ),
+                  //   ),
+                  //   controller: _.nameController,
+                  // ),
+                  // Text(_.facilities)
                   SizedBox(height: 20),
                   Column(
                     children: _.churches.map<Widget>((item) {

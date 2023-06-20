@@ -6,123 +6,113 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/circular_progress_indicator_widget.dart';
+
 class LoginPage extends StatelessWidget {
   final loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: transparentAppbar(),
-      body: GetBuilder<LoginController>(builder: (controller) { return SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              navigateToWidget(),
-              SizedBox(height: 20),
-              Image.asset(
-                'assets/logo.png',
-                width: 200,
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                'Welcome back,',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w300,
-                  height: 1.5,
-                ),
-              ),
-              Text(
-                'Sign In',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w700,
-                  height: 1.5,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
-              TextFormField(
-                controller: loginController.email,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  prefixIcon: Icon(
-                    Icons.email,
+        appBar: transparentAppbar(),
+        body: GetBuilder<LoginController>(builder: (controller) {
+          return SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  navigateToWidget(),
+                  SizedBox(height: 20),
+                  Image.asset(
+                    'assets/logo.png',
+                    width: 200,
                   ),
-                ),
-                keyboardType: TextInputType.emailAddress,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              !loginController.forgotPassword ? TextFormField(
-                controller: loginController.password,
-                decoration: InputDecoration(
-                    hintText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        controller.showPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                  SizedBox(height: 50),
+                  Text(
+                    'Welcome back,',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                      height: 1.5,
+                    ),
+                  ),
+                  Text(
+                    'Sign In',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
+                      height: 1.5,
+                    ),
+                  ),
+                  SizedBox(height: 50),
+                  TextFormField(
+                    controller: controller.email,
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                      prefixIcon: Icon(Icons.email),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                  ),
+                  SizedBox(height: 20),
+                  !controller.forgotPassword
+                      ? TextFormField(
+                          controller: controller.password,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            prefixIcon: Icon(Icons.lock),
+                            suffixIcon: IconButton(
+                              icon: Icon(controller.showPassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              onPressed: controller.toggleVisibilityofPassword,
+                            ),
+                          ),
+                          obscureText: !controller.showPassword,
+                        )
+                      : Container(),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: controller.toggleForgotPassword,
+                    child: Text(
+                      controller.forgotPassword ? 'Cancel' : 'Forgot Password?',
+                      style: TextStyle(
+                        color: redColor,
                       ),
-                      onPressed: () {
-                        controller.toggleVisibilityofPassword();
-                      },
-                    )),
-                obscureText: !controller.showPassword,
-              ) : Container(),
-              SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  loginController.toggleForgotPassword();
-                },
-                child: Text(
-                  loginController.forgotPassword ? 'Cancel' : 'Forgot Password?',
-                  style: TextStyle(
-                    color: redColor,
+                    ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              buildCTABtn(
-                redColor,
-                loginController.forgotPassword ? 'Send Reset Link' : 'Sign In',
-                () => loginController.forgotPassword ? loginController.onResetPassword() : loginController.onSignIn(),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Center(child: Text('or')),
-              SizedBox(
-                height: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  loginController.navigateToRegister();
-                },
-                child: Center(
-                  child: Text(
-                    "Don't have an account? Sign Up",
+                  SizedBox(height: 20),
+                  Obx(() {
+                    return Container(
+                      child: controller.isLoading.value
+                          ? CircularProgressIndicatorWidget()
+                          : buildCTABtn(
+                              redColor,
+                              controller.forgotPassword
+                                  ? 'Send Reset Link'
+                                  : 'Sign In',
+                              () => controller.forgotPassword
+                                  ? controller.onResetPassword()
+                                  : controller.onSignIn(),
+                            ),
+                    );
+                  }),
+                  SizedBox(height: 30),
+                  Center(child: Text('or')),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: controller.navigateToRegister,
+                    child: Center(
+                      child: Text(
+                        "Don't have an account? Sign Up",
+                      ),
+                    ),
                   ),
-                ),
+                  SizedBox(height: 50),
+                ],
               ),
-              SizedBox(
-                height: 50,
-              ),
-            ],
-          ),
-        ),
-      );} ),
-    );
+            ),
+          );
+        }));
   }
 }
 

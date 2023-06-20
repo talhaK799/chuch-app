@@ -5,21 +5,30 @@ List<ChurchModel> churchFromJson(String str) => List<ChurchModel>.from(
 
 class ChurchModel {
   String id;
+
   String name;
   String address;
-  double rating;
-  int totalUserRatings;
-  String type;
-  String imageRef;
+  double? rating;
+  int? totalUserRatings;
+  String? type;
+  String? imageRef;
+  String? country;
+  DateTime? createdAt;
+  String? description;
+  int? churchId;
 
   ChurchModel({
     required this.id,
     required this.name,
     required this.address,
-    required this.rating,
-    required this.totalUserRatings,
-    required this.type,
-    required this.imageRef,
+    this.rating,
+    this.totalUserRatings,
+    this.type,
+    this.imageRef,
+    this.country,
+    this.createdAt,
+    this.description,
+    this.churchId,
   });
 
   factory ChurchModel.fromJson(Map<String, dynamic> json) => ChurchModel(
@@ -30,6 +39,20 @@ class ChurchModel {
         totalUserRatings: json["totalUserRatings"],
         type: json["type"],
         imageRef: json["imageRef"],
+        country: json["country"],
+        // createdAt: DateTime.parse(json['created_at']),
+        description: json["description"],
+      );
+
+  factory ChurchModel.fromSearchChurchJson(Map<String, dynamic> json) =>
+      ChurchModel(
+        churchId: json["id"],
+        name: json["name"],
+        address: json["address"],
+        country: json["country"],
+        createdAt: DateTime.parse(json['created_at']),
+        description: json["description"],
+        id: "",
       );
 
   Map<String, dynamic> toJson() => {

@@ -12,12 +12,18 @@ class LoginController extends GetxController {
   TextEditingController get email => _email;
   TextEditingController get password => _password;
   bool get showPassword => _showPassword;
+  RxBool isLoading = false.obs;
 
   onSignIn() async {
+    isLoading.value = true;
+
     var result = await auth.signIn(
       email: email.value.text,
       password: password.value.text,
     );
+    await Future.delayed(Duration(milliseconds: 500));
+
+    isLoading.value = false;
 
     print("SignIN Result => $result");
   }

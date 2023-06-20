@@ -2,11 +2,9 @@ import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/models/member-of.dart';
 import 'package:flutter/material.dart';
 
-Widget buildEnrolledChurches(MemberOfModel church, bool selected) {
+Widget buildEnrolledChurches(MemberOfModel church, bool selected, onTap) {
   return GestureDetector(
-    onTap: () {
-      print(church.id);
-    },
+    onTap: onTap,
     child: Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),

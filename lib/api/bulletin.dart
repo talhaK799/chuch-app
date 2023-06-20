@@ -23,9 +23,7 @@ class BulletinAPI {
       }
     """;
 
-    Map<String, dynamic> variables = {
-      "facility": churchid,
-    };
+    Map<String, dynamic> variables = {"facility": churchid};
 
     var res = await hasura.hasuraQuery(query, variables);
 

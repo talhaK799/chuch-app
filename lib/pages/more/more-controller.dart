@@ -43,6 +43,13 @@ class MoreController extends GetxController {
     await auth.signOut();
   }
 
+  updateSelectedChurch(int churchId) {
+    print(churchId);
+    localData.setInt("selected_church_id", churchId);
+    selectedChurch = churchId;
+    update();
+  }
+
   List<CMenuItem> moreMenuItems = [
     CMenuItem(
       title: 'Profile',

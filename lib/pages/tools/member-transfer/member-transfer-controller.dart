@@ -24,7 +24,7 @@ class MemberTransferController extends GetxController {
     'Ascension Island',
   ];
 
-  bool? serached = false;
+  bool serached = false;
 
   TextEditingController nameController = TextEditingController();
 

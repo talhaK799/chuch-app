@@ -75,6 +75,7 @@ query MyQuery {
     message
     sender_name
     bulletin {
+      id
       name
       image
       subtitle

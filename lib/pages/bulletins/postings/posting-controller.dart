@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/bulletin.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class PostingController extends GetxController {
   @override
   void onInit() async {
     bulletinId = Get.arguments['bulletinId'];
+    log("bulletinId $bulletinId");
     postings = await api.getPublicPostingBulletinById(bulletinId);
     print(postings);
     departments = await api.getEligiblePublicDepartment();

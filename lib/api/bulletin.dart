@@ -27,6 +27,8 @@ class BulletinAPI {
 
     var res = await hasura.hasuraQuery(query, variables);
 
+    print("By churchId: $res");
+
     return res["data"]["bulletin"];
   }
 
@@ -133,6 +135,8 @@ class BulletinAPI {
 
     var res = await hasura.hasuraQuery(query, variables);
 
+    print("abid2");
+    print("check: $res");
     return res["data"]["member_dept_permission"];
   }
 
@@ -157,7 +161,7 @@ class BulletinAPI {
     };
 
     var res = await hasura.hasuraQuery(query, variables);
-
+    print("abid1");
     return res["data"]["bulletin"][0]["dept_public_hostings"];
   }
 

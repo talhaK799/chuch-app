@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../widgets/navigate-back-widget.dart';
 import '../../widgets/transparentAppbar.dart';
+import '../bulletins/postings/postings-page.dart';
 import 'departments-controller.dart';
 
 class PublicPosting extends StatelessWidget {
@@ -68,7 +71,15 @@ class PublicPosting extends StatelessWidget {
                             ),
                             child: GestureDetector(
                               onTap: () {
-                                // Get.to(page);
+                                // ! will start from here
+                                log("check id: ${_.publicPosting[index].id}");
+                                Get.to(
+                                  PostingsPage(),
+                                  arguments: {
+                                    'bulletinId':
+                                        _.publicPosting[index].bulletin.id,
+                                  },
+                                );
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

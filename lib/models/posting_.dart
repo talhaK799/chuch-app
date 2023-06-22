@@ -21,14 +21,20 @@ class DeptPublicPosting {
 }
 
 class Bulletin {
+  String id;
   String name;
   String image;
   String subtitle;
 
-  Bulletin({required this.name, required this.image, required this.subtitle});
+  Bulletin(
+      {required this.id,
+      required this.name,
+      required this.image,
+      required this.subtitle});
 
   factory Bulletin.fromJson(Map<String, dynamic> json) {
     return Bulletin(
+      id: json['id'],
       name: json['name'],
       image: json['image'],
       subtitle: json['subtitle'],

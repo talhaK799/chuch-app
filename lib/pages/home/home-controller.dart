@@ -1,10 +1,11 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/blog.dart';
 import 'package:churchappenings/api/bulletin.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/top-carousel-menu.dart';
 import 'package:churchappenings/pages/bulletins/single-bulletin/single-bulletin-page.dart';
 import 'package:churchappenings/routes.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:churchappenings/api/poll.dart';
@@ -212,6 +213,7 @@ class HomeController extends GetxController {
     update();
 
     await fetchBulletins();
+    log("check state");
     update();
 
     categories = await blogApi.getBlogCategories();

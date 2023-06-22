@@ -6,6 +6,8 @@ import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../models/church.dart';
+
 class MemberTransferPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -77,95 +79,9 @@ class MemberTransferPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 5),
-                  Container(
-                    // width: 200,
-                    // height: 200,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: _.serached == false
-                          ? _.churchList.length
-                          : _.serachList.length,
-                      clipBehavior: Clip.none,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(top: 10),
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Name:',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  SizedBox(width: 10),
-                                  Flexible(
-                                    child: Text(
-                                      _.serachList.isEmpty
-                                          ? _.churchList[index].name
-                                          : _.serachList[index].name,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Address:',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Flexible(
-                                    child: Text(
-                                      _.serachList.isEmpty
-                                          ? _.churchList[index].address
-                                          : _.serachList[index].address,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 5),
-                              Row(
-                                children: [
-                                  Text('created_at:'),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    _.serachList.isEmpty
-                                        ? _.churchList[index].createdAt
-                                            .toString()
-                                        : _.serachList[index].createdAt
-                                            .toString(),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  _.serached == false
+                      ? serachWidget(_, churchList: _.churchList)
+                      : serachWidget(_, churchList: _.serachList),
                   // Text("aa ${_.facilities.address}"),
                   // TextFormField(
                   //   autocorrect: true,
@@ -199,6 +115,89 @@ class MemberTransferPage extends StatelessWidget {
                   )
                 ],
               ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Container serachWidget(MemberTransferController _,
+      {List<ChurchModel>? churchList}) {
+    return Container(
+      // width: 200,
+      // height: 200,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: churchList!.length,
+        clipBehavior: Clip.none,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      'Name:',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    SizedBox(width: 10),
+                    Flexible(
+                      child: Text(
+                        churchList[index].name,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Text(
+                      'Address:',
+                      style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Flexible(
+                      child: Text(
+                        churchList[index].address,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5),
+                Row(
+                  children: [
+                    Text('created_at:'),
+                    SizedBox(width: 10),
+                    Text(
+                      churchList[index].createdAt.toString(),
+                    ),
+                  ],
+                ),
+              ],
             ),
           );
         },

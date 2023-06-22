@@ -23,7 +23,9 @@ class DepartmentController extends GetxController {
     super.onInit();
     getMyDepartments();
     // String deptId = Get.arguments['deptId'];
-    getPublicDepartment(Get.arguments['deptId']);
+    if (Get.arguments != null && Get.arguments['deptId'] != null) {
+      getPublicDepartment(Get.arguments['deptId']);
+    }
   }
 
   getMyDepartments() async {
@@ -32,12 +34,16 @@ class DepartmentController extends GetxController {
       departmentsMember.add(Departments.fromJson(value['department']));
     });
     update();
-    response = await departmentApi.getAllDepartments();
 
-    print("**** Response ==== >>> $response");
-    for (int i = 0; i < response.length; i++) {
-      departments.add(Departments.fromJson(response[i]["department"]));
-    }
+    var result = response = await departmentApi.getAllDepartments();
+
+    // print("**** Response ==== >>> $response");
+    // res.forEach((value) {
+    //   departments.add(Departments.fromJson(response["department"]));
+    // });
+    // for (int i = 0; i < response.length; i++) {
+    //   departments.add(Departments.fromJson(response[i]["department"]));
+    // }
     loading = false;
     update();
   }

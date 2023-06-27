@@ -50,7 +50,9 @@ class DetailsDepartment extends StatelessWidget {
             SizedBox(height: 5),
             GestureDetector(
               onTap: () {
-                Get.to(PrivatePosting());
+                Get.to(
+                  PrivatePosting(deptId: deptId),
+                );
               },
               child: buildBottomActionButton("Private Posting"),
             ),

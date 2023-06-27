@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
-import 'add_department_page.dart';
 import 'details_dapartment_page.dart';
 
 class DepartmentsPage extends StatelessWidget {
@@ -30,12 +29,12 @@ class DepartmentsPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       navigateToWidget(),
-                      GestureDetector(
-                        onTap: () {
-                          Get.to(AddDepartmentPage());
-                        },
-                        child: Text('Add New'),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Get.to(AddDepartmentPage());
+                      //   },
+                      //   child: Text('Add New'),
+                      // ),
                       // IconButton(
                       //     onPressed: () {
                       //       Get.to(AddDepartmentPage());

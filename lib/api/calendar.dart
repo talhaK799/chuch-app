@@ -104,6 +104,13 @@ class CalendarAPI {
     var res = await hasura.hasuraQuery(query, variables);
     return res["data"]["happening"];
   }
+
+
+
+
+
+
+  
 }
 
 dynamic myEncode(dynamic item) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:churchappenings/api/blog.dart';
 import 'package:churchappenings/api/bulletin.dart';
 import 'package:churchappenings/api/profile.dart';
@@ -16,11 +14,13 @@ class HomeController extends GetxController {
   PollAPI pollapi = PollAPI();
   BlogAPI blogApi = BlogAPI();
   String? churchLogo;
+  Rx<bool> isLoading = false.obs;
 
   int currentCarouselSelected = 1;
 
   String name = "";
   var bulletins = [];
+
   var categories = [];
 
   List<TopCarouselMenu> topCarouselMenu = [
@@ -213,7 +213,6 @@ class HomeController extends GetxController {
     update();
 
     await fetchBulletins();
-    log("check state");
     update();
 
     categories = await blogApi.getBlogCategories();
@@ -229,9 +228,27 @@ class HomeController extends GetxController {
     Get.toNamed(Routes.polls);
   }
 
+  // Future fetchBulletins() async {
+  //   bulletins = await bulletinApi.getBulletins(profileApi.selectedChurchId);
+  //   print(bulletins);
+  // }
+
   Future fetchBulletins() async {
-    bulletins = await bulletinApi.getBulletins(profileApi.selectedChurchId);
-    print(bulletins);
+    try {
+      isLoading.value = true;
+
+      DateTime currentDate = DateTime.now();
+      String formattedDate =
+          "${currentDate.year}-${currentDate.month}-${currentDate.day}";
+      print("CHECKKKK ::: $formattedDate");
+      bulletins = await bulletinApi.fetchUpComingBulletins(formattedDate);
+      isLoading.value = false;
+
+      // bulletins = await bulletinApi.getBulletins(profileApi.selectedChurchId);
+      print(bulletins);
+    } catch (e) {
+      isLoading.value = false;
+    }
   }
 
   void setCurrentActive(int i) {

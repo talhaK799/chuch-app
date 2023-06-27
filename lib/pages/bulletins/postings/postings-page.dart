@@ -41,6 +41,7 @@ class PostingsPage extends StatelessWidget {
                       height: 1.5,
                     ),
                   ),
+                  // Text(_);
                   SizedBox(height: 30),
                   Column(
                     children: _.departments.map<Widget>((dept) {
@@ -118,25 +119,33 @@ class PostingsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                  width: double.infinity,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
-                        onPressed: () {
-                          _.handleSubmit();
-                        },
-                      ),
-                      hintText: 'Type here ...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                    ),
-                    controller: _.messageController,
-                  ),
-                ),
+                _.permission.firstWhere(
+                            (permission) =>
+                                permission['permission_id'] ==
+                                'DEPARTMENT_PUBLIC_POSTING',
+                            orElse: () => {})['is_modify'] ==
+                        true
+                    ? Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                        width: double.infinity,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon: Icon(Icons.send),
+                              onPressed: () {
+                                _.handleSubmit();
+                              },
+                            ),
+                            hintText: 'Type here ...',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          controller: _.messageController,
+                        ),
+                      )
+                    : SizedBox(),
               ],
             ),
           );

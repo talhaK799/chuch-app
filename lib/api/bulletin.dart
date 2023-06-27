@@ -11,8 +11,42 @@ class BulletinAPI {
   var uuid = Uuid();
   Logger log = Logger();
 
+  Future<dynamic> fetchUpComingBulletins(String currentDate) async {
+    print("AAA99:: $currentDate");
+    String query = """
+query MyQuery {
+  bulletin(where: {facility_id: {_eq: 58}, is_draft: {_eq: false}, created_at: {_gte: "$currentDate"}}, order_by: {created_at: asc}) {
+    name
+    image
+    id
+    created_at
+  }
+}
+""";
+
+    var res = await hasura.hasuraQuery(query);
+    print('bulletins by date: $res');
+    return res["data"]["bulletin"];
+  }
+
+  Future<dynamic> fetchBulletinsByDate(String date) async {
+    String query = """
+query MyQuery {
+  bulletin(where: {facility_id: {_eq: 58}, is_draft: {_eq: false}, created_at: {_eq: "$date"}}) {
+    name
+    image
+    id
+  }
+}
+""";
+
+    var res = await hasura.hasuraQuery(query);
+    print('bulletins by date: $res');
+    return res["data"]["bulletin"];
+  }
+
   Future<dynamic> getBulletins(int churchid) async {
-    log.d(churchid);
+    log.d("aaaaaa222: $churchid");
     String query = """
       query MyQuery(\$facility: Int!) {
         bulletin(where: {facility_id: {_eq: \$facility}, is_draft: {_eq: false}}) {
@@ -53,6 +87,7 @@ class BulletinAPI {
   }
 
   Future<dynamic> getBulletinById(String id) async {
+    log.d("checkkkkkkkkkk=====>>>>> $id");
     String query = """
       query MyQuery(\$id: String!) {
         bulletin(where: {id: {_eq: \$id}}) {
@@ -88,7 +123,6 @@ class BulletinAPI {
     };
 
     var res = await hasura.hasuraQuery(query, variables);
-
     return res["data"]["bulletin"][0];
   }
 
@@ -141,6 +175,7 @@ class BulletinAPI {
   }
 
   Future<dynamic> getPublicPostingBulletinById(String id) async {
+    print("a2222:: $id");
     String query = """
       query MyQuery(\$id: String!) {
         bulletin(where: {id: {_eq: \$id}}) {

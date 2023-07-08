@@ -37,10 +37,21 @@ class EditProfileController extends GetxController {
       isEmployed = 1;
     }
     print("isEmployed => $isEmployed");
-    name = data["user"]["name"] != null ? data["user"]["name"] : "Ali Khan";
-    data["user"]["birthdate"] != null
-        ? selectedDate = DateTime.parse(data["user"]["birthdate"])
-        : print("no data");
+    name = data != null && data["user"] != null && data["user"]["name"] != null
+        ? data["user"]["name"]
+        : "Ali Khan";
+    if (data != null &&
+        data["user"] != null &&
+        data["user"]["birthdate"] != null) {
+      selectedDate = DateTime.parse(data["user"]["birthdate"]);
+    } else {
+      print("no data");
+    }
+
+    // name = data["user"]["name"] != null ? data["user"]["name"] : "Ali Khan";
+    // data["user"]["birthdate"] != null
+    //     ? selectedDate = DateTime.parse(data["user"]["birthdate"])
+    //     : print("no data");
     dateController.text = DateFormat.yMMMd().format(selectedDate!).toString();
 
     for (var i = 0; i < tempSkills.length; i++) {

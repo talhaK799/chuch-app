@@ -1,3 +1,4 @@
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -9,10 +10,9 @@ import '../../widgets/bottom-action-button.dart';
 import '../../widgets/navigate-back-widget.dart';
 import '../../widgets/transparentAppbar.dart';
 import 'departments-controller.dart';
-import 'dumydata_screen.dart';
 
 class CreatePrivatePost extends StatelessWidget {
-  const CreatePrivatePost({super.key});
+  // const CreatePrivatePost({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -112,17 +112,17 @@ class CreatePrivatePost extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          _.addDummyData();
-                          Get.to(
-                            DumyScreen(
-                              title: _.titleController.text,
-                              des: _.descController.text,
-                              file: _.imagePath.toString(),
-                            ),
-                            arguments: {'deptId': "27"},
-                          );
+                          // _.addDummyData();
+                          // Get.to(
+                          //   DumyScreen(
+                          //     title: _.titleController.text,
+                          //     des: _.descController.text,
+                          //     file: _.imagePath.toString(),
+                          //   ),
+                          //   arguments: {'deptId': "27"},
+                          // );
                           log("DData:: ${_.dumyData}");
-                          // _.savePrivatePost();
+                          _.savePrivatePost();
                           // Get.to(
                           //   ChatScreen(),
                           // );

@@ -6,11 +6,16 @@ import 'package:churchappenings/models/posting_.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../api/chat.dart';
 import '../../api/private_posting.dart';
+import '../../api/profile.dart';
 import '../../api/upload-image.dart';
+import '../../models/chat.dart';
 import '../../models/private_posting.dart';
 
 class DepartmentController extends GetxController {
+  ProfileAPI profileApi = ProfileAPI.to;
+
   PrivatePostingApi privatePostingApi = PrivatePostingApi();
   PrivatePostingModel privatePostingModel = PrivatePostingModel();
   bool loading = true;
@@ -21,27 +26,113 @@ class DepartmentController extends GetxController {
   // List<dynamic> deptPublicPosting = [];
   List<DeptPublicPosting> publicPosting = [];
   List dumyData = [];
-
   String? imagePath;
+  List<String> chatMessages = [];
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _descController = TextEditingController();
 
   TextEditingController get titleController => _titleController;
   TextEditingController get descController => _descController;
+  TextEditingController messageController = TextEditingController();
 
-  // DepartmentController(String id) {
-  //   getPublicDepartment(id);
-  // }
+  var getPrivatePosting;
+
+  ChatDao chatDao = ChatDao();
+  ChatModel chatModel = ChatModel();
+  Stream<dynamic>? messagesStream;
+  final chatList = <ChatModel>[].obs;
+
+  DepartmentController([String? screenName, bool? isSreeen]) {
+    switch (screenName) {
+      case "PrivatePostingScreen":
+        {
+          getPrivatePost();
+        }
+        break;
+
+      case "ChatScreen":
+        {
+          getMessage(Get.arguments['deptId']);
+        }
+        break;
+      case "AddDepartmentPage":
+        {
+          getAllDepartments();
+        }
+        break;
+    }
+
+    // bool? isScreenShow = isSreeen;
+
+    // if (isSreeen == null) {
+    //   isScreenShow = false;
+    // }
+
+    // if (isScreenShow == true) getPrivatePost();
+
+    // if (isScreenShow == true) getMessage(Get.arguments['deptId']);
+
+    // getAllDepartments();
+    // getPublicDepartment(id);
+  }
 
   @override
   onInit() async {
     super.onInit();
     getMyDepartments();
+    // getMessage();
     // String deptId = Get.arguments['deptId'];
     if (Get.arguments != null && Get.arguments['deptId'] != null) {
       getPublicDepartment(Get.arguments['deptId']);
     }
+  }
+
+  String getCurrentUserId() {
+    String senderId = profileApi.memberId!.toString();
+    return senderId;
+  }
+
+  void sendMessage(String privatePostId) {
+    String senderId = profileApi.memberId!.toString();
+    log("user=> $senderId");
+    chatModel.date = DateTime.now();
+
+    chatModel.id = senderId;
+    chatDao.saveMessage(chatModel, senderId, privatePostId);
+    update();
+  }
+
+  Stream<List<ChatModel>> getMessage(String privatePostId) {
+    log("test2 run");
+    // Remove the chatList initialization here
+
+    // Replace this with your actual implementation to get the stream from chatDao
+    Stream stream = chatDao.listenToMessages(privatePostId);
+    stream.listen((event) {
+      // Remove the chatList = [] line
+      print("check1123: ${event.snapshot.value.toString()}");
+      ChatModel message =
+          ChatModel.fromJson(Map<String, dynamic>.from(event.snapshot.value));
+      // Use the chatList.insert(0, message) method to add the new message at the beginning of the list
+      chatList.add(message);
+
+      message = ChatModel();
+      update();
+    });
+
+    // Store the stream in messagesStream
+    messagesStream = stream;
+
+    // Return the chatList as a stream using the Rx method .stream
+    return chatList.stream;
+  }
+
+  Future<void> getPrivatePost() async {
+    String deptId = Get.arguments['deptId'];
+    getPrivatePosting = await privatePostingApi.fetchPrivatePost(deptId);
+    update();
+    log("a11: ${getPrivatePosting[0]["id"]}");
   }
 
   getMyDepartments() async {
@@ -49,10 +140,20 @@ class DepartmentController extends GetxController {
     res.forEach((value) {
       departmentsMember.add(Departments.fromJson(value['department']));
     });
+    // update();
+
+    // }
+    loading = false;
     update();
+  }
 
+  getAllDepartments() async {
     var result = response = await departmentApi.getAllDepartments();
-
+    result.forEach((value) {
+      departments.add(Departments.fromJson(value));
+    });
+    update();
+    log("test 88: ${departments[0].name}");
     // print("**** Response ==== >>> $response");
     // res.forEach((value) {
     //   departments.add(Departments.fromJson(response["department"]));
@@ -60,8 +161,6 @@ class DepartmentController extends GetxController {
     // for (int i = 0; i < response.length; i++) {
     //   departments.add(Departments.fromJson(response[i]["department"]));
     // }
-    loading = false;
-    update();
   }
 
   getPublicDepartment(String deptId) async {

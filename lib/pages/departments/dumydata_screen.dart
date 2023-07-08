@@ -9,7 +9,7 @@ import 'departments-controller.dart';
 
 class DumyScreen extends StatelessWidget {
   const DumyScreen(
-      {super.key, required this.title, required this.des, required this.file});
+      {required this.title, required this.des, required this.file});
   final String title, des;
   final String file;
   @override

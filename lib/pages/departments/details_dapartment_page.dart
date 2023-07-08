@@ -9,7 +9,7 @@ import '../../widgets/transparentAppbar.dart';
 
 class DetailsDepartment extends StatelessWidget {
   const DetailsDepartment(
-      {super.key, required this.name, required this.deptId});
+      { required this.name, required this.deptId});
   final String name;
   final String deptId;
 
@@ -52,6 +52,7 @@ class DetailsDepartment extends StatelessWidget {
               onTap: () {
                 Get.to(
                   PrivatePosting(deptId: deptId),
+                  arguments: {'deptId': deptId},
                 );
               },
               child: buildBottomActionButton("Private Posting"),

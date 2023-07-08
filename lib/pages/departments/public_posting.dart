@@ -9,7 +9,7 @@ import '../bulletins/postings/postings-page.dart';
 import 'departments-controller.dart';
 
 class PublicPosting extends StatelessWidget {
-  const PublicPosting({super.key, required this.deptId});
+  const PublicPosting({ required this.deptId});
   final String deptId;
 
   @override

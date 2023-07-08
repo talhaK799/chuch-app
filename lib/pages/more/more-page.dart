@@ -1,4 +1,3 @@
-import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/pages/more/more-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';

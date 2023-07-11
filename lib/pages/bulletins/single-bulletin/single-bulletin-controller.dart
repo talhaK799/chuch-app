@@ -10,7 +10,7 @@ class SingleBulletinController extends GetxController {
   @override
   void onInit() async {
     bulletinId = Get.arguments['bulletinId'];
-    bulletin = await api.getBulletinById("bulletinId");
+    bulletin = await api.getBulletinById(bulletinId);
     print(bulletin["dept_public_hostings"]);
     loading = false;
     update();

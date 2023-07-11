@@ -1,8 +1,6 @@
 import 'package:churchappenings/constants/red-material-color.dart';
-import 'package:churchappenings/pages/bulletins/create/bulletin-created-by-me-page.dart';
-
-import 'postings/postings-page.dart';
-import 'single-bulletin/single-bulletin-page.dart';
+import 'package:churchappenings/pages/bulletins/single-bulletin/single-bulletin-page.dart';
+import 'package:intl/intl.dart';
 
 import 'bulletins-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
@@ -37,18 +35,19 @@ class BulletinsPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             navigateToWidget(),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(BulletinCreatedByMePage());
-                              },
-                              child: Text(
-                                'Create',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                  color: redColor,
-                                ),
-                              ),
-                            ),
+                            SizedBox(),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Get.to(BulletinCreatedByMePage());
+                            //   },
+                            //   child: Text(
+                            //     'Create',
+                            //     style: TextStyle(
+                            //       fontWeight: FontWeight.w700,
+                            //       color: redColor,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(height: 10),
@@ -68,39 +67,114 @@ class BulletinsPage extends StatelessWidget {
                             height: 1.5,
                           ),
                         ),
-                        SizedBox(height: 30),
-                        Column(
-                          children: _.bulletins.map<Widget>((bulletin) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 20, top: 30),
-                                  child: Text(
-                                    bulletin['name'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: redColor,
-                                      fontSize: 17,
+                        SizedBox(height: 15),
+                        GestureDetector(
+                          onTap: _.showDatePickerDialog,
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: Obx(
+                              () => Text(
+                                _.selectedDate.value != null
+                                    ? DateFormat('yyyy-MM-dd')
+                                        .format(_.selectedDate.value!)
+                                    : 'Select a date',
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _.bulletins.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                // height: 150,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 10),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 2,
+                                      blurRadius: 5,
+                                      offset: Offset(0, 3),
                                     ),
+                                  ],
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(
+                                      SingleBulletinPage(),
+                                      arguments: {
+                                        'bulletinId': _.bulletins[index]["id"]
+                                      },
+                                    );
+                                  },
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.network(
+                                        _.bulletins[index]['image'],
+                                        height: 150,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                          'Name: ${_.bulletins[index]['name']}'),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                buildBoardTile('View', () {
-                                  Get.to(
-                                    SingleBulletinPage(),
-                                    arguments: {'bulletinId': bulletin["id"]},
-                                  );
-                                }),
-                                buildBoardTile('Public Postings', () {
-                                  Get.to(
-                                    PostingsPage(),
-                                    arguments: {'bulletinId': bulletin["id"]},
-                                  );
-                                }),
-                              ],
-                            );
-                          }).toList(),
-                        ),
+                              );
+                            }),
+                        // SizedBox(height: 20),
+                        // Column(
+                        //   children: _.bulletins.map<Widget>((bulletin) {
+                        //     return Column(
+                        //       crossAxisAlignment: CrossAxisAlignment.start,
+                        //       children: [
+                        //         Container(
+                        //           margin: EdgeInsets.only(bottom: 20, top: 30),
+                        //           child: Text(
+                        //             bulletin['name'],
+                        //             style: TextStyle(
+                        //               fontWeight: FontWeight.w700,
+                        //               color: redColor,
+                        //               fontSize: 17,
+                        //             ),
+                        //           ),
+                        //         ),
+                        //         buildBoardTile('View', () {
+                        //           Get.to(
+                        //             SingleBulletinPage(),
+                        //             arguments: {'bulletinId': bulletin["id"]},
+                        //           );
+                        //         }),
+                        //         buildBoardTile('Public Postings', () {
+                        //           Get.to(
+                        //             PostingsPage(),
+                        //             arguments: {'bulletinId': bulletin["id"]},
+                        //           );
+                        //         }),
+                        //       ],
+                        //     );
+                        //   }).toList(),
+                        // ),
                       ],
                     ),
                   )

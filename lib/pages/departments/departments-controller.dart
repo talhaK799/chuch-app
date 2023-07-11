@@ -3,9 +3,16 @@ import 'dart:developer';
 import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/models/department.dart';
 import 'package:churchappenings/models/posting_.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../api/private_posting.dart';
+import '../../api/upload-image.dart';
+import '../../models/private_posting.dart';
+
 class DepartmentController extends GetxController {
+  PrivatePostingApi privatePostingApi = PrivatePostingApi();
+  PrivatePostingModel privatePostingModel = PrivatePostingModel();
   bool loading = true;
   DepartmentAPI departmentApi = DepartmentAPI();
   var response;
@@ -13,6 +20,15 @@ class DepartmentController extends GetxController {
   List departmentsMember = [];
   // List<dynamic> deptPublicPosting = [];
   List<DeptPublicPosting> publicPosting = [];
+  List dumyData = [];
+
+  String? imagePath;
+
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _descController = TextEditingController();
+
+  TextEditingController get titleController => _titleController;
+  TextEditingController get descController => _descController;
 
   // DepartmentController(String id) {
   //   getPublicDepartment(id);
@@ -87,6 +103,35 @@ class DepartmentController extends GetxController {
     Get.snackbar("Success", "Department join request sent successfully",
         snackPosition: SnackPosition.BOTTOM);
     loading = false;
+    update();
+  }
+
+  Future uploadEventImage() async {
+    imagePath = await selectImage();
+    update();
+  }
+
+  Future savePrivatePost() async {
+    String deptId = Get.arguments['deptId'];
+    log("aa22 $deptId");
+    String uploadedImageUrl = await uploadImage(imagePath!);
+    privatePostingApi.createPrivatePosting(
+      title: titleController.text,
+      description: descController.text,
+      image: uploadedImageUrl,
+      deptId: deptId,
+    );
+
+    // privatePostingModel.title = titleController.text;
+    // privatePostingModel.image = uploadedImageUrl;
+    // privatePostingModel.description = descController.text;
+    // privatePostingModel.senderId = senderId;
+    // privatePostingModel.senderName = senderName;
+    // privatePostingModel.senderDept = deptId;
+  }
+
+  addDummyData() {
+    dumyData.add({titleController.text, descController.text, imagePath});
     update();
   }
 }

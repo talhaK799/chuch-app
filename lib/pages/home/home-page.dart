@@ -322,78 +322,158 @@ Expanded buildQuickMenuItem({
 
 Container bulletinsFeed(HomeController _) {
   return Container(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Upcoming Bulletins",
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Column(
-          children: _.bulletins.map<Widget>(
-            (bulletin) {
-              return GestureDetector(
-                onTap: () {
-                  _.redirectToBulletin(bulletin["id"]);
-                },
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        bulletin["image"],
+    child: Obx(() {
+      return Container(
+        child: _.isLoading.value == true
+            ? Center(child: CircularProgressIndicator())
+            : _.bulletins.isEmpty
+                ? Center(
+                    child: Text(
+                      "Not Found Upcoming Bulletins",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
                       ),
-                      fit: BoxFit.cover,
                     ),
-                  ),
-                  width: double.infinity,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.75),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 30,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          bulletin["name"],
-                          style: TextStyle(
-                            color: Colors.white,
-                            height: 1.5,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Upcoming Bulletins",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Container(
+                        height: 300,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              _.bulletins.isNotEmpty
+                                  ? _.bulletins[0]["image"].toString()
+                                  : '',
+                            ),
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        SizedBox(height: 30),
-                        Text(
-                          'September 10',
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.7),
-                          ),
+                        width: double.infinity,
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              left: 0,
+                              child: Container(
+                                padding: EdgeInsets.only(left: 10),
+                                height: 100,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: Colors.black.withOpacity(0.75),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      _.bulletins.isNotEmpty
+                                          ? _.bulletins[0]["name"].toString()
+                                          : '',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        height: 2.0,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Text(
+                                      _.bulletins.isNotEmpty
+                                          ? _.bulletins[0]["created_at"]
+                                          : '',
+                                      style: TextStyle(
+                                        color: Colors.white.withOpacity(0.7),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+
+                      // Column(
+                      //   children: _.bulletins.map<Widget>(
+                      //     (bulletin) {
+                      //       return GestureDetector(
+                      //         onTap: () {
+                      //           log("Bulletins ================================> ${bulletin["id"]}");
+                      //           _.redirectToBulletin(bulletin["id"]);
+                      //         },
+                      //         child: Container(
+                      //           margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: BorderRadius.circular(10),
+                      //             image: DecorationImage(
+                      //               image: NetworkImage(
+                      //                 bulletin["image"],
+                      //               ),
+                      //               fit: BoxFit.cover,
+                      //             ),
+                      //           ),
+                      //           width: double.infinity,
+                      //           child: Container(
+                      //             decoration: BoxDecoration(
+                      //               color: Colors.black.withOpacity(0.75),
+                      //               borderRadius: BorderRadius.circular(10),
+                      //             ),
+                      //             padding: EdgeInsets.symmetric(
+                      //               horizontal: 20,
+                      //               vertical: 30,
+                      //             ),
+                      //             child: Column(
+                      //               crossAxisAlignment: CrossAxisAlignment.start,
+                      //               children: [
+                      //                 Text(
+                      //                   bulletin["name"],
+                      //                   style: TextStyle(
+                      //                     color: Colors.white,
+                      //                     height: 1.5,
+                      //                   ),
+                      //                 ),
+                      //                 SizedBox(height: 30),
+                      //                 Text(
+                      //                   'September 10',
+                      //                   style: TextStyle(
+                      //                     color: Colors.white.withOpacity(0.7),
+                      //                   ),
+                      //                 ),
+                      //               ],
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       );
+                      //     },
+                      //   ).toList(),
+                      // ),
+                    ],
                   ),
-                ),
-              );
-            },
-          ).toList(),
-        ),
-      ],
-    ),
+      );
+    }),
   );
 }
 

@@ -3,7 +3,6 @@ import 'package:churchappenings/pages/more/profile/edit_profile/edit_profile_pag
 import 'package:churchappenings/pages/more/profile/profile-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';

@@ -11,7 +11,7 @@ class AddDepartmentPage extends StatelessWidget {
     return Scaffold(
       appBar: transparentAppbar(),
       body: GetBuilder<DepartmentController>(
-        init: DepartmentController(),
+        init: DepartmentController("AddDepartmentPage"),
         global: false,
         builder: (_) {
           if (_.loading) {
@@ -56,9 +56,11 @@ class AddDepartmentPage extends StatelessWidget {
                         return Column(
                           children: [
                             ListTile(
-                              title: Text("Name: ${_.departments[index].name}"),
-                              subtitle:
-                                  Html(data: "${_.departments[index].desc}"),
+                              title: Text(
+                                  "Name: ${_.departments[index].name.toString()}"),
+                              subtitle: Html(
+                                  data:
+                                      "${_.departments[index].desc.toString()}"),
                               trailing: TextButton(
                                   onPressed: () {
                                     _.sendJoinRequest(_.departments[index].id!);

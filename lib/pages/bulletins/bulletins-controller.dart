@@ -35,7 +35,8 @@ class BulletinsController extends GetxController {
 
   void showDatePickerDialog() async {
     final currentDate = DateTime.now();
-    final initialDate = selectedDate.value ?? currentDate;
+    final initialDate =
+     selectedDate.value ?? currentDate;
 
     final pickedDate = await showDatePicker(
       context: Get.context!,

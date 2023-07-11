@@ -9,6 +9,7 @@ class DepartmentAPI {
 
   Future getAllDepartments() async {
     int id = profileApi.selectedChurchId;
+    log("churchId:: $id");
 
     String query = """
       query MyQuery {
@@ -21,8 +22,8 @@ class DepartmentAPI {
     """;
 
     var res = await hasura.hasuraQuery(query);
-    log('AAAAAAAAAA::: $id');
-    print("AAA:: $res");
+
+    print("get All Departments:: $res");
     return res["data"]["department"];
   }
 

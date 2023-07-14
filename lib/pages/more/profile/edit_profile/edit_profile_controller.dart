@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../models/member-of.dart';
+import '../../../../services/local_data.dart';
+
 class EditProfileController extends GetxController {
   bool loading = true;
   List<String> skills = [];
@@ -17,6 +20,11 @@ class EditProfileController extends GetxController {
   String employmentStatus = "Unemployed";
   bool isNotified = false;
   TextEditingController dateController = TextEditingController();
+  List<Member> churches = [];
+  int selectedChurch = 9999999;
+  final ProfileAPI profileApi = ProfileAPI.to;
+  Member? selectedChurchObj;
+  final localData = LocalData();
 
   @override
   onInit() async {
@@ -24,6 +32,13 @@ class EditProfileController extends GetxController {
 
     var data = await profileAPI.getProfileData();
     var tempSkills = await profileAPI.getSkills();
+    churches = profileApi.churches;
+    selectedChurch = profileApi.selectedChurchId;
+    for (int i = 0; i < churches.length; i++) {
+      if (selectedChurch == churches[i].id) {
+        selectedChurchObj = churches[i];
+      }
+    }
 
     print(data);
     selectedSkill = data["occupation"] == null ? "None" : data["occupation"];
@@ -58,6 +73,13 @@ class EditProfileController extends GetxController {
       skills.add(tempSkills[i]["title"]);
     }
     loading = false;
+    update();
+  }
+
+  updateSelectedChurch(int churchId) {
+    print(churchId);
+    localData.setInt("selected_church_id", churchId);
+    selectedChurch = churchId;
     update();
   }
 

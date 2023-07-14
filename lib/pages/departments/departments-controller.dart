@@ -7,17 +7,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../api/chat.dart';
+import '../../api/inventory.dart';
 import '../../api/private_posting.dart';
 import '../../api/profile.dart';
 import '../../api/upload-image.dart';
 import '../../models/chat.dart';
+import '../../models/inventory.dart';
 import '../../models/private_posting.dart';
 
 class DepartmentController extends GetxController {
+  InventoryApi inventoryApi = InventoryApi();
   ProfileAPI profileApi = ProfileAPI.to;
 
   PrivatePostingApi privatePostingApi = PrivatePostingApi();
-  PrivatePostingModel privatePostingModel = PrivatePostingModel();
+  PrivatePosting privatePostingModel = PrivatePosting();
   bool loading = true;
   DepartmentAPI departmentApi = DepartmentAPI();
   var response;
@@ -43,6 +46,10 @@ class DepartmentController extends GetxController {
   Stream<dynamic>? messagesStream;
   final chatList = <ChatModel>[].obs;
 
+  RxInt currentPageIndex = 0.obs;
+  List<Inventory> inventoryList = [];
+  List<Inventory> inventoryBorrowedList = [];
+
   DepartmentController([String? screenName, bool? isSreeen]) {
     switch (screenName) {
       case "PrivatePostingScreen":
@@ -61,7 +68,18 @@ class DepartmentController extends GetxController {
           getAllDepartments();
         }
         break;
+
+      case "InventoryScreen":
+        {
+          getInventory();
+          getBorrowedInventory();
+        }
+        break;
     }
+
+    permissionInventory();
+
+    //! new it will be created in switch
 
     // bool? isScreenShow = isSreeen;
 
@@ -86,6 +104,39 @@ class DepartmentController extends GetxController {
     if (Get.arguments != null && Get.arguments['deptId'] != null) {
       getPublicDepartment(Get.arguments['deptId']);
     }
+  }
+
+  Future<void> permissionInventory() async {
+    await inventoryApi.permission(
+        deptId: Get.arguments['deptId'],
+        memberId: profileApi.memberId.toString());
+  }
+
+  Future<void> getInventory() async {
+    loading = true;
+    update();
+    var res = await inventoryApi.fetchInventory(Get.arguments['deptId']);
+    res.forEach((value) {
+      inventoryList.add(Inventory.fromJson(value));
+    });
+    loading = false;
+
+    update();
+    log("test001: ${inventoryList[0].name}");
+  }
+
+  onChangePage(int value) {
+    currentPageIndex.value = value;
+    update();
+  }
+
+  Future<void> getBorrowedInventory() async {
+    var res = await inventoryApi.borrowedInventory(Get.arguments['deptId']);
+    res.forEach((value) {
+      inventoryBorrowedList.add(Inventory.fromJson(value));
+    });
+    update();
+    log("test101: ${inventoryBorrowedList[0].borrowedFrom}");
   }
 
   String getCurrentUserId() {

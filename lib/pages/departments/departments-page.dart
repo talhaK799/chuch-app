@@ -70,34 +70,35 @@ class DepartmentsPage extends StatelessWidget {
                         itemCount: _.departmentsMember.length,
                         itemBuilder: (context, index) {
                           return Container(
-                              margin: EdgeInsets.only(top: 10),
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 2,
-                                    blurRadius: 5,
-                                    offset: Offset(0, 3),
+                            margin: EdgeInsets.only(top: 10),
+                            padding: EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 5,
+                                  offset: Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Get.to(
+                                  DetailsDepartment(
+                                    name: _.departmentsMember[index].name
+                                        .toString(),
+                                    deptId: _.departmentsMember[index].id
+                                        .toString(),
                                   ),
-                                ],
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Get.to(
-                                    DetailsDepartment(
-                                      name: _.departmentsMember[index].name
-                                          .toString(),
-                                      deptId: _.departmentsMember[index].id
-                                          .toString(),
-                                    ),
-                                  );
-                                  // _.sendJoinRequest(
-                                  //     _.departmentsMember[index].id!);
-                                },
-                                child: Column(children: [
+                                );
+                                // _.sendJoinRequest(
+                                //     _.departmentsMember[index].id!);
+                              },
+                              child: Column(
+                                children: [
                                   Row(
                                     children: [
                                       Text(
@@ -138,8 +139,10 @@ class DepartmentsPage extends StatelessWidget {
                                       )),
                                     ],
                                   ),
-                                ]),
-                              ));
+                                ],
+                              ),
+                            ),
+                          );
 
                           // Column(
                           //   children: [

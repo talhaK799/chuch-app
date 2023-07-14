@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../bulletins/single-bulletin/single-bulletin-page.dart';
 import 'home-controller.dart';
 
 class HomePage extends StatelessWidget {
@@ -354,65 +355,74 @@ Container bulletinsFeed(HomeController _) {
                         ),
                       ),
 
-                      Container(
-                        height: 300,
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              _.bulletins.isNotEmpty
-                                  ? _.bulletins[0]["image"].toString()
-                                  : '',
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            SingleBulletinPage(),
+                            arguments: {'bulletinId': _.bulletins[0]["id"]},
+                          );
+                        },
+                        child: Container(
+                          height: 300,
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                _.bulletins.isNotEmpty
+                                    ? _.bulletins[0]["image"].toString()
+                                    : '',
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
-                        ),
-                        width: double.infinity,
-                        child: Stack(
-                          children: [
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              left: 0,
-                              child: Container(
-                                padding: EdgeInsets.only(left: 10),
-                                height: 100,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withOpacity(0.75),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      _.bulletins.isNotEmpty
-                                          ? _.bulletins[0]["name"].toString()
-                                          : '',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        height: 2.0,
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.w600,
+                          width: double.infinity,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                bottom: 0,
+                                right: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 10),
+                                  height: 100,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.black.withOpacity(0.75),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        _.bulletins.isNotEmpty
+                                            ? _.bulletins[0]["name"].toString()
+                                            : '',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          height: 2.0,
+                                          fontSize: 23,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Text(
-                                      _.bulletins.isNotEmpty
-                                          ? _.bulletins[0]["created_at"]
-                                          : '',
-                                      style: TextStyle(
-                                        color: Colors.white.withOpacity(0.7),
+                                      SizedBox(height: 20),
+                                      Text(
+                                        _.bulletins.isNotEmpty
+                                            ? _.bulletins[0]["created_at"]
+                                            : '',
+                                        style: TextStyle(
+                                          color: Colors.white.withOpacity(0.7),
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
 

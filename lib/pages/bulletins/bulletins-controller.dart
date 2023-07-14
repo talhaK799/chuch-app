@@ -35,15 +35,14 @@ class BulletinsController extends GetxController {
 
   void showDatePickerDialog() async {
     final currentDate = DateTime.now();
-    final initialDate =
-     selectedDate.value ?? currentDate;
+    final initialDate = selectedDate.value ?? currentDate;
 
     final pickedDate = await showDatePicker(
       context: Get.context!,
       initialDate: initialDate,
       // firstDate: currentDate,
-      firstDate:
-          DateTime(currentDate.year - 1), // Enable dates from one year ago
+      firstDate: currentDate
+          .subtract(Duration(days: 30)), // Enable dates from one year ago
 
       lastDate: DateTime(currentDate.year + 1),
     );

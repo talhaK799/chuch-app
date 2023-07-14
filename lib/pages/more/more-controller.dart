@@ -15,8 +15,8 @@ class MoreController extends GetxController {
 
   String name = '';
   String church = "";
-  List<MemberOfModel> churches = [];
-  MemberOfModel? selectedChurchObj;
+  List<Member> churches = [];
+  Member? selectedChurchObj;
   int selectedChurch = 9999999;
 
   @override
@@ -54,7 +54,9 @@ class MoreController extends GetxController {
     CMenuItem(
       title: 'Profile',
       action: () {
-        Get.to(ProfilePage());
+        Get.to(ProfilePage(
+          
+        ));
       },
       icon: Icons.build_outlined,
     ),

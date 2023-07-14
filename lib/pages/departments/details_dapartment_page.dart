@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import '../../widgets/bottom-action-button.dart';
 import '../../widgets/navigate-back-widget.dart';
 import '../../widgets/transparentAppbar.dart';
+import 'inventory_posting.dart';
 
 class DetailsDepartment extends StatelessWidget {
-  const DetailsDepartment(
-      { required this.name, required this.deptId});
+  const DetailsDepartment({required this.name, required this.deptId});
   final String name;
   final String deptId;
 
@@ -56,6 +56,16 @@ class DetailsDepartment extends StatelessWidget {
                 );
               },
               child: buildBottomActionButton("Private Posting"),
+            ),
+            SizedBox(height: 5),
+            GestureDetector(
+              onTap: () {
+                Get.to(
+                  InventoryPosting(),
+                  arguments: {'deptId': deptId},
+                );
+              },
+              child: buildBottomActionButton("Inventory Posting"),
             ),
           ],
         ),

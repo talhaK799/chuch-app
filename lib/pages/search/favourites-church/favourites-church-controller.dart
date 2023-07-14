@@ -4,7 +4,7 @@ import 'package:churchappenings/services/firestore.dart';
 
 class FavouritesChurchController extends GetxController {
   final FirestoreService db = FirestoreService.to;
-  List<ChurchModel> churches = [];
+  List<Church> churches = [];
   bool loading = true;
 
   @override

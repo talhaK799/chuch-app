@@ -105,4 +105,6 @@ class ProfileController extends GetxController {
     isNewJobNoti = !isNewJobNoti;
     update();
   }
+
+ 
 }

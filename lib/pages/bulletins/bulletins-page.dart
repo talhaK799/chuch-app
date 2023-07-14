@@ -124,16 +124,19 @@ class BulletinsPage extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Image.network(
-                                        _.bulletins[index]['image'],
-                                        height: 150,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
                                       Text(
                                           'Name: ${_.bulletins[index]['name']}'),
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(5),
+                                        child: Image.network(
+                                          _.bulletins[index]['image'],
+                                          height: 150,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                       SizedBox(
                                         height: 5,
                                       ),

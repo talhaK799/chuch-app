@@ -9,7 +9,7 @@ class FirestoreService extends GetxController {
   static FirestoreService to = Get.find();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future addChurchToFav(ChurchModel data) async {
+  Future addChurchToFav(Church data) async {
     String uid = await auth.getUserId;
     await _db
         .collection('users')
@@ -21,7 +21,7 @@ class FirestoreService extends GetxController {
         );
   }
 
-  Future<List<ChurchModel>> fetchFavChurches() async {
+  Future<List<Church>> fetchFavChurches() async {
     String uid = await auth.getUserId;
     QuerySnapshot results = await _db
         .collection('users')

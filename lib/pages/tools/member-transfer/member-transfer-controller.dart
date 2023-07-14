@@ -30,15 +30,15 @@ class MemberTransferController extends GetxController {
 
   MembersAPI api = MembersAPI();
   var churches = [];
-  List<ChurchModel> churchList = [];
-  List<ChurchModel> serachList = [];
+  List<Church> churchList = [];
+  List<Church> serachList = [];
 
   getFacilities() async {
     churchList = [];
     var res =
         await searchChurchApi.fetchChurchByCountry(selectedCountry.toString());
     res.forEach((value) {
-      churchList.add(ChurchModel.fromSearchChurchJson(value));
+      churchList.add(Church.fromSearchChurchJson(value));
     });
 
     print("Churches length => ${churchList.length}");

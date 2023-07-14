@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
-Widget buildChurchCard(ChurchModel church) {
+Widget buildChurchCard(Church church) {
   final FavouritesChurchController controller = Get.find();
   navigateToDetailsPage() {
     Get.to(SearchDetailsPage(), arguments: {"id": church.id});

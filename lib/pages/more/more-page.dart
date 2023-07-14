@@ -43,17 +43,18 @@ class MorePage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 30),
-                    Column(
-                      children: _.churches.map(
-                        (church) {
-                          bool selected = false;
-                          if (church.id == _.selectedChurch) selected = true;
-                          return buildEnrolledChurches(church, selected, () {
-                            _.updateSelectedChurch(church.id);
-                          });
-                        },
-                      ).toList(),
-                    ),
+                    //!
+                    // Column(
+                    //   children: _.churches.map(
+                    //     (church) {
+                    //       bool selected = false;
+                    //       if (church.id == _.selectedChurch) selected = true;
+                    //       return buildEnrolledChurches(church, selected, () {
+                    //         _.updateSelectedChurch(church.id);
+                    //       });
+                    //     },
+                    //   ).toList(),
+                    // ),
                     _.churches.length > 0
                         ? ListView.builder(
                             shrinkWrap: true,

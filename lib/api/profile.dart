@@ -9,7 +9,7 @@ class ProfileAPI {
   static ProfileAPI to = ProfileAPI();
   final HasuraService hasura = HasuraService.to;
   final localData = LocalData();
-  List<MemberOfModel> churches = [];
+  List<Member> churches = [];
   int selectedChurchId = 0;
   String name = '';
   String email = '';

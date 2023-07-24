@@ -67,7 +67,7 @@ class SearchDetailsController extends GetxController {
   Future addChurchToFavourite() async {
     print("Add to favoutire");
     print(church.types);
-    ChurchModel data = ChurchModel(
+    Church data = Church(
       id: church.placeId ?? '',
       name: church.name ?? '',
       address: church.formattedAddress ?? '',

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/blog.dart';
 import 'package:churchappenings/api/bulletin.dart';
 import 'package:churchappenings/api/profile.dart';
@@ -187,6 +189,7 @@ class HomeController extends GetxController {
   int get noOfPolls => _noOfPolls;
   FirebaseMessaging _messaging = FirebaseMessaging.instance;
   onInit() async {
+    log("checkkkkinggg::");
     name = profileApi.name;
     var churches = profileApi.churches;
     // DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();

@@ -1,14 +1,13 @@
 import 'dart:convert';
 
-List<MemberOfModel> memberOfModelFromJson(String str) =>
-    List<MemberOfModel>.from(
-        json.decode(str).map((x) => MemberOfModel.fromJson(x)));
+List<Member> memberOfModelFromJson(String str) =>
+    List<Member>.from(json.decode(str).map((x) => Member.fromJson(x)));
 
-String memberOfModelToJson(List<MemberOfModel> data) =>
+String memberOfModelToJson(List<Member> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
-class MemberOfModel {
-  MemberOfModel({
+class Member {
+  Member({
     required this.id,
     required this.name,
     required this.logo,
@@ -18,7 +17,7 @@ class MemberOfModel {
   String name;
   String logo;
 
-  factory MemberOfModel.fromJson(Map<String, dynamic> json) => MemberOfModel(
+  factory Member.fromJson(Map<String, dynamic> json) => Member(
         id: json["id"] != null ? json["id"] : null,
         name: json["name"] != null ? json["name"] : "",
         logo: json["logo"] != null ? json["logo"] : "",

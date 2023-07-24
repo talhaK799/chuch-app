@@ -123,7 +123,7 @@ class MemberTransferPage extends StatelessWidget {
   }
 
   Container serachWidget(MemberTransferController _,
-      {List<ChurchModel>? churchList}) {
+      {List<Church>? churchList}) {
     return Container(
       // width: 200,
       // height: 200,

@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-List<ChurchModel> churchFromJson(String str) => List<ChurchModel>.from(
-    json.decode(str).map((x) => ChurchModel.fromJson(x)));
+List<Church> churchFromJson(String str) =>
+    List<Church>.from(json.decode(str).map((x) => Church.fromJson(x)));
 
-class ChurchModel {
+class Church {
   String id;
 
   String name;
@@ -17,7 +17,7 @@ class ChurchModel {
   String? description;
   int? churchId;
 
-  ChurchModel({
+  Church({
     required this.id,
     required this.name,
     required this.address,
@@ -31,7 +31,7 @@ class ChurchModel {
     this.churchId,
   });
 
-  factory ChurchModel.fromJson(Map<String, dynamic> json) => ChurchModel(
+  factory Church.fromJson(Map<String, dynamic> json) => Church(
         id: json["id"],
         name: json["name"],
         address: json["address"],
@@ -44,8 +44,7 @@ class ChurchModel {
         description: json["description"],
       );
 
-  factory ChurchModel.fromSearchChurchJson(Map<String, dynamic> json) =>
-      ChurchModel(
+  factory Church.fromSearchChurchJson(Map<String, dynamic> json) => Church(
         churchId: json["id"],
         name: json["name"],
         address: json["address"],

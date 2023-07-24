@@ -6,6 +6,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../build-enrolled-churches.dart';
+
 class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -132,10 +134,21 @@ class EditProfilePage extends StatelessWidget {
                                 value: _.isNewJobNoti,
                                 onChanged: (value) {
                                   _.updateNewJobNoti();
-                                })
+                                }),
                           ],
                         )
                       : Container(),
+                  SizedBox(height: 20),
+                  Column(
+                      children: _.churches.map(
+                    (church) {
+                      bool selected = false;
+                      if (church.id == _.selectedChurch) selected = true;
+                      return buildEnrolledChurches(church, selected, () {
+                        _.updateSelectedChurch(church.id);
+                      });
+                    },
+                  ).toList()),
 
                   ///!
                   ///

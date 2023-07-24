@@ -53,17 +53,27 @@ class SingleBulletinPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Column(
-                  children: _.bulletin["assignments"].map<Widget>(
-                    (assignment) {
-                      return buildEventItem(
-                        title: assignment["happening"]["title"],
-                        assignedTo: assignment["assigne"],
-                        time: assignment["happening"]["date_time"],
-                      );
-                    },
-                  ).toList(),
-                ),
+                _.bulletin["assignments"] == null ||
+                        _.bulletin["assignments"].isEmpty
+                    ? Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Text("There are no events"),
+                          ),
+                        ],
+                      )
+                    : Column(
+                        children: _.bulletin["assignments"].map<Widget>(
+                          (assignment) {
+                            return buildEventItem(
+                              title: assignment["happening"]["title"],
+                              assignedTo: assignment["assigne"],
+                              time: assignment["happening"]["date_time"],
+                            );
+                          },
+                        ).toList(),
+                      ),
                 Column(
                   children: _.bulletin['responsibility'].map<Widget>(
                     (single) {
@@ -112,43 +122,51 @@ class SingleBulletinPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: _.bulletin['dept_public_hostings'].map<Widget>(
-                    (single) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              width: 1,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        width: double.infinity,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              single["department"]["name"],
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              single["message"],
-                              style: TextStyle(fontSize: 17),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ).toList(),
-                )
+                _.bulletin["dept_public_hostings"] == null ||
+                        _.bulletin["dept_public_hostings"].isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                            "There are no departmental posts related to this Bulletin"),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:
+                            _.bulletin['dept_public_hostings'].map<Widget>(
+                          (single) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    width: 1,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 10,
+                              ),
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    single["department"]["name"],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    single["message"],
+                                    style: TextStyle(fontSize: 17),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ).toList(),
+                      )
               ],
             ),
           );

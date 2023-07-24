@@ -32,7 +32,9 @@ class ProfilePage extends StatelessWidget {
                       navigateToWidget(),
                       GestureDetector(
                         onTap: () {
-                          Get.to(EditProfilePage());
+                          Get.to(EditProfilePage(
+                          
+                          ));
                         },
                         child: Text(
                           'Edit',

@@ -1,4 +1,4 @@
-class PrivatePostingModel {
+class PrivatePosting {
   String? senderId;
   String? senderName;
   String? senderDept;
@@ -6,7 +6,7 @@ class PrivatePostingModel {
   String? description;
   String? image;
 
-  PrivatePostingModel(
+  PrivatePosting(
       {this.senderId,
       this.senderName,
       this.senderDept,

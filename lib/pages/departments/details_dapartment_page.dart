@@ -65,7 +65,7 @@ class DetailsDepartment extends StatelessWidget {
                   arguments: {'deptId': deptId},
                 );
               },
-              child: buildBottomActionButton("Inventory Posting"),
+              child: buildBottomActionButton("Inventory"),
             ),
           ],
         ),

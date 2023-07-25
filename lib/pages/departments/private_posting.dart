@@ -26,41 +26,41 @@ class PrivatePosting extends StatelessWidget {
               }
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          navigateToWidget(),
-                          GestureDetector(
-                            onTap: () {
-                              Get.to(
-                                CreatePrivatePost(),
-                                arguments: {'deptId': deptId},
-                              );
-                            },
-                            child: Text(
-                              "Create Post",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        navigateToWidget(),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              CreatePrivatePost(),
+                              arguments: {'deptId': deptId},
+                            );
+                          },
+                          child: Text(
+                            "Create Post",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "Private Posting",
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700,
-                          height: 1.5,
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Private Posting",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        height: 1.5,
                       ),
-                      SizedBox(height: 10),
-                      ListView.separated(
+                    ),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: ListView.separated(
                         padding: EdgeInsets.all(8),
                         shrinkWrap: true,
                         itemCount: _.getPrivatePosting.length,
@@ -132,8 +132,8 @@ class PrivatePosting extends StatelessWidget {
                           );
                         },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               );
             }));

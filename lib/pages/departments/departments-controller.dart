@@ -166,7 +166,10 @@ class DepartmentController extends GetxController {
       ChatModel message =
           ChatModel.fromJson(Map<String, dynamic>.from(event.snapshot.value));
       // Use the chatList.insert(0, message) method to add the new message at the beginning of the list
-      chatList.add(message);
+
+      chatList.insert(0, message);
+
+      // chatList[0].date
 
       message = ChatModel();
       update();

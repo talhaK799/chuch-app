@@ -2,7 +2,6 @@ import 'package:churchappenings/pages/departments/departments-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 import 'add_department_page.dart';
@@ -112,7 +111,7 @@ class DepartmentsPage extends StatelessWidget {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.130),
+                                              0.10),
                                       Flexible(
                                         child: Text(
                                           _.departmentsMember[index].name
@@ -123,22 +122,22 @@ class DepartmentsPage extends StatelessWidget {
                                     ],
                                   ),
                                   SizedBox(height: 5),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Description:',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      SizedBox(width: 10),
-                                      Flexible(
-                                          child: Html(
-                                        data:
-                                            '${_.departmentsMember[index].desc}',
-                                      )),
-                                    ],
-                                  ),
+                                  // Row(
+                                  //   children: [
+                                  //     Text(
+                                  //       'Description:',
+                                  //       style: TextStyle(
+                                  //         fontWeight: FontWeight.w400,
+                                  //       ),
+                                  //     ),
+                                  //     SizedBox(width: 10),
+                                  //     Flexible(
+                                  //         child: Html(
+                                  //       data:
+                                  //           '${_.departmentsMember[index].desc}',
+                                  //     )),
+                                  //   ],
+                                  // ),
                                 ],
                               ),
                             ),

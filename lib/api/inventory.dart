@@ -72,8 +72,6 @@ query MyQuery {
 }
 """;
 
-//! work
-
     var res = await hasura.hasuraQuery(query);
     print('permission data: $res');
     // return res["data"]["department_borrowed_inventory"];

@@ -56,6 +56,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Obx(
                       () => ListView.builder(
                         itemCount: _.chatList.length,
+                        shrinkWrap: true,
+                        reverse: true,
                         itemBuilder: (context, index) {
                           ChatModel chat = _.chatList[index];
                           String message = chat.message!;

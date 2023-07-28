@@ -1,3 +1,4 @@
+import 'package:churchappenings/pages/polling/create_poll_page.dart';
 import 'package:churchappenings/pages/polling/poll-card-builder.dart';
 import 'package:churchappenings/pages/polling/polls-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
@@ -30,13 +31,32 @@ class PollsPage extends StatelessWidget {
                     height: 1.5,
                   ),
                 ),
-                Text(
-                  'Church polls',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w300,
-                    height: 1.5,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Church polls',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w300,
+                        height: 1.5,
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(CreatePollPage());
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Center(child: Text("Create Poll")),
+                      ),
+                    )
+                  ],
                 ),
                 SizedBox(height: 30),
               ],

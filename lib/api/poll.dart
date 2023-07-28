@@ -26,6 +26,7 @@ class PollAPI {
       var res = await hasura.hasuraQuery(query);
 
       data = pollModelFromJson(json.encode(res["data"]["polling"]));
+      print("@poll response==>>>>>>${data[0].toJson()}");
 
       print(data);
     } catch (e) {

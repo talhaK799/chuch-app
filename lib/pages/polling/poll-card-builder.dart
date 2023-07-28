@@ -1,6 +1,9 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/models/poll.dart';
+import 'package:churchappenings/pages/polling/vote-poll-page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
 Container pollCardBuilder(PollModel poll) {
   bool vottedAlready = false;
@@ -28,9 +31,10 @@ Container pollCardBuilder(PollModel poll) {
           ),
         ),
         SizedBox(height: 5),
-        Text(
-          poll.desc,
-        ),
+        Html(data: poll.desc),
+        // Text("data"
+        //     // poll.desc,
+        //     ),
         SizedBox(height: 15),
         vottedAlready
             ? Container(
@@ -48,6 +52,9 @@ Container pollCardBuilder(PollModel poll) {
             : GestureDetector(
                 onTap: () {
                   //Vote Poll Page
+                  Get.to(VotePollPage(
+                    poll: poll,
+                  ));
                 },
                 child: Row(
                   children: [

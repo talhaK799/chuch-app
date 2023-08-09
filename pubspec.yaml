@@ -25,6 +25,7 @@ dependencies:
   uuid: ^3.0.7
   syncfusion_flutter_gauges: ^20.4.48
   logger: ^1.4.0
+  html_editor_enhanced: ^2.5.1
   # FireFlutter
   firebase_core: ^2.14.0
   firebase_auth: ^4.6.3

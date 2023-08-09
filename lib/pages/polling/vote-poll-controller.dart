@@ -1,4 +1,5 @@
 import 'package:churchappenings/api/poll.dart';
+import 'package:churchappenings/models/poll.dart';
 import 'package:get/get.dart';
 import 'package:churchappenings/pages/polling/polls-controller.dart';
 
@@ -7,6 +8,12 @@ class VotePollController extends GetxController {
   late String selectedOption = '';
   String? imagePath;
   String? uploadedImageUrl;
+  PollModel poll = PollModel();
+
+  VotePollController({PollModel? pol}) {
+    this.poll = pol ?? PollModel();
+    // fetchPolls();
+  }
 
   markSelected(int id, String option) {
     selected = id;
@@ -14,17 +21,16 @@ class VotePollController extends GetxController {
     update(['selected']);
   }
 
-  // Future uploadEventImage() async {
-  //   imagePath = await selectImage();
-
-  //   update();
-  // }
+  bool hasLink(String inputString) {
+    RegExp urlPattern = RegExp(r'https?://\S+|www\.\S+');
+    return urlPattern.hasMatch(inputString);
+  }
 
   submitPoll(int pollId) async {
     final PollsController controller = Get.find();
     PollAPI pollapi = PollAPI();
     // if (imagePath != null) {
-    //   uploadedImageUrl = await uploadImage(imagePath!);
+    // uploadedImageUrl = await uploadImage(imagePath!);
     // }
     if (selected != 999) {
       await pollapi.addvote(pollId, selectedOption);

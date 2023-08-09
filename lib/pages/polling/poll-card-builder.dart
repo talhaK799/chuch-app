@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 Container pollCardBuilder(PollModel poll) {
   bool vottedAlready = false;
 
-  if (poll.userPols.length == 1) {
+  if (poll.userPols!.length == 1) {
     vottedAlready = true;
   }
 
@@ -24,7 +24,7 @@ Container pollCardBuilder(PollModel poll) {
       children: [
         SizedBox(height: 10),
         Text(
-          poll.title,
+          poll.title ?? "",
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontSize: 16,
@@ -44,7 +44,7 @@ Container pollCardBuilder(PollModel poll) {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  'Response - ' + poll.userPols[0].selectedOption.toString(),
+                  'Response - ' + poll.userPols![0].selectedOption.toString(),
                   style: TextStyle(color: Colors.white),
                 ),
                 padding: EdgeInsets.all(15),
@@ -52,6 +52,8 @@ Container pollCardBuilder(PollModel poll) {
             : GestureDetector(
                 onTap: () {
                   //Vote Poll Page
+
+                  // print("poll${poll.toJson()}");
                   Get.to(VotePollPage(
                     poll: poll,
                   ));

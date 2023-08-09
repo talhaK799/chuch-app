@@ -8,35 +8,37 @@ String pollModelToJson(List<PollModel> data) =>
 
 class PollModel {
   PollModel({
-    required this.id,
-    required this.title,
-    required this.desc,
-    required this.options,
-    required this.userPols,
+    this.id,
+    this.title,
+    this.desc,
+    this.options,
+    this.userPols,
   });
 
-  int id;
-  String title;
-  String desc;
-  List<Option> options;
-  List<UserPol> userPols;
+  int? id;
+  String? title;
+  String? desc;
+  var options;
+  List<UserPol>? userPols;
 
-  factory PollModel.fromJson(Map<String, dynamic> json) => PollModel(
-        id: json["id"],
-        title: json["title"],
-        desc: json["desc"],
-        options:
-            List<Option>.from(json["options"].map((x) => Option.fromJson(x))),
-        userPols: List<UserPol>.from(
-            json["user_pols"].map((x) => UserPol.fromJson(x))),
-      );
+  PollModel.fromJson(v) {
+    id = v["id"];
+    title = v["title"];
+    desc = v["desc"];
+    options = v["options"].runtimeType == String
+        ? List<Option>.from(
+            jsonDecode(v["options"]).map((x) => Option.fromJson(x)))
+        : List<Option>.from(v["options"].map((x) => Option.fromJson(x)));
+    userPols =
+        List<UserPol>.from(v["user_pols"].map((x) => UserPol.fromJson(x)));
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "title": title,
         "desc": desc,
-        "options": List<dynamic>.from(options.map((x) => x.toJson())),
-        "user_pols": List<dynamic>.from(userPols.map((x) => x.toJson())),
+        "options": List<dynamic>.from(options!.map((x) => x.toJson())),
+        "user_pols": List<dynamic>.from(userPols!.map((x) => x.toJson())),
       };
 }
 
@@ -49,10 +51,12 @@ class Option {
   int id;
   String option;
 
-  factory Option.fromJson(Map<String, dynamic> json) => Option(
-        id: json["id"],
-        option: json["option"],
-      );
+  factory Option.fromJson(Map<String, dynamic> json) {
+    return Option(
+      id: json["id"],
+      option: json["option"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

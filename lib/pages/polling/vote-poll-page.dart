@@ -17,130 +17,131 @@ class VotePollPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: transparentAppbar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    navigateToWidget(),
-                    SizedBox(height: 30),
-                    Text(
-                      poll.title,
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w700,
-                        height: 1.5,
+    return GetBuilder<VotePollController>(
+      init: VotePollController(pol: poll),
+      builder: (model) => Scaffold(
+        appBar: transparentAppbar(),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      navigateToWidget(),
+                      SizedBox(height: 30),
+                      Text(
+                        "${poll.title}",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w700,
+                          height: 1.5,
+                        ),
                       ),
-                    ),
-                    Html(
-                      data: poll.desc,
-                    ),
-                    // Text(
-                    //   ,
-                    //   style: TextStyle(
-                    //     fontSize: 18,
-                    //     fontWeight: FontWeight.w300,
-                    //     height: 1.5,
-                    //   ),
-                    // ),
-                    SizedBox(height: 30),
-                    GetBuilder<VotePollController>(
-                      id: 'selected',
-                      builder: (_) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: poll.options
-                            .map(
-                              (e) => buildOption(
-                                e,
-                                () {
+                      Html(
+                        data: poll.desc,
+                      ),
+                      // Text(
+                      //   ,
+                      //   style: TextStyle(
+                      //     fontSize: 18,
+                      //     fontWeight: FontWeight.w300,
+                      //     height: 1.5,
+                      //   ),
+                      // ),
+                      SizedBox(height: 30),
+                      GetBuilder<VotePollController>(
+                        id: 'selected',
+                        builder: (_) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: poll.options
+                              .map<Widget>(
+                                (e) => buildOption(e, () {
                                   _.markSelected(e.id, e.option);
-                                },
-                                _.selected,
-                              ),
-                            )
-                            .toList(),
+                                }, _.selected, model),
+                              )
+                              .toList(),
+                        ),
                       ),
-                    ),
-                    // // SizedBox(
-                    // //   height: 15,
-                    // // ),
-                    // GetBuilder<VotePollController>(
-                    //   builder: (_) => Center(
-                    //     child: GestureDetector(
-                    //       onTap: () {
-                    //         _.uploadEventImage();
-                    //       },
-                    //       child: Container(
-                    //         height: 50,
-                    //         margin: EdgeInsets.only(bottom: 10),
-                    //         // padding: EdgeInsets.all(15),
-                    //         width: double.infinity,
-                    //         decoration: BoxDecoration(
-                    //           color: Colors.transparent,
-                    //           border: Border.all(
-                    //             width: 1,
-                    //             color: Colors.grey,
-                    //           ),
-                    //           borderRadius: BorderRadius.circular(10),
-                    //         ),
-                    //         child: _.imagePath != null
-                    //             ? ClipRRect(
-                    //                 borderRadius: BorderRadius.circular(10),
-                    //                 child: Image.file(
-                    //                   File(
-                    //                     _.imagePath!,
-                    //                   ),
-                    //                   fit: BoxFit.cover,
-                    //                 ),
-                    //               )
-                    //             : Padding(
-                    //                 padding: EdgeInsets.all(15),
-                    //                 child: Row(
-                    //                   children: [
-                    //                     Icon(
-                    //                       Icons.add,
-                    //                       size: 18,
-                    //                     ),
-                    //                     Text(
-                    //                       "  Uplaod response as a image",
-                    //                       style: TextStyle(
-                    //                           color: Colors.black,
-                    //                           fontWeight: FontWeight.w500,
-                    //                           fontSize: 16),
-                    //                     ),
 
-                    //                     // Text(
-                    //                     //   e.option,
-                    //                     //   style: TextStyle(
-                    //                     //     color: isSelected ? Colors.white : Colors.black,
-                    //                     //   ),
-                    //                     // ),
-                    //                   ],
-                    //                 ),
-                    //               ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // )
-                  ],
+                      // // SizedBox(
+                      // //   height: 15,
+                      // // ),
+                      // GetBuilder<VotePollController>(
+                      //   builder: (_) => Center(
+                      //     child: GestureDetector(
+                      //       onTap: () {
+                      //         _.uploadEventImage();
+                      //       },
+                      //       child: Container(
+                      //         height: 50,
+                      //         margin: EdgeInsets.only(bottom: 10),
+                      //         // padding: EdgeInsets.all(15),
+                      //         width: double.infinity,
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.transparent,
+                      //           border: Border.all(
+                      //             width: 1,
+                      //             color: Colors.grey,
+                      //           ),
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         child: _.imagePath != null
+                      //             ? ClipRRect(
+                      //                 borderRadius: BorderRadius.circular(10),
+                      //                 child: Image.file(
+                      //                   File(
+                      //                     _.imagePath!,
+                      //                   ),
+                      //                   fit: BoxFit.cover,
+                      //                 ),
+                      //               )
+                      //             : Padding(
+                      //                 padding: EdgeInsets.all(15),
+                      //                 child: Row(
+                      //                   children: [
+                      //                     Icon(
+                      //                       Icons.add,
+                      //                       size: 18,
+                      //                     ),
+                      //                     Text(
+                      //                       "  Uplaod response as a image",
+                      //                       style: TextStyle(
+                      //                           color: Colors.black,
+                      //                           fontWeight: FontWeight.w500,
+                      //                           fontSize: 16),
+                      //                     ),
+
+                      //                     // Text(
+                      //                     //   e.option,
+                      //                     //   style: TextStyle(
+                      //                     //     color: isSelected ? Colors.white : Colors.black,
+                      //                     //   ),
+                      //                     // ),
+                      //                   ],
+                      //                 ),
+                      //               ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // )
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          submitButton(() => voteController.submitPoll(poll.id)),
-        ],
+            submitButton(() => voteController.submitPoll(poll.id!)),
+          ],
+        ),
       ),
     );
   }
 
-  GestureDetector buildOption(Option e, Function onTap, int selected) {
+  GestureDetector buildOption(
+      Option e, Function onTap, int selected, VotePollController model) {
     bool isSelected = false;
     if (e.id == selected) isSelected = true;
 
@@ -169,12 +170,21 @@ class VotePollPage extends StatelessWidget {
                   fontWeight: isSelected ? FontWeight.w700 : FontWeight.w400),
             ),
             SizedBox(width: 10),
-            Text(
-              e.option,
-              style: TextStyle(
-                color: isSelected ? Colors.white : Colors.black,
-              ),
-            ),
+            model.hasLink(e.option) == true
+                ? UnconstrainedBox(
+                    child: Image.network(
+                      '${e.option}',
+                      height: 100,
+                      width: 100,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : Text(
+                    e.option,
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                    ),
+                  ),
           ],
         ),
       ),

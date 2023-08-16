@@ -27,6 +27,11 @@ class PollsController extends GetxController {
     update();
   }
 
+  bool hasLink(String inputString) {
+    RegExp urlPattern = RegExp(r'https?://\S+|www\.\S+');
+    return urlPattern.hasMatch(inputString);
+  }
+
   Future<void> isModify(String memberId) async {
     var res = await pollapi.checkPermissionForCreatePoll(memberId);
     List<dynamic> data = res["data"]["member_facility_permission"];

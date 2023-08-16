@@ -1,5 +1,6 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/models/poll.dart';
+import 'package:churchappenings/pages/polling/polls-controller.dart';
 import 'package:churchappenings/pages/polling/vote-poll-page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -37,17 +38,30 @@ Container pollCardBuilder(PollModel poll) {
         //     ),
         SizedBox(height: 15),
         vottedAlready
-            ? Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: redColor,
-                  borderRadius: BorderRadius.circular(10),
+            ? GetBuilder<PollsController>(
+                init: PollsController(),
+                builder: (model) => Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: redColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: model.hasLink(poll.userPols![0].selectedOption) == true
+                      ? UnconstrainedBox(
+                          child: Image.network(
+                            '${poll.userPols![0].selectedOption}',
+                            height: 100,
+                            width: 100,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : Text(
+                          'Response - ' +
+                              poll.userPols![0].selectedOption.toString(),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                  padding: EdgeInsets.all(15),
                 ),
-                child: Text(
-                  'Response - ' + poll.userPols![0].selectedOption.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-                padding: EdgeInsets.all(15),
               )
             : GestureDetector(
                 onTap: () {

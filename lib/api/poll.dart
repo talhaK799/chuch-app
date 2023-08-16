@@ -25,6 +25,7 @@ class PollAPI {
           }
         """;
       var res = await hasura.hasuraQuery(query);
+      print("Get poll ====>>>>$res");
       print("lenght => ${res["data"]["polling"].length}");
       res["data"]["polling"].forEach((v) {
         data.add(PollModel.fromJson(v));

@@ -1,4 +1,5 @@
 import 'package:churchappenings/pages/calender/calendar-page.dart';
+import 'package:churchappenings/pages/church/add_new_church_page.dart';
 import 'package:churchappenings/pages/community_outreach/community_outreach_page.dart';
 import 'package:churchappenings/pages/departments/departments-page.dart';
 import 'package:churchappenings/pages/more/info/about-churchappening-page.dart';
@@ -91,6 +92,9 @@ class Routes {
   static const String privacyPolicy = '/privacyPolicy';
   static const String communityOutreach = '/communityOutreach';
 
+  //add new church
+  static const String addNewChurch = '/addNewChurch';
+
   // Routes Defination
   static List<GetPage<dynamic>> pages = [
     GetPage(name: initial, page: () => InitialPage()),
@@ -129,5 +133,6 @@ class Routes {
     GetPage(name: members, page: () => MembersPage()),
     GetPage(name: communityOutreach, page: () => CommunityOutreachPage()),
     GetPage(name: memberTransfer, page: () => MemberTransferPage()),
+    GetPage(name: addNewChurch, page: () => AddNewChurchPage())
   ];
 }

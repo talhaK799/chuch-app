@@ -96,25 +96,25 @@ class AddNewChurchPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                           border: Border.all(color: Colors.grey),
                         ),
-                        child: DropdownButton<CountryAndTerritory>(
+                        child: DropdownButton<CountryAndDivision>(
                           borderRadius: BorderRadius.circular(8),
                           isExpanded: true,
                           hint: Text("Select Country"),
                           underline: Container(),
-                          value: model.selectedCountryAndTerritory,
-                          items: model.countryAndTerritory
-                              .map((CountryAndTerritory countryAndTerritory) {
-                            return DropdownMenuItem<CountryAndTerritory>(
-                              value: countryAndTerritory,
-                              child: Text("${countryAndTerritory.country}"),
+                          value: model.selectedCountryAndDivision,
+                          items: model.countryAndDivisions
+                              .map((CountryAndDivision countryAndDivision) {
+                            return DropdownMenuItem<CountryAndDivision>(
+                              value: countryAndDivision,
+                              child: Text("${countryAndDivision.country}"),
                             );
                           }).toList(),
-                          onChanged: (countryCode) {
-                            model.selectCountry(countryCode!);
+                          onChanged: (countryAndDivision) {
+                            model.selectCountry(countryAndDivision!);
                           },
                         )),
                     15.height,
-                    Text("Territory"),
+                    Text("Division"),
                     5.height,
                     Container(
                         width: double.infinity,
@@ -126,7 +126,7 @@ class AddNewChurchPage extends StatelessWidget {
                           border: Border.all(color: Colors.grey),
                         ),
                         child: Text(
-                          "${model.selectedCountryAndTerritory.territory}",
+                          "${model.selectedCountryAndDivision.devision}",
                           style: TextStyle(fontSize: 15),
                         )),
                     15.height,
@@ -136,7 +136,7 @@ class AddNewChurchPage extends StatelessWidget {
                       type: TextInputType.number,
                       onChanged: (val) {
                         if (val.isNotEmpty) {
-                          model.addChurch.noOfMembers = val;
+                          model.addChurch.noOfMembers = int.parse(val);
                         }
                       },
                       validator: (val) {
@@ -147,11 +147,26 @@ class AddNewChurchPage extends StatelessWidget {
                       },
                     ),
                     CustomTextFormFeild(
+                      labelText: "Territory",
+                      controller: model.territoryController,
+                      onChanged: (val) {
+                        if (val.isNotEmpty) {
+                          model.addChurch.territory = val;
+                        }
+                      },
+                      validator: (val) {
+                        if (val!.isEmpty) {
+                          return "Please enter territory";
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomTextFormFeild(
                       labelText: "Address",
                       controller: model.addressController,
                       onChanged: (val) {
                         if (val.isNotEmpty) {
-                          model.addChurch.address = val;
+                          model.searchPickUpLocation(val);
                         }
                       },
                       validator: (val) {
@@ -161,6 +176,86 @@ class AddNewChurchPage extends StatelessWidget {
                         return null;
                       },
                     ),
+                    model.predictions.isEmpty
+                        ? Container()
+                        : Container(
+                            color: Colors.white,
+                            child: ListView.separated(
+                              shrinkWrap: true,
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    model.getSearchedLocationDetails(
+                                        model.predictions[index].placeId!,
+                                        index);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 6),
+                                    child: Text(
+                                        "${model.predictions[index].address}"),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (conext, index) {
+                                return Divider(thickness: 2);
+                              },
+                              itemCount: model.predictions.length,
+                            ),
+                          ),
+                    1.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            model.addressController.text =
+                                await Get.to(() => SelectLocation()) ?? '';
+                          },
+                          child: Container(
+                            height: 38,
+                            width: 130,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    width: 1, color: Colors.black54)),
+                            child: Center(
+                              child: Text(
+                                "Select On Map",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        15.width,
+                        GestureDetector(
+                          onTap: () => model.getCurrentLocation(),
+                          child: Container(
+                            height: 38,
+                            width: 152,
+                            decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                    width: 1, color: Colors.black54)),
+                            child: Center(
+                              child: Text(
+                                "Current Location",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.8),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    15.height,
                     Text("Admin Details",
                         style: TextStyle(
                             fontSize: 22, fontWeight: FontWeight.w700)),
@@ -219,7 +314,7 @@ class AddNewChurchPage extends StatelessWidget {
                         }
                         if (_formKey.currentState!.validate() &&
                             (model.imagePath != null)) {
-                          //add church
+                          model.createChurch();
                         }
                       },
                       child: Container(

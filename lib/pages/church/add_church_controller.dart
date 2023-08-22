@@ -1,25 +1,55 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:churchappenings/api/church.dart';
+import 'package:churchappenings/api/google.dart';
 import 'package:churchappenings/api/upload-image.dart';
 import 'package:churchappenings/models/add_church.dart';
 import 'package:churchappenings/models/country_code.dart';
+import 'package:churchappenings/models/location.dart';
+import 'package:churchappenings/models/prediction.dart';
+import 'package:churchappenings/utils/map_response.dart';
+import 'package:churchappenings/utils/prediction_response.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_place/google_place.dart' as Loc;
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
+import 'package:uuid/uuid.dart';
 
 class AddChurchController extends GetxController {
   final log = Logger();
-  late CountryAndTerritory selectedCountryAndTerritory;
+
+  late CountryAndDivision selectedCountryAndDivision;
   TextEditingController nameController = TextEditingController();
   TextEditingController noOfMembersController = TextEditingController();
   TextEditingController adminNameController = TextEditingController();
   TextEditingController adminEmailController = TextEditingController();
   TextEditingController adminPhoneController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  TextEditingController territoryController = TextEditingController();
   AddChurch addChurch = AddChurch();
+  LatLng? latLng;
   String? imagePath;
   String? uploadedImageUrl;
+  Position? position;
+  Uuid uuid = Uuid();
+  LatLng? currentLocation;
+  late PrdicutionResponse prdicutionResponse;
+  List<Predicution> predictions = [];
+  late MapResponse mapResponse;
+  LatLng? selectedLocation;
+  String? fromlongitude;
+  String? fromlatitude;
+  List<String> listOfLats = [];
+  List<String> listOfLongs = [];
+  ChurchApi churchApi = ChurchApi();
+  CustomLocation? customLocation = CustomLocation();
 
   AddChurchController() {
-    selectedCountryAndTerritory = countryAndTerritory[0];
+    selectedCountryAndDivision = countryAndDivisions[0];
   }
 
   Future uploadEventImage() async {
@@ -27,22 +57,208 @@ class AddChurchController extends GetxController {
     update();
   }
 
-  selectCountry(CountryAndTerritory country) {
-    selectedCountryAndTerritory = country;
-    log.e(
-        "@addchurchcontroller:Country country==>${selectedCountryAndTerritory.country} territory==>${selectedCountryAndTerritory.territory}");
+  getCurrentLocation() async {
+    position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    currentLocation = LatLng(position!.latitude, position!.longitude);
+
+    String address = await getAddressFromLatLng(Loc.Location(
+        lat: currentLocation!.latitude, lng: currentLocation!.longitude));
+    addressController.text = address;
+
+    print("Cureent Location is $currentLocation");
     update();
+  }
+
+  Future<Map<String, double>?> getLatLngFromAddress(
+      String address, String apiKey) async {
+    final queryParameters = {
+      'address': address,
+      'key': apiKey,
+    };
+
+    final uri = Uri.https(
+        'maps.googleapis.com', '/maps/api/geocode/json', queryParameters);
+
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final jsonResponse = json.decode(response.body);
+      final results = jsonResponse['results'] as List<dynamic>;
+
+      if (results.isNotEmpty) {
+        final location = results[0]['geometry']['location'];
+        final double latitude = location['lat'];
+        final double longitude = location['lng'];
+
+        return {'latitude': latitude, 'longitude': longitude};
+      }
+    }
+
+    return null; // If the request fails or no coordinates are found
+  }
+
+  getLatitudeAndLongnitudeFromAdd(
+    String address,
+  ) async {
+    Map<String, double>? coordinates =
+        await getLatLngFromAddress(address, EndPoints.googleApiKey);
+
+    if (coordinates != null) {
+      double latitude = coordinates['latitude']!;
+      double longitude = coordinates['longitude']!;
+
+      currentLocation = LatLng(latitude, longitude);
+    } else {
+      print('Coordinates not found.');
+    }
+    update();
+  }
+
+  Future<String> getAddressFromLatLng(Loc.Location location) async {
+    try {
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(location.lat!, location.lng!);
+
+      Placemark place = placemarks[0];
+
+      print("the location is  ${place.thoroughfare} " +
+          " ${place.subLocality}" +
+          " ${place.locality}" +
+          " ${place.country}");
+      return "${place.thoroughfare} ${place.subLocality} ${place.locality} ${place.country}";
+    } catch (e) {
+      print("the exception is $e");
+      return '';
+    }
+  }
+
+  prediction() async {
+    prdicutionResponse = await getPreduction(addChurch.address!);
+    prdicutionResponse.predicutions.forEach((element) {
+      this.predictions.add(element);
+    });
+  }
+
+  getLocationDetails(String placeId) async {
+    String request =
+        '${EndPoints.detailLocation}?placeid=$placeId&key=${EndPoints.googleApiKey}';
+
+    var response = await Dio().get(request);
+
+    if (response.statusCode == 200) {
+      return MapResponse.fromJson(response.data);
+    }
+  }
+
+  searchPickUpLocation(String val) async {
+    predictions.clear();
+    prdicutionResponse = await getPreduction(val.trim());
+    prdicutionResponse.predicutions.forEach((element) {
+      this.predictions.add(element);
+    });
+
+    update();
+  }
+
+  getSearchedLocationDetails(String placeId, index) async {
+    mapResponse = await getLocationDetails(placeId);
+
+    if (mapResponse.mapAddress!.latitude != null) {
+      if (true) {
+        addChurch.address = predictions[index].address;
+        selectedLocation = LatLng(mapResponse.mapAddress!.latitude!,
+            mapResponse.mapAddress!.longnitude!);
+        fromlatitude = mapResponse.mapAddress!.latitude!.toString();
+        fromlongitude = mapResponse.mapAddress!.longnitude!.toString();
+
+        addressController.text = predictions[index].address!;
+        // addChurch.location!.lat = mapResponse.mapAddress!.latitude!;
+        // addChurch.location!.lng = mapResponse.mapAddress!.longnitude!;
+        print("Address => ${predictions[index].address}");
+        predictions.clear();
+      }
+    }
+
+    update();
+  }
+
+  selectCountry(CountryAndDivision country) {
+    selectedCountryAndDivision = country;
+
+    update();
+  }
+
+  ///prediction
+  getPreduction(String input) async {
+    String requestUrl =
+        '${EndPoints.baseURLForMap}?input=$input&key=${EndPoints.googleApiKey}&sessiontoken=${uuid.v4()}';
+    var response = await Dio().get(requestUrl);
+    if (response.statusCode == 200) {
+      return PrdicutionResponse.fromJson(response.data);
+    }
+  }
+
+  getPlaceId(double lat, double log) async {
+    String request =
+        'https://maps.googleapis.com/maps/api/geocode/json?latlng=$lat,$log&key=${EndPoints.googleApiKey}';
+
+    var response = await Dio().get(request);
+    if (response.statusCode == 200) {
+      print("placeId  ==>>${response.data["results"][0]["place_id"]}");
+      addChurch.placeId = response.data["results"][0]["place_id"];
+    }
+    update();
+  }
+
+  createChurch() async {
+    addChurch.country = selectedCountryAndDivision.country;
+    addChurch.division = selectedCountryAndDivision.devision;
+    addChurch.address = addressController.text;
+    addChurch.territory = territoryController.text;
+    addChurch.mode = 'test';
+
+    // addChurch.location?.lat = currentLocation!.latitude;
+    // addChurch.location?.lng = currentLocation!.longitude;
+    // currentLocation != null
+    // ?
+    if (addressController.text.isNotEmpty) {
+      await getLatitudeAndLongnitudeFromAdd(addressController.text);
+    }
+    currentLocation != null
+        ? await getPlaceId(
+            currentLocation!.latitude, currentLocation!.longitude)
+        : await getPlaceId(position!.latitude, position!.longitude);
+    // : getPlaceId(position!.latitude, position!.longitude);
+
+    if (imagePath != null) {
+      uploadedImageUrl = await uploadImage(imagePath!);
+      if (uploadedImageUrl != null) {
+        addChurch.logo = uploadedImageUrl;
+      }
+    }
+    customLocation != null
+        ? await churchApi.addChurch(
+            addChurch, currentLocation!.latitude, currentLocation!.longitude)
+        : await churchApi.addChurch(
+            addChurch, position!.latitude, position!.longitude);
+
+    // log.i("church ==>>${addChurch.toJson()}}");
+    // log.i("placeId  ==>>$place}");
   }
 
   clearController() {
     nameController.clear();
-
+    territoryController.clear();
     noOfMembersController.clear();
     adminNameController.clear();
     adminEmailController.clear();
     adminPhoneController.clear();
     addressController.clear();
-    selectedCountryAndTerritory = countryAndTerritory[0];
+
+    selectedCountryAndDivision = countryAndDivisions[0];
     imagePath = null;
     uploadedImageUrl = null;
     update();
@@ -54,370 +270,360 @@ class AddChurchController extends GetxController {
   ///*************************************************************/
   ///*************************************************************/
 
-  List<CountryAndTerritory> countryAndTerritory = [
-    CountryAndTerritory(
-        country: "Select Country", territory: "Select territory"),
-    CountryAndTerritory(
-        country: "Armenia", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Andorra", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Argentina", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Austria", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Australia", territory: "South Pacific Division (SPD)"),
-    CountryAndTerritory(
+  List<CountryAndDivision> countryAndDivisions = [
+    CountryAndDivision(country: "Select Country", devision: "Select territory"),
+    CountryAndDivision(
+        country: "Armenia", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Andorra", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Argentina", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Austria", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Australia", devision: "South Pacific Division (SPD)"),
+    CountryAndDivision(
         country: "Angola",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Ascension Island",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Albania", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Albania", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
         country: "Bosnia-Herzegovina",
-        territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Belgium", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Belarus", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Burundi", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
+        devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Belgium", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Belarus", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Burundi", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
         country: "British / Bermuda",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Benin", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Benin", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
         country: "Burkina Faso",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Bolivia", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Brazil", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Bhutan", territory: "outhern Asia Division (SUD)"),
-    CountryAndTerritory(
+        devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Bolivia", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Brazil", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Bhutan", devision: "outhern Asia Division (SUD)"),
+    CountryAndDivision(
         country: "Bangladesh",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Brunei", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Burma", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
+        devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Brunei", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Burma", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
         country: "Botswana",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Canada", territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Czech Republic", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "China", territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Canada", devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Czech Republic", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "China", devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
         country: "Comoro Islands",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Central America", territory: "Inter-American Division"),
-    CountryAndTerritory(
-        country: "Caribbean", territory: "Inter-American Division"),
-    CountryAndTerritory(
-        country: "Cameroon", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Chile", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Cape Verde", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Central America", devision: "Inter-American Division"),
+    CountryAndDivision(
+        country: "Caribbean", devision: "Inter-American Division"),
+    CountryAndDivision(
+        country: "Cameroon", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Chile", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Cape Verde", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
         country: "Central African Republic",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Chad", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Cambodia", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Channel Islands", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Croatia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Cyprus", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Congo", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
+        devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Chad", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Cambodia", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Channel Islands", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Croatia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Cyprus", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Congo", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
         country: "Democratice Republic of Congo",
-        territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Denmark", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Djibouti", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Eritrea", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Ethiopia", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Ecuador", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
+        devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Denmark", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Djibouti", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Eritrea", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Ethiopia", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Ecuador", devision: "South American Division (SAD)"),
+    CountryAndDivision(
         country: "East Timor",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
+        devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
         country: "Equatorial Guinea",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Estonia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Faeroe Islands", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Finland", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
+        devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Estonia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Faeroe Islands", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Finland", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
         country: "France/Kerguelen Islands",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "France", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "France", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
         country: "French / St. Pierre",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
         country: "French / Miquelon",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
         country: "Federated States of Micronesia",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Georgia", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Germany", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Gilbraltar", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Greece", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Greenland", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Gabon", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Gambia", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Ghana", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Guinea", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Georgia", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Germany", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Gilbraltar", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Greece", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Greenland", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Gabon", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Gambia", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Ghana", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Guinea", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
         country: "Guinea-Bissau",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Hungary", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Iceland", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Ireland", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Isle of Man", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Ivory Coast",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Indonesia",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "India", territory: "outhern Asia Division (SUD)"),
-    CountryAndTerritory(
-        country: "Italy", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Japan", territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
-        country: "Kenya", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Kazakhstan", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Kyrgyzstan", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
+        devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Hungary", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Iceland", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Ireland", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Isle of Man", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Ivory Coast", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Indonesia", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "India", devision: "outhern Asia Division (SUD)"),
+    CountryAndDivision(
+        country: "Italy", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Japan", devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
+        country: "Kenya", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Kazakhstan", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Kyrgyzstan", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
         country: "Lesbotho",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Laos", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Latvia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Lithuania", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Liberia", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Liechtenstein", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Luxemburg", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Mali", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Mauritania", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Macedonia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Montenegro", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Laos", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Latvia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Lithuania", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Liberia", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Liechtenstein", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Luxemburg", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Mali", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Mauritania", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Macedonia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Montenegro", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
         country: "Madagascar",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Malawi",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Malaysia", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Malaysia", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
         country: "Mauritius",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Mozambique",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Marshall Islands",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Mexico", territory: "Inter-American Division"),
-    CountryAndTerritory(
-        country: "Moldova", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Malta", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Monaco", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Mongolia", territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Marshall Islands", devision: "North American Division (NAD)"),
+    CountryAndDivision(country: "Mexico", devision: "Inter-American Division"),
+    CountryAndDivision(
+        country: "Moldova", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Malta", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Monaco", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Mongolia", devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
         country: "North Korea",
-        territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
+        devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
         country: "Namibia",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Northern South America",
-        territory: "Inter-American Division"),
-    CountryAndTerritory(
-        country: "New Zealand", territory: "South Pacific Division (SPD)"),
-    CountryAndTerritory(
-        country: "New Zealand", territory: "South Pacific Division (SPD)"),
-    CountryAndTerritory(
-        country: "New Guinea", territory: "South Pacific Division (SPD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Northern South America", devision: "Inter-American Division"),
+    CountryAndDivision(
+        country: "New Zealand", devision: "South Pacific Division (SPD)"),
+    CountryAndDivision(
+        country: "New Zealand", devision: "South Pacific Division (SPD)"),
+    CountryAndDivision(
+        country: "New Guinea", devision: "South Pacific Division (SPD)"),
+    CountryAndDivision(
         country: "Northern Mariana Islands",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Nepal", territory: "outhern Asia Division (SUD)"),
-    CountryAndTerritory(
-        country: "Netherlands", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Norway", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Niger", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Nigeria", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Peru", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Paraguay", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
-        country: "Papua", territory: "South Pacific Division (SPD)"),
-    CountryAndTerritory(
-        country: "Pakistan", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Nepal", devision: "outhern Asia Division (SUD)"),
+    CountryAndDivision(
+        country: "Netherlands", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Norway", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Niger", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Nigeria", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Peru", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Paraguay", devision: "South American Division (SAD)"),
+    CountryAndDivision(
+        country: "Papua", devision: "South Pacific Division (SPD)"),
+    CountryAndDivision(
+        country: "Pakistan", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
         country: "Phillippines",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Portugal", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Poland", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Palau", territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Rwanda", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
+        devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Portugal", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Poland", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Palau", devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Rwanda", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
         country: "Réunion",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Russia", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Romania", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Somalia", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Serbia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Slovenia", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Sweden", territory: "Trans-European Division (TED)"),
-    CountryAndTerritory(
-        country: "Senegal", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(country: "Russia", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Romania", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Somalia", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Serbia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Slovenia", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Sweden", devision: "Trans-European Division (TED)"),
+    CountryAndDivision(
+        country: "Senegal", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
         country: "Sierra Leone",
-        territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Singapore",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Sri Lanka",
-        territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
+        devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Singapore", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Sri Lanka", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
         country: "St. Helen",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "São Tomé and Príncipe",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Seychelles",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "South Africa",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Swaziland",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "South Korea",
-        territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
-        country: "San Marino", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Slovakia", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Spain", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "Switzerland", territory: "Inter-European Division (EUD)"),
-    CountryAndTerritory(
-        country: "South Sudan",
-        territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Tajikistan", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Turkmenistan", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Taiwan", territory: "Northern Asia-Pacific Division (NSD)"),
-    CountryAndTerritory(
-        country: "Thailand", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Togo", territory: "West-Central Africa Division (WAD)"),
-    CountryAndTerritory(
-        country: "Tanzania", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Uganda", territory: "East-Central Africa Division (ECD)"),
-    CountryAndTerritory(
-        country: "Ukraine", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
-        country: "Uzbekistan", territory: "Euro-Asia Division (ESD)"),
-    CountryAndTerritory(
+        devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
+        country: "San Marino", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Slovakia", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Spain", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "Switzerland", devision: "Inter-European Division (EUD)"),
+    CountryAndDivision(
+        country: "South Sudan", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Tajikistan", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Turkmenistan", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Taiwan", devision: "Northern Asia-Pacific Division (NSD)"),
+    CountryAndDivision(
+        country: "Thailand", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Togo", devision: "West-Central Africa Division (WAD)"),
+    CountryAndDivision(
+        country: "Tanzania", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Uganda", devision: "East-Central Africa Division (ECD)"),
+    CountryAndDivision(
+        country: "Ukraine", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
+        country: "Uzbekistan", devision: "Euro-Asia Division (ESD)"),
+    CountryAndDivision(
         country: "United States / American",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
         country: "UK /Tristan da Cunha",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
-        country: "Uruguay", territory: "South American Division (SAD)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
+        country: "Uruguay", devision: "South American Division (SAD)"),
+    CountryAndDivision(
         country: "US/ Pacific of Guam",
-        territory: "North American Division (NAD)"),
-    CountryAndTerritory(
-        country: "Vietnam", territory: "Southern Asia-Pacific Division (SSD)"),
-    CountryAndTerritory(
-        country: "Wake Islands", territory: "North American Division (NAD)"),
-    CountryAndTerritory(
+        devision: "North American Division (NAD)"),
+    CountryAndDivision(
+        country: "Vietnam", devision: "Southern Asia-Pacific Division (SSD)"),
+    CountryAndDivision(
+        country: "Wake Islands", devision: "North American Division (NAD)"),
+    CountryAndDivision(
         country: "Zambia",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
-    CountryAndTerritory(
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
+    CountryAndDivision(
         country: "Zimbabwe",
-        territory: "Southern Africa-Indian Ocean Division (SID)"),
+        devision: "Southern Africa-Indian Ocean Division (SID)"),
   ];
 }

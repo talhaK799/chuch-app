@@ -1,6 +1,6 @@
-class CountryAndTerritory {
+class CountryAndDivision {
   String? country;
-  String? territory;
+  String? devision;
 
-  CountryAndTerritory({this.country, this.territory});
+  CountryAndDivision({this.country, this.devision});
 }

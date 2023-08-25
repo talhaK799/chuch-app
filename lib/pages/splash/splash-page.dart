@@ -93,6 +93,15 @@ class SplashPage extends StatelessWidget {
                       () => signInWithGoogle(),
                     ),
                     SizedBox(
+                      height: 15,
+                    ),
+                    buildCTABtn(
+                      redColor,
+                      FontAwesomeIcons.plus,
+                      'Add New Church',
+                      () => Get.toNamed(Routes.addNewChurch),
+                    ),
+                    SizedBox(
                       height: 50,
                     ),
                   ],

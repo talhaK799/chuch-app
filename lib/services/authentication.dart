@@ -3,12 +3,15 @@ import 'package:churchappenings/models/user.dart';
 import 'package:churchappenings/pages/guest-home/guest-home-page.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/services/hasura.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:get/get.dart';
 
 class Authentication extends GetxController {
   static Authentication to = Get.find();
+  final localData = LocalData();
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Rxn<User> firebaseUser = Rxn<User>();
@@ -36,11 +39,12 @@ class Authentication extends GetxController {
     } else {
       final HasuraService hasura = HasuraService.to;
       await hasura.initializeAuthenticatedConnection();
-
       final ProfileAPI profileApi = ProfileAPI.to;
       await profileApi.storeProfileInLocal(await getUserId);
 
-      if (profileApi.churches.length == 0) {
+      var list = await profileApi.toCheckMember(profileApi.memberId!);
+
+      if (list.length == 0) {
         Get.offAll(GuestHomePage());
       } else {
         Get.offAllNamed(Routes.home);
@@ -134,6 +138,7 @@ class Authentication extends GetxController {
 
   Future signOut() async {
     await _firebaseAuth.signOut();
+    await localData.clear();
   }
 
   Future resetPassword({required String email}) async {

@@ -41,40 +41,63 @@ class ProfileAPI {
           }
         """;
 
+      print("uuid => ${uuidarg}");
+
       uuid = uuidarg;
       Map<String, dynamic> variables = {"uuid": uuid};
       var res = await hasura.hasuraQuery(query, variables);
-      // print("res => $res");
+      print("res => $res");
       // Set member Id
-      memberId = res["data"]["member"][0]["id"] != null
-          ? res["data"]["member"][0]["id"]
-          : null;
+      if (res != null) {
+        memberId = res["data"]["member"][0]["id"] != null
+            ? res["data"]["member"][0]["id"]
+            : null;
 
-      // Set User name
-      name = res["data"]["user"][0]["name"] != null
-          ? res["data"]["user"][0]["name"]
-          : null;
-      email = res["data"]["user"][0]["email"] != null
-          ? res["data"]["user"][0]["email"]
-          : null;
-      // print(res["data"]["facility"]);
-      // Set MemberOfChurches
-      churches = memberOfModelFromJson(
-        json.encode(res["data"]["facility"]),
-      );
+        // Set User name
+        name = res["data"]["user"][0]["name"] != null
+            ? res["data"]["user"][0]["name"]
+            : null;
+        email = res["data"]["user"][0]["email"] != null
+            ? res["data"]["user"][0]["email"]
+            : null;
+        // print(res["data"]["facility"]);
+        // Set MemberOfChurches
+        churches = memberOfModelFromJson(
+          json.encode(res["data"]["facility"]),
+        );
 
-      // Selected Church Id
-      int getSelectedChurchId = await localData.getInt('selected_church_id');
-      if (getSelectedChurchId != 99999999)
-        selectedChurchId = getSelectedChurchId;
-      else if (res["data"]["facility"] !=
-          null) if (res["data"]["facility"].length > 0) {
-        selectedChurchId = res["data"]["facility"][0]["id"];
-        selectedChurchName = res["data"]["facility"][0]["name"];
+        print("Churches => ${churches.length}");
+
+        // Selected Church Id
+        int getSelectedChurchId = await localData.getInt('selected_church_id');
+        if (getSelectedChurchId != 99999999)
+          selectedChurchId = getSelectedChurchId;
+        else if (res["data"]["facility"] !=
+            null) if (res["data"]["facility"].length > 0) {
+          selectedChurchId = res["data"]["facility"][0]["id"];
+          selectedChurchName = res["data"]["facility"][0]["name"];
+        }
       }
     } catch (e) {
       print("Error => $e");
     }
+  }
+
+  Future toCheckMember(int memberId) async {
+    // print("**** MEMBER ID **** $memberId");
+    String query = """
+      query MyQuery {
+       facility_member(where: {member_id: {_eq: $memberId}}) {
+        facility_id
+      }
+    }
+    """;
+
+    var res = await hasura.hasuraQuery(query);
+    // print("**** tocheck Response ==== >>> $res");
+
+    return res["data"]["facility_member"];
+    // {data: {facility_member: []}}
   }
 
   Future getSkills() async {
@@ -105,7 +128,7 @@ class ProfileAPI {
     Map<String, dynamic> variables = {"uuid": memberId};
 
     var res = await hasura.hasuraQuery(query, variables);
-    print("**** Response ==== >>> $res");
+    print("**** Profile Response ==== >>> $res");
     if (res == null) {
       return null;
     } else

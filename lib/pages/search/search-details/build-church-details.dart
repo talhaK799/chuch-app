@@ -1,6 +1,7 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/search/search-details/search-details-controller.dart';
 import 'package:churchappenings/utils/dial-call.dart';
+import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/utils/launch-map.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:flutter/material.dart';
@@ -65,44 +66,66 @@ Container buildChurchDetails(DetailsResult church) {
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 30),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildLinks(
-                Icons.call,
-                'Call',
-                () {
-                  dialCall(church.internationalPhoneNumber!);
-                },
+              Row(
+                children: [
+                  buildLinks(
+                    Icons.call,
+                    'Call',
+                    () {
+                      dialCall(church.internationalPhoneNumber!);
+                    },
+                  ),
+                  buildLinks(
+                    Icons.web,
+                    'Website',
+                    () {
+                      launchUrl(church.website!);
+                    },
+                  ),
+                  buildLinks(
+                    Icons.directions,
+                    'Direction',
+                    () {
+                      launchMaps(
+                        church.geometry!.location!.lat!,
+                        church.geometry!.location!.lng!,
+                      );
+                    },
+                  ),
+                  buildLinks(
+                    Icons.star,
+                    'Favorites',
+                    () {
+                      controller.addChurchToFavourite();
+                      Get.snackbar(
+                        'Success',
+                        'Added to favorites',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    },
+                  ),
+                ],
               ),
-              buildLinks(
-                Icons.web,
-                'Website',
-                () {
-                  launchUrl(church.website!);
-                },
-              ),
-              buildLinks(
-                Icons.directions,
-                'Direction',
-                () {
-                  launchMaps(
-                    church.geometry!.location!.lat!,
-                    church.geometry!.location!.lng!,
-                  );
-                },
-              ),
-              buildLinks(
-                Icons.star,
-                'Favorites',
-                () {
-                  controller.addChurchToFavourite();
-                  Get.snackbar(
-                    'Success',
-                    'Added to favorites',
-                    snackPosition: SnackPosition.BOTTOM,
-                  );
-                },
-              ),
+              30.height,
+              Row(
+                children: [
+                  RequestMemberShip(
+                    Icons.real_estate_agent_sharp,
+                    'Request for Membership',
+                    () {
+                      // controller.addChurchToFavourite();
+                      Get.snackbar(
+                        'Success',
+                        'Added to for Review',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    },
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -137,6 +160,52 @@ Expanded buildLinks(IconData icon, String title, Function onTap) {
               color: redColor,
             ),
           ),
+        ],
+      ),
+    ),
+  );
+}
+
+Expanded RequestMemberShip(IconData icon, String title, Function onTap) {
+  return Expanded(
+    child: GestureDetector(
+      onTap: () {
+        onTap();
+      },
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: redColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // SizedBox(height: 7),
+          // Text(
+          //   title,
+          //   style: TextStyle(
+          //     color: redColor,
+          //   ),
+          // ),
         ],
       ),
     ),

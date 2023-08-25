@@ -1,4 +1,6 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/routes.dart';
+import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,27 +23,6 @@ class GuestHomePage extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     _.openDrawer();
-                      //   },
-                      //   child: Container(
-                      //     width: 45,
-                      //     height: 45,
-                      //     child: Image(
-                      //       image: AssetImage('assets/icon/menu.png'),
-                      //       width: 75,
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -53,57 +34,141 @@ class GuestHomePage extends StatelessWidget {
                           height: 1.5,
                         ),
                       ),
-                      Text(
-                        'Hi ' + _.name,
-                        style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.w700,
-                          height: 1.5,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Hi ' + _.name,
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w700,
+                              height: 1.5,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _.logOut();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: redColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.logout,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  2.width,
+                                  Text(
+                                    'Log out',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+
+                SizedBox(height: 20),
+                // Padding(
+                //   padding:
+                //       const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     children: [
+                //       Text(
+                //         "Tools",
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.w700,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Search",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                      children: _.topCarouselMenu.child.map<Widget>((single) {
-                    return Expanded(
-                      child: GestureDetector(
+                    children: _.topCarouselMenu2.map<Widget>((single) {
+                      return GestureDetector(
                         onTap: () {
-                          Get.toNamed(single.path);
+                          _.setCurrentActive(single.id);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 15,
-                          ),
+                              horizontal: 20, vertical: 15),
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: redColor,
-                            ),
+                            color: single.id == _.currentCarouselSelected
+                                ? Colors.black
+                                : redColor,
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          child: Center(
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(
+                                  single.icon,
+                                  color: Colors.white,
+                                  width: 23,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  single.title,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                      children: _
+                          .topCarouselMenu2[_.currentCarouselSelected - 1].child
+                          .map<Widget>((single) {
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(single.path);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: redColor,
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SvgPicture.asset(
                                 single.icon,
@@ -129,41 +194,192 @@ class GuestHomePage extends StatelessWidget {
                     );
                   }).toList()),
                 ),
-                SizedBox(height: 20),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+
+                SizedBox(height: 30),
+
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Tools",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildQuickMenuItem(
+                            name: 'Sermon Notes',
+                            assetUrl: 'assets/icon/039-writing.svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.sermonNotes);
+                            },
+                          ),
+                          buildQuickMenuItem(
+                            name: 'Bulletins',
+                            assetUrl: 'assets/icon/024-planning.svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.bulletins);
+                            },
+                          ),
+                          buildQuickMenuItem(
+                            name: 'My Departments',
+                            assetUrl: 'assets/icon/034-structure.svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.department);
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildQuickMenuItem(
+                            name: 'Announcements',
+                            assetUrl: 'assets/icon/028-megaphone.svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.announcements);
+                            },
+                          ),
+                          Container(
+                            width: 80,
+                          ),
+                          Container(
+                            width: 80,
+                          )
+
+                          // buildQuickMenuItem(
+                          //   name: 'Events',
+                          //   assetUrl: 'assets/icon/027-calendar-2.svg',
+                          //   bgColor: redColor.withOpacity(0.2),
+                          //   action: () {
+                          //     Get.toNamed(Routes.myevent);
+                          //   },
+                          // ),
+                          // buildQuickMenuItem(
+                          //   name: 'Calendar',
+                          //   assetUrl: 'assets/icon/025-calendar.svg',
+                          //   bgColor: redColor.withOpacity(0.2),
+                          //   action: () {
+                          //     Get.toNamed(Routes.calendar);
+                          //   },
+                          // ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                
-                SizedBox(height: 20),
-                ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                  ),
-                  title: Text(
-                    "Log out",
-                  ),
-                  trailing: Icon(Icons.arrow_right),
-                  onTap: () {
-                    _.logOut();
-                  },
-                ),
+                SizedBox(height: 30),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.start,
+                //   children: _.categories.map(
+                //     (single) {
+                //       return GestureDetector(
+                //         onTap: () {
+                //           Get.to(BlogPage(),
+                //               arguments: {'blogName': single["name"]});
+                //         },
+                //         child: Container(
+                //           margin:
+                //               EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10),
+                //             image: DecorationImage(
+                //               image: AssetImage('assets/sample-bulletin.jpeg'),
+                //               fit: BoxFit.cover,
+                //             ),
+                //           ),
+                //           child: Container(
+                //             decoration: BoxDecoration(
+                //               color: Colors.black.withOpacity(0.75),
+                //               borderRadius: BorderRadius.circular(10),
+                //             ),
+                //             padding: EdgeInsets.symmetric(
+                //               horizontal: 20,
+                //               vertical: 30,
+                //             ),
+                //             child: Column(
+                //               crossAxisAlignment: CrossAxisAlignment.start,
+                //               children: [
+                //                 Text(
+                //                   single["name"],
+                //                   style: TextStyle(
+                //                     color: Colors.white,
+                //                     height: 1.5,
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ).toList(),
+                // ),
+
+                // SizedBox(height: 20),
+                // ListTile(
+                //   leading: Icon(
+                //     Icons.logout,
+                //   ),
+                //   title: Text(
+                //     "Log out",
+                //   ),
+                //   trailing: Icon(Icons.arrow_right),
+                //   onTap: () {
+                //     _.logOut();
+                //   },
+                // ),
                 SizedBox(height: 50),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget buildQuickMenuItem({
+    required String name,
+    required String assetUrl,
+    required Color bgColor,
+    required Function action,
+  }) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          action();
+        },
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                width: 80,
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: bgColor,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    assetUrl,
+                    color: redColor,
+                    width: 50,
+                  ),
+                ),
+              ),
+              SizedBox(height: 7),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

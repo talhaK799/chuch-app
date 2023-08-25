@@ -2,6 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalData {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  Future clear() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.clear();
+  }
 
   Future setString(String key, String value) async {
     final SharedPreferences prefs = await _prefs;

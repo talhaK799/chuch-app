@@ -59,13 +59,6 @@ class MoreController extends GetxController {
       icon: Icons.build_outlined,
     ),
     CMenuItem(
-      title: 'Add New Church',
-      action: () {
-        Get.toNamed(Routes.addNewChurch);
-      },
-      icon: Icons.add_circle_outline,
-    ),
-    CMenuItem(
       title: 'About Church Happenings',
       action: () {
         Get.toNamed(Routes.aboutChurchappening);

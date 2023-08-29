@@ -27,6 +27,7 @@ class ProfileAPI {
               name
               email
               birthdate
+              type
             }
 
             facility {
@@ -52,11 +53,13 @@ class ProfileAPI {
         memberId = res["data"]["member"][0]["id"] != null
             ? res["data"]["member"][0]["id"]
             : null;
+        print("memberId => $memberId");
 
         // Set User name
         name = res["data"]["user"][0]["name"] != null
             ? res["data"]["user"][0]["name"]
             : null;
+        // print(res["data"]["user"][0]["type"]);
         email = res["data"]["user"][0]["email"] != null
             ? res["data"]["user"][0]["email"]
             : null;
@@ -81,6 +84,22 @@ class ProfileAPI {
     } catch (e) {
       print("Error => $e");
     }
+  }
+
+  Future callQuery() async {
+    String query = """
+         query MyQuery(\$uuid: String!) {
+  user(where: {uuid: {_eq: \$uuid}}) {
+    name
+    email
+  }
+}
+
+        """;
+    uuid = 'VXINAgnBEYNfTVCv0fIX0jgU0Mt1';
+    Map<String, dynamic> variables = {"uuid": uuid};
+    var res = await hasura.hasuraQuery(query, variables);
+    print("res => $res");
   }
 
   Future toCheckMember(int memberId) async {

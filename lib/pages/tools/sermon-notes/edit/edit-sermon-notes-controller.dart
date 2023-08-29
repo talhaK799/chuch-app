@@ -33,9 +33,11 @@ class EditSermonNotesController extends GetxController {
   Future saveNote() async {
     var convertedValue = quillcontroller.document.toDelta().toJson();
 
-    api.updateNote(id, convertedValue);
+    await api.updateNote(id, convertedValue);
     saveButtonEnabled = false;
     update();
+    Get.back();
+    Get.back();
 
     Timer(Duration(seconds: 10), () {
       saveButtonEnabled = true;

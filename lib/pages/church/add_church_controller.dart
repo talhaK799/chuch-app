@@ -1,4 +1,9 @@
 import 'dart:convert';
+import 'package:churchappenings/constants/api.dart';
+import 'package:churchappenings/services/hasura.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hasura_connect/hasura_connect.dart';
 import 'package:http/http.dart' as http;
 import 'package:churchappenings/api/church.dart';
 import 'package:churchappenings/api/google.dart';
@@ -47,6 +52,7 @@ class AddChurchController extends GetxController {
   List<String> listOfLongs = [];
   ChurchApi churchApi = ChurchApi();
   CustomLocation? customLocation = CustomLocation();
+  late HasuraConnect hasuraConnect;
 
   AddChurchController() {
     selectedCountryAndDivision = countryAndDivisions[0];
@@ -214,6 +220,8 @@ class AddChurchController extends GetxController {
   }
 
   createChurch() async {
+    final HasuraService hasura = HasuraService.to;
+    await hasura.unAuthenticationConnection();
     addChurch.country = selectedCountryAndDivision.country;
     addChurch.division = selectedCountryAndDivision.devision;
     addChurch.address = addressController.text;
@@ -234,7 +242,7 @@ class AddChurchController extends GetxController {
     // : getPlaceId(position!.latitude, position!.longitude);
 
     if (imagePath != null) {
-      uploadedImageUrl = await uploadImage(imagePath!);
+      // uploadedImageUrl = await uploadImage(imagePath!);
       if (uploadedImageUrl != null) {
         addChurch.logo = uploadedImageUrl;
       }

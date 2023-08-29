@@ -1,5 +1,7 @@
+import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/services/authentication.dart';
+import 'package:churchappenings/services/hasura.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +15,13 @@ class LoginController extends GetxController {
   TextEditingController get password => _password;
   bool get showPassword => _showPassword;
   RxBool isLoading = false.obs;
+  final api = ProfileAPI();
+
+  Future apiCall() async {
+    final HasuraService hasura = HasuraService.to;
+    await hasura.unAuthenticationConnection();
+    await api.callQuery();
+  }
 
   onSignIn() async {
     isLoading.value = true;

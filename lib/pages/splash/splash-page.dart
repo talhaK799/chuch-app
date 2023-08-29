@@ -1,3 +1,4 @@
+import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/services/authentication.dart';
@@ -12,6 +13,7 @@ class SplashPage extends StatelessWidget {
   }
 
   final Authentication auth = Authentication.to;
+  final api = ProfileAPI();
 
   void signInWithGoogle() async {
     await auth.signInWithGoogle();

@@ -61,6 +61,8 @@ class ChurchApi {
         "lng": lng, // Pass longitude as a variable
       };
 
+      // print(
+      // "church object ==========> ${addChurch.toJson()},latitude $lat,longnitude $lng");
       var res = await hasura.hasuraMutation(mutation, variables);
       print("church respons==========>$res");
     } catch (e) {

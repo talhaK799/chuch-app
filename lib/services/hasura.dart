@@ -33,6 +33,7 @@ class HasuraService extends GetxController {
       print("INITIALIZED");
       final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
       String token = await _firebaseAuth.currentUser!.getIdToken();
+      print("Toaken----->$token");
       final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
       pattern
           .allMatches(token)
@@ -50,6 +51,21 @@ class HasuraService extends GetxController {
       print("Code :" + e.code);
       // print("Details :" + e.details);
       print("Message :" + e.message.toString());
+    }
+  }
+
+  Future unAuthenticationConnection() async {
+    try {
+      hasuraConnect = HasuraConnect(
+        HASURA_READER_ENDPOINT,
+        headers: {
+          "content-type": "application/json",
+          // "Authorization": "Bearer " + token,
+        },
+      );
+      print("hasuraConnect => ${hasuraConnect.url}");
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -97,7 +113,7 @@ class HasuraService extends GetxController {
       return result;
     } catch (e) {
       if (context != null) processIndicator.hide(context);
-      print(e);
+      print("errror=> $e");
     }
   }
 

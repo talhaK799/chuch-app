@@ -1,5 +1,6 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/login/login-controller.dart';
+import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
@@ -104,6 +105,22 @@ class LoginPage extends StatelessWidget {
                     child: Center(
                       child: Text(
                         "Don't have an account? Sign Up",
+                      ),
+                    ),
+                  ),
+                  30.height,
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.apiCall();
+                      },
+                      child: Text(
+                        'click',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
                     ),
                   ),

@@ -26,14 +26,6 @@ class GuestHomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Welcome to Churchappenings',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300,
-                          height: 1.5,
-                        ),
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -76,6 +68,14 @@ class GuestHomePage extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                      Text(
+                        'Welcome to Churchappenings',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w300,
+                          height: 1.5,
+                        ),
                       ),
                     ],
                   ),
@@ -231,6 +231,37 @@ class GuestHomePage extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          buildQuickMenuItem(
+                            name: "Stewardship",
+                            assetUrl: 'assets/icon/021-donation.svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.stewardship);
+                            },
+                          ),
+                          buildQuickMenuItem(
+                            name: "Donate Services",
+                            assetUrl:
+                                "assets/icon/023-customer-service-agent.svg",
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              // Get.toNamed(Routes.bulletins);
+                            },
+                          ),
+                          buildQuickMenuItem(
+                            name: "Guestbook",
+                            assetUrl: "assets/icon/book.svg",
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.toNamed(Routes.guestbook);
+                            },
+                          ),
+                        ],
+                      ),
+                      20.height,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

@@ -75,7 +75,14 @@ class PollsPage extends StatelessWidget {
                       child: GetBuilder<PollsController>(
                         id: 'polls',
                         builder: (_) {
-                          if (_.polls.length > 0)
+                          if (_.everyOnePolls.length > 0)
+                            return ListView.builder(
+                              itemCount: _.everyOnePolls.length,
+                              itemBuilder: (context, index) {
+                                return pollCardBuilder(_.everyOnePolls[index]);
+                              },
+                            );
+                          else if (_.polls.length > 0)
                             return ListView.builder(
                               itemCount: _.polls.length,
                               itemBuilder: (context, index) {

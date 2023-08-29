@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/creat_poll.dart';
 import 'package:churchappenings/models/pemission.dart';
 import 'package:churchappenings/models/poll.dart';
@@ -6,6 +7,7 @@ import 'package:churchappenings/services/hasura.dart';
 
 class PollAPI {
   final HasuraService hasura = HasuraService.to;
+  final ProfileAPI profileApi = ProfileAPI.to;
 
   Future<List<PollModel>?> fetchPolls() async {
     List<PollModel> data = [];
@@ -18,9 +20,9 @@ class PollAPI {
               title
               desc
               options
-              user_pols {
-                selected_option
-              }
+             user_pols(where: {member_id: {_eq: 123}}) {
+      selected_option
+    }
             }
           }
         """;
@@ -39,6 +41,40 @@ class PollAPI {
     }
 
     return data;
+  }
+
+  Future fatchPollEveryOne() async {
+    try {
+      String query = """
+              query myQuery {
+  polling(where: {poll_permission: {permission_type: {_eq: "EVERYONE"}}}) {
+
+    desc
+    facility_id
+    id
+    is_archived
+    is_upcoming
+    options
+
+    scheduled_archieval
+    start_date
+    title
+  }
+}
+        """;
+      var res = await hasura.hasuraQuery(query);
+      print("Get Everyone poll ====>>>>$res");
+      print("lenght => ${res["data"]["polling"]}");
+      // res["data"]["polling"].forEach((v) {
+      //   data.add(PollModel.fromJson(v));
+      // });
+      // print("datt => ${data.length}");
+
+      // data = pollModelFromJson(res["data"]["polling"]);
+      // print("@poll response==>>>>>>${data[0].toJson()}");
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<int> fetchNoOfPolls() async {
@@ -66,15 +102,15 @@ class PollAPI {
 
   Future addvote(int pollId, String selectedOption) async {
     try {
-      String query = """
-        query MyQuery {
-          member {
-            id
-          }
-        }
-      """;
+      // String query = """
+      //   query MyQuery {
+      //     member {
+      //       id
+      //     }
+      //   }
+      // """;
 
-      var res = await hasura.hasuraQuery(query);
+      // var res = await hasura.hasuraQuery(query);
 
       String mutation = """
         mutation MyMutation(\$poll_id: Int!, \$member_id: Int!, \$selected_option: String!) {
@@ -92,7 +128,7 @@ class PollAPI {
 
       Map<String, dynamic> variables = {
         "poll_id": pollId,
-        "member_id": res["data"]["member"][0]["id"],
+        "member_id": profileApi.memberId,
         "selected_option": selectedOption,
       };
 

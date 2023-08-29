@@ -117,11 +117,11 @@ Container buildChurchDetails(DetailsResult church) {
                     'Request for Membership',
                     () {
                       // controller.addChurchToFavourite();
-                      Get.snackbar(
-                        'Success',
-                        'Added to for Review',
-                        snackPosition: SnackPosition.BOTTOM,
-                      );
+                      // Get.snackbar(
+                      //   'Success',
+                      //   'Added to for Review',
+                      //   snackPosition: SnackPosition.BOTTOM,
+                      // );
                     },
                   ),
                 ],

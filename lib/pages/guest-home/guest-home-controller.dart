@@ -103,19 +103,19 @@ class GuestHomeController extends GetxController {
       title: "Show Gratitude",
       icon: "assets/icon/006-plant.svg",
       child: [
-        Child(
-          title: "Stewardship",
-          icon: "assets/icon/021-donation.svg",
-          path: Routes.stewardship,
-        ),
+        // Child(
+        //   title: "Stewardship",
+        //   icon: "assets/icon/021-donation.svg",
+        //   path: Routes.stewardship,
+        // ),
         Child(
             title: "Community Outreach",
             icon: "assets/icon/022-global-network.svg",
             path: Routes.communityOutreach),
-        Child(
-          title: "Donate Services",
-          icon: "assets/icon/023-customer-service-agent.svg",
-        ),
+        // Child(
+        //   title: "Donate Services",
+        //   icon: "assets/icon/023-customer-service-agent.svg",
+        // ),
       ],
     ),
     TopCarouselMenu(
@@ -155,11 +155,11 @@ class GuestHomeController extends GetxController {
           icon: "assets/icon/033-star.svg",
           path: Routes.favChurches,
         ),
-        Child(
-          title: "Guestbook",
-          icon: "assets/icon/book.svg",
-          path: Routes.guestbook,
-        ),
+        // Child(
+        //   title: "Guestbook",
+        //   icon: "assets/icon/book.svg",
+        //   path: Routes.guestbook,
+        // ),
         Child(
           title: "Help",
           icon: "assets/icon/help.svg",

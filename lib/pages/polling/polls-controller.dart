@@ -5,12 +5,14 @@ import 'package:churchappenings/api/poll.dart';
 
 class PollsController extends GetxController {
   List<PollModel> polls = [];
+  List<PollModel> everyOnePolls = [];
   PollAPI pollapi = PollAPI();
   bool isElligibleForCreatePoll = false;
   bool isLoading = false;
   final ProfileAPI profileApi = ProfileAPI.to;
   PollsController() {
     isModify(profileApi.memberId.toString());
+    fetchEveryOnePolls();
     // fetchPolls();
   }
 
@@ -40,6 +42,14 @@ class PollsController extends GetxController {
         isElligibleForCreatePoll = true;
       }
     });
+    update();
+  }
+
+  Future<void> fetchEveryOnePolls() async {
+    isLoading = true;
+    everyOnePolls = await pollapi.fatchPollEveryOne() ?? [];
+    // update(['polls']);
+    isLoading = false;
     update();
   }
 }

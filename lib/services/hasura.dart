@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/constants/api.dart';
 import 'package:churchappenings/utils/process_indicator.dart';
 import 'package:cloud_functions/cloud_functions.dart';
@@ -114,6 +116,22 @@ class HasuraService extends GetxController {
     } catch (e) {
       if (context != null) processIndicator.hide(context);
       print("errror=> $e");
+
+      final error = e;
+
+      if (error
+          .toString()
+          .toLowerCase()
+          .contains("could not verify jwt: jwtexpired")) {
+        log('jjjjjjjjj');
+
+        final auth = Authentication();
+        await auth.signOut();
+
+        // logout();
+      } else {
+        print('Error fetching data: ${error.toString()}');
+      }
     }
   }
 

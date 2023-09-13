@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../models/chat.dart';
 
 class ChatDao {
+  
   final DatabaseReference _messagesRef =
       FirebaseDatabase.instance.ref().child('messages');
 

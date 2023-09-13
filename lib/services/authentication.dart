@@ -12,6 +12,8 @@ class Authentication extends GetxController {
   static Authentication to = Get.find();
   final localData = LocalData();
 
+  bool isMember = false;
+
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Rxn<User> firebaseUser = Rxn<User>();
@@ -40,14 +42,18 @@ class Authentication extends GetxController {
       final HasuraService hasura = HasuraService.to;
       await hasura.initializeAuthenticatedConnection();
       final ProfileAPI profileApi = ProfileAPI.to;
+
       await profileApi.storeProfileInLocal(await getUserId);
 
       var list = await profileApi.toCheckMember(profileApi.memberId!);
 
       if (list.length == 0) {
         Get.offAll(GuestHomePage());
+
+        localData.setMemberStatus(false);
       } else {
         Get.offAllNamed(Routes.home);
+        localData.setMemberStatus(false);
       }
     }
   }

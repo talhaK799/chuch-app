@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/services/hasura.dart';
+import 'package:churchappenings/services/local_data.dart';
 
 class DepartmentAPI {
   final ProfileAPI profileApi = ProfileAPI.to;
@@ -51,6 +52,28 @@ class DepartmentAPI {
 
       return res["data"]["department_join_req"];
     }
+  }
+
+  Future getDepartmentsYourGuestrOff() async {
+    print(profileApi.selectedChurchId);
+    // int? id = profileApi.memberId;
+    //   print("Member ID => $id");
+
+    String query = """
+       query MyQuery {
+  department {
+    facility_id
+    id
+    desc
+    name
+  }
+}
+    """;
+
+    var res = await hasura.hasuraQuery(query);
+    print("**** Response ==== >>> $res");
+
+    return res["data"]["department"];
   }
 
   Future deptJoinRequest(int deptId) async {

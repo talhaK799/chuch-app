@@ -1,6 +1,11 @@
+import 'package:churchappenings/api/guest_chat_api.dart';
+import 'package:churchappenings/models/guest_chat_model.dart';
+import 'package:churchappenings/pages/departments/guest_chat_controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer';
+
+import 'package:get/get.dart';
 
 class GuestChatScreen extends StatefulWidget {
   const GuestChatScreen({Key? key}) : super(key: key);
@@ -10,9 +15,10 @@ class GuestChatScreen extends StatefulWidget {
 }
 
 class _GuestChatScreenState extends State<GuestChatScreen> {
-  List<String> textList = []; 
+  final ChatController chatController = Get.put(ChatController());
+
   TextEditingController _textEditingController = TextEditingController();
-DateTime date = DateTime.now();
+  List<String> textList = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,49 +42,54 @@ DateTime date = DateTime.now();
               ),
             ),
             Flexible(
-              child: ListView.builder(
-                itemCount: textList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  log('tedd $textList');
-                  return Padding(
-                    padding: EdgeInsets.symmetric(vertical: 13),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Zainab Jan'),
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: Text(
-                              textList[index],
+              child: Obx(
+                () => ListView.builder(
+                  reverse: true,
+                  itemCount: chatController.chatMessages.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final message = chatController.chatMessages[index];
+                    return Padding(
+                      padding: EdgeInsets.symmetric(vertical: 13),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(message.userName ?? ""),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Container(
+                              padding: const EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: Text(
+                                message.message ?? " ",
+                              ),
                             ),
                           ),
-                        ),
-                        Text('12-45-7 2:10pm')
-                      ],
-                    ),
-                  );
-                },
+                          Text(message.createdAt.toString())
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(3.0),
               child: TextField(
+              
                 controller: _textEditingController,
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(
                     onTap: () {
                       String text = _textEditingController.text;
-                      textList.add(text);
-                      log('message $textList');
-                      _textEditingController.clear();
-                      setState(() {}); 
+                      if (text.isNotEmpty) {
+                        chatController.sendGuestMessage(text);
+                       
+                        _textEditingController.clear();
+                      }
                     },
                     child: Padding(
                       padding:

@@ -1,4 +1,4 @@
-import 'package:churchappenings/pages/departments/chat.dart';
+
 
 import 'package:churchappenings/pages/departments/guest_chat_screen.dart';
 import 'package:churchappenings/pages/departments/private_posting.dart';

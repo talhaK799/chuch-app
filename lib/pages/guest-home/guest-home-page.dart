@@ -1,4 +1,5 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/tools/guestbook/guest_book_page.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
@@ -256,7 +257,8 @@ class GuestHomePage extends StatelessWidget {
                             assetUrl: "assets/icon/book.svg",
                             bgColor: redColor.withOpacity(0.2),
                             action: () {
-                              Get.toNamed(Routes.guestbook);
+                            //  Get.toNamed(Routes.guestbook);
+                            Get.to(GuestBookScreen());
                             },
                           ),
                         ],

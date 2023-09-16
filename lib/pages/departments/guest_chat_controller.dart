@@ -9,13 +9,13 @@ import '../../api/profile.dart';
 
 class ChatController extends GetxController {
   RxList<GuestChatModel> chatMessages = <GuestChatModel>[].obs;
-  GuestChatModel cht = GuestChatModel();
-  ProfileAPI profileApi = ProfileAPI.to;
+  // GuestChatModel cht = GuestChatModel();
+  // ProfileAPI profileApi = ProfileAPI.to;
 
   @override
   onInit() async {
     super.onInit();
-    log('hhhh');
+  
     fetchChatMessages();
     update();
   }
@@ -32,11 +32,9 @@ class ChatController extends GetxController {
 
   Future<void> sendGuestMessage(text) async {
     try {
-      cht.message = text;
-      cht.userName = profileApi.name;
-      cht.createdAt = DateTime.now();
-      chatMessages.add(cht);
+   
       GuestChatApi().sendMessage(text);
+    
       update();
     } catch (e) {}
   }

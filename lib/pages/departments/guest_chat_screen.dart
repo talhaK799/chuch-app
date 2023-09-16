@@ -87,6 +87,7 @@ class _GuestChatScreenState extends State<GuestChatScreen> {
                       String text = _textEditingController.text;
                       if (text.isNotEmpty) {
                         chatController.sendGuestMessage(text);
+                        chatController.fetchChatMessages();
                        
                         _textEditingController.clear();
                       }

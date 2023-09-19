@@ -257,8 +257,8 @@ class GuestHomePage extends StatelessWidget {
                             assetUrl: "assets/icon/book.svg",
                             bgColor: redColor.withOpacity(0.2),
                             action: () {
-                            //  Get.toNamed(Routes.guestbook);
-                            Get.to(GuestBookScreen());
+                              //  Get.toNamed(Routes.guestbook);
+                              Get.to(GuestBookScreen());
                             },
                           ),
                         ],

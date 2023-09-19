@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:churchappenings/api/guest_chat_api.dart';
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/models/add_guestbook.dart';
 import 'package:churchappenings/pages/tools/guestbook/addguest.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +18,10 @@ class GuestBookScreen extends StatefulWidget {
 }
 
 class _GuestBookScreenState extends State<GuestBookScreen> {
+  DateTime now = DateTime.now();
+//String formattedDate = now.toUtc().toIso8601String();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

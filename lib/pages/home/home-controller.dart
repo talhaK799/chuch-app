@@ -18,6 +18,8 @@ class HomeController extends GetxController {
   String? churchLogo;
   Rx<bool> isLoading = false.obs;
 
+  
+
   int currentCarouselSelected = 1;
 
   String name = "";

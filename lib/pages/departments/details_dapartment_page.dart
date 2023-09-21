@@ -1,3 +1,6 @@
+
+
+import 'package:churchappenings/pages/departments/guest_chat_screen.dart';
 import 'package:churchappenings/pages/departments/private_posting.dart';
 import 'package:churchappenings/pages/departments/public_posting.dart';
 import 'package:flutter/material.dart';
@@ -66,6 +69,13 @@ class DetailsDepartment extends StatelessWidget {
                 );
               },
               child: buildBottomActionButton("Inventory"),
+            ),
+            SizedBox(height: 5),
+            GestureDetector(
+              onTap: () {
+                Get.to(GuestChatScreen());
+              },
+              child: buildBottomActionButton("Guest Messages"),
             ),
           ],
         ),

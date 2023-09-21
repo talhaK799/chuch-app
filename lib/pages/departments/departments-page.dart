@@ -35,13 +35,17 @@ class DepartmentsPage extends StatelessWidget {
                       //   },
                       //   child: Text('Add New'),
                       // ),
-                      IconButton(
-                          onPressed: () {
-                            Get.to(
-                              AddDepartmentPage(),
-                            );
-                          },
-                          icon: Icon(Icons.add))
+
+                      // _.memberStatus == false
+                      //     ? Container()
+                         // : 
+                          IconButton(
+                              onPressed: () {
+                                Get.to(
+                                  AddDepartmentPage(),
+                                );
+                              },
+                              icon: Icon(Icons.add))
                     ],
                   ),
                   SizedBox(height: 10),
@@ -53,14 +57,14 @@ class DepartmentsPage extends StatelessWidget {
                       height: 1.5,
                     ),
                   ),
-                  Text(
-                    'My departments',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w300,
-                      height: 1.5,
-                    ),
-                  ),
+                  // Text(
+                  //   'My departments',
+                  //   style: TextStyle(
+                  //     fontSize: 18,
+                  //     fontWeight: FontWeight.w300,
+                  //     height: 1.5,
+                  //   ),
+                  // ),
                   SizedBox(height: 20),
                   Container(
                     child: ListView.builder(

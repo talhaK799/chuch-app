@@ -1,4 +1,5 @@
 import 'package:churchappenings/pages/departments/departments-controller.dart';
+import 'package:churchappenings/widgets/Dialogues/dialogue.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,11 @@ class AddDepartmentPage extends StatelessWidget {
                                       "${_.departments[index].desc.toString()}"),
                               trailing: TextButton(
                                   onPressed: () {
-                                    _.sendJoinRequest(_.departments[index].id!);
+                                    showCustomDialog(context, "Are you sure?",
+                                        "Do you want to join?", () {
+                                      _.sendJoinRequest(
+                                          _.departments[index].id!);
+                                    });
                                   },
                                   child: Text("Join",
                                       style: TextStyle(color: Colors.blue))),

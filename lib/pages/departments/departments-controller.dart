@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/models/department.dart';
 import 'package:churchappenings/models/posting_.dart';
+import 'package:churchappenings/services/local_data.dart';
+import 'package:churchappenings/widgets/Dialogues/dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,9 +18,10 @@ import '../../models/inventory.dart';
 import '../../models/private_posting.dart';
 
 class DepartmentController extends GetxController {
+  final localData = LocalData();
   InventoryApi inventoryApi = InventoryApi();
   ProfileAPI profileApi = ProfileAPI.to;
-
+  late bool memberStatus;
   PrivatePostingApi privatePostingApi = PrivatePostingApi();
   PrivatePosting privatePostingModel = PrivatePosting();
   bool loading = true;
@@ -98,6 +101,9 @@ class DepartmentController extends GetxController {
   @override
   onInit() async {
     super.onInit();
+    memberStatus = await localData.getMemberStatus();
+    log('member status .....${memberStatus}');
+    getAllDepartments();
     getMyDepartments();
     // getMessage();
     // String deptId = Get.arguments['deptId'];
@@ -191,22 +197,42 @@ class DepartmentController extends GetxController {
 
   getMyDepartments() async {
     var res = await departmentApi.getDepartmentsYourMemberOff();
+    //log("message $res");
     res.forEach((value) {
       departmentsMember.add(Departments.fromJson(value['department']));
     });
-    // update();
 
-    // }
     loading = false;
     update();
   }
 
   getAllDepartments() async {
-    var result = response = await departmentApi.getAllDepartments();
-    result.forEach((value) {
-      departments.add(Departments.fromJson(value));
-    });
+    log("message ");
+    if (memberStatus == false) {
+      log("message ");
+      var result = await departmentApi.getDepartmentsYourGuestrOff();
+      log("message $result");
+      result.forEach((value) {
+        departments.add(Departments.fromJson(value));
+
+        log("message $result");
+      });
+    } else {
+      var res = await departmentApi.getAllDepartments();
+      log("message $res");
+      res.forEach((value) {
+        departments.add(Departments.fromJson(value));
+      });
+    }
+
+    loading = false;
     update();
+
+    // var result = response = await departmentApi.getAllDepartments();
+    // result.forEach((value) {
+    //   departments.add(Departments.fromJson(value));
+    // });
+    // update();
     log("test 88: ${departments[0].name}");
     // print("**** Response ==== >>> $response");
     // res.forEach((value) {
@@ -251,8 +277,11 @@ class DepartmentController extends GetxController {
   sendJoinRequest(int deptId) async {
     loading = true;
     update();
+   
 
-    await departmentApi.deptJoinRequest(deptId);
+     await departmentApi.deptJoinRequest(deptId);
+   
+   
     Get.snackbar("Success", "Department join request sent successfully",
         snackPosition: SnackPosition.BOTTOM);
     loading = false;

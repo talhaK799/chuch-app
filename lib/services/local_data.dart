@@ -7,6 +7,16 @@ class LocalData {
     prefs.clear();
   }
 
+  Future<void> setMemberStatus(bool isMember) async {
+    final SharedPreferences prefs = await await _prefs;
+    await prefs.setBool('isMember', isMember);
+  }
+
+  Future<bool> getMemberStatus() async {
+    final SharedPreferences prefs = await await _prefs;
+    return prefs.getBool('isMember') ?? false;
+  }
+
   Future setString(String key, String value) async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString(key, value);

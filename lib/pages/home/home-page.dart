@@ -177,7 +177,7 @@ class HomePage extends StatelessWidget {
                             },
                           ),
                           buildQuickMenuItem(
-                            name: 'My Departments',
+                            name: 'Departments',
                             assetUrl: 'assets/icon/034-structure.svg',
                             bgColor: redColor.withOpacity(0.2),
                             action: () {

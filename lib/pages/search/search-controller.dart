@@ -1,13 +1,20 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:churchappenings/api/guest_chat_api.dart';
+import 'package:churchappenings/api/members.dart';
 import 'package:churchappenings/constants/api.dart';
+import 'package:churchappenings/pages/tools/guestbook/guest_book_page.dart';
 import 'package:churchappenings/routes.dart';
+import 'package:churchappenings/services/authentication.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_place/google_place.dart';
 
 class SearchController extends GetxController {
+  bool? registerChurch = false;
   final googlePlace = GooglePlace(GooglePlacesAPIKey);
   late Position location;
   List<SearchResult> _churches = [];
@@ -23,19 +30,75 @@ class SearchController extends GetxController {
   TextEditingController _nameQuery = TextEditingController();
   TextEditingController get cityQuery => _cityQuery;
   TextEditingController get nameQuery => _nameQuery;
-
+  final localData = LocalData();
   List<SearchResult> get churches => _churches;
   List<Uint8List> get images => _images;
   bool get loading => _loading;
   bool get fetchedImages => _fetchedImages;
+  List<dynamic> facilities = [];
+  MembersAPI membersAPI = MembersAPI();
+  int churchId = 0;
+  bool? memberTransferr;
+  memberTransfer(id) async {
+    memberTransferr = await membersAPI.memberTransfer(id);
+    log('nnnnnnnnnnnnnnnnnnn$memberTransferr');
+    update();
+  }
+
+  List<dynamic> memberStatus = [];
+  getMemberStatus() async {
+    memberStatus = await membersAPI.getMemberStatus(churchId);
+    log('kkkkkkkkkkkkkkk${memberStatus}');
+    update();
+  }
+
+  onInit() async {
+    churchId = await localData.getInt('Churchid');
+    log('idd $churchId');
+    //  await getMemberStatus();
+
+    // await memberTransfer(churchId);
+    getChurches();
+    _loading = false;
+    update();
+  }
+
+  Future logOut() async {
+    final auth = Authentication();
+    await auth.signOut();
+  }
+
+  getChurches() async {
+    List<dynamic> response = await GuestChatApi().getChurches();
+    facilities = response;
+    //   log('message $facilities');
+
+    _loading = false;
+    //  Get.to(GuestBookScreen());
+
+    update();
+  }
 
   handleSubMenuTap(String setactive) async {
     _activeSearchBy = setactive;
-
+    registerChurch = false;
     if (setactive == 'Location') {
       await handleChurchesSearch(true);
+      registerChurch = false;
     }
+    if (setactive == "Register") {
+      registerChurches();
+    }
+    update();
+  }
 
+  registerChurches() {
+    registerChurch = true;
+
+    log('message');
+    registerChurch = true;
+    update();
+    getChurches();
     update();
   }
 
@@ -137,11 +200,15 @@ class SearchController extends GetxController {
     }
   }
 
+  getRegisteredSearches() {}
+
   Future<void> handleChurchesSearch(bool bylocation) async {
     _loading = true;
     update();
+
     if (bylocation) {
       await getCurrentPosition();
+      registerChurch = false;
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         _loading = false;
@@ -151,11 +218,24 @@ class SearchController extends GetxController {
       await fetchChurchesByLocation(location.latitude, location.longitude);
     } else {
       if (activeSearchBy == 'City') {
+        registerChurch = false;
+        log('message');
         if (_cityQuery.value.text != _oldSearchQuery) {
           await fetchChurchesByPlace(_cityQuery.value.text);
           _oldSearchQuery = _cityQuery.value.text;
         }
-      } else {
+      }
+      //  else if (activeSearchBy == 'Register') {
+      //   log('message');
+      //   registerChurch = true;
+      //   update();
+      //   getChurches();
+      //   update();
+      // }
+
+      else {
+        registerChurch = false;
+        update();
         await fetchChurchByName();
       }
     }

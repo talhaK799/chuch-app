@@ -101,6 +101,8 @@ class DepartmentController extends GetxController {
   @override
   onInit() async {
     super.onInit();
+    profileApi.selectedChurchId = await localData.getInt('Churchid');
+
     memberStatus = await localData.getMemberStatus();
     log('member status .....${memberStatus}');
     getAllDepartments();
@@ -207,23 +209,22 @@ class DepartmentController extends GetxController {
   }
 
   getAllDepartments() async {
-    log("message ");
-    if (memberStatus == false) {
-      log("message ");
-      var result = await departmentApi.getDepartmentsYourGuestrOff();
-      log("message $result");
-      result.forEach((value) {
-        departments.add(Departments.fromJson(value));
+    // if (memberStatus == false) {
 
-        log("message $result");
-      });
-    } else {
-      var res = await departmentApi.getAllDepartments();
-      log("message $res");
-      res.forEach((value) {
-        departments.add(Departments.fromJson(value));
-      });
-    }
+    //   var result = await departmentApi.getDepartmentsYourGuestrOff();
+    //   log("message............ $result");
+    //   result.forEach((value) {
+    //     departments.add(Departments.fromJson(value));
+
+    //   });
+    // } else {
+
+    var res = await departmentApi.getAllDepartments();
+    log("message $res");
+    res.forEach((value) {
+      departments.add(Departments.fromJson(value));
+    });
+    //  }
 
     loading = false;
     update();
@@ -277,11 +278,9 @@ class DepartmentController extends GetxController {
   sendJoinRequest(int deptId) async {
     loading = true;
     update();
-   
 
-     await departmentApi.deptJoinRequest(deptId);
-   
-   
+    await departmentApi.deptJoinRequest(deptId);
+
     Get.snackbar("Success", "Department join request sent successfully",
         snackPosition: SnackPosition.BOTTOM);
     loading = false;

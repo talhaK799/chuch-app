@@ -1,14 +1,13 @@
-import 'dart:developer';
 
-import 'package:churchappenings/api/guest_chat_api.dart';
 import 'package:churchappenings/constants/red-material-color.dart';
-import 'package:churchappenings/models/add_guestbook.dart';
+
 import 'package:churchappenings/pages/tools/guestbook/addguest.dart';
+import 'package:churchappenings/pages/tools/guestbook/guest_details_screen.dart';
 import 'package:churchappenings/pages/tools/guestbook/guestbook-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+
+
 import 'package:get/get.dart';
 
 class GuestBookScreen extends StatefulWidget {
@@ -61,40 +60,45 @@ class _GuestBookScreenState extends State<GuestBookScreen> {
                       child: ListView.builder(
                         itemCount: _.guestData!.length ?? 2,
                         itemBuilder: (context, index) {
-                          return Card(
-                            elevation: 6.0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  Text(
-                                    'Guest Information',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: redColor,
+                          return GestureDetector(
+                            onTap: (){
+                              Get.to(DetailsScreen(personData: _.guestData![index]));
+                            },
+                            child: Card(
+                              elevation: 6.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  children: [
+                                    Text(
+                                      'Guest Information',
+                                      style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: redColor,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(height: 16.0),
-                                  _buildInfoField(
-                                      _.guestData![index].name ?? "",
-                                      Icons.person),
-                                  _buildInfoField(
-                                      _.guestData![index].email ?? "",
-                                      Icons.email),
-                                  _buildInfoField(
-                                      _.guestData![index].phoneNo ?? "",
-                                      Icons.phone),
-                                  _buildInfoField(
-                                      "${_.guestData![index].country ?? ""}  ${_.guestData![index].state ?? ""}",
-                                      Icons.location_on),
-                                  // _buildInfoField(
-                                  //     'Special Requests', Icons.note),
-                                ],
+                                    SizedBox(height: 16.0),
+                                    _buildInfoField(
+                                        _.guestData![index].name ?? "",
+                                        Icons.person),
+                                    _buildInfoField(
+                                        _.guestData![index].email ?? "",
+                                        Icons.email),
+                                    _buildInfoField(
+                                        _.guestData![index].phoneNo ?? "",
+                                        Icons.phone),
+                                    _buildInfoField(
+                                        "${_.guestData![index].country ?? ""}  ${_.guestData![index].state ?? ""}",
+                                        Icons.location_on),
+                                    // _buildInfoField(
+                                    //     'Special Requests', Icons.note),
+                                  ],
+                                ),
                               ),
                             ),
                           );

@@ -38,14 +38,14 @@ class DepartmentsPage extends StatelessWidget {
 
                       // _.memberStatus == false
                       //     ? Container()
-                         // : 
-                          IconButton(
-                              onPressed: () {
-                                Get.to(
-                                  AddDepartmentPage(),
-                                );
-                              },
-                              icon: Icon(Icons.add))
+                      // :
+                      // IconButton(
+                      //     onPressed: () {
+                      //       // Get.to(
+                      //       //   AddDepartmentPage(),
+                      //       // );
+                      //     },
+                      //     icon: Icon(Icons.add))
                     ],
                   ),
                   SizedBox(height: 10),
@@ -70,7 +70,7 @@ class DepartmentsPage extends StatelessWidget {
                     child: ListView.builder(
                         shrinkWrap: true,
                         primary: false,
-                        itemCount: _.departmentsMember.length,
+                        itemCount: _.departments.length,
                         itemBuilder: (context, index) {
                           return Container(
                             margin: EdgeInsets.only(top: 10),
@@ -89,25 +89,25 @@ class DepartmentsPage extends StatelessWidget {
                             ),
                             child: InkWell(
                               onTap: () {
+                                  _.memberStatus == false? null :
                                 Get.to(
                                   DetailsDepartment(
-                                    name: _.departmentsMember[index].name
-                                        .toString(),
-                                    deptId: _.departmentsMember[index].id
-                                        .toString(),
+                                    name: _.departments[index].name.toString(),
+                                    deptId: _.departments[index].id.toString(),
                                   ),
                                 );
                                 // _.sendJoinRequest(
                                 //     _.departmentsMember[index].id!);
                               },
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
                                     children: [
                                       Text(
                                         'Name:',
                                         style: TextStyle(
-                                          fontWeight: FontWeight.w400,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(height: 10),
@@ -118,30 +118,24 @@ class DepartmentsPage extends StatelessWidget {
                                               0.10),
                                       Flexible(
                                         child: Text(
-                                          _.departmentsMember[index].name
-                                              .toString(),
+                                          _.departments[index].name.toString(),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(height: 5),
-                                  // Row(
-                                  //   children: [
-                                  //     Text(
-                                  //       'Description:',
-                                  //       style: TextStyle(
-                                  //         fontWeight: FontWeight.w400,
-                                  //       ),
-                                  //     ),
-                                  //     SizedBox(width: 10),
-                                  //     Flexible(
-                                  //         child: Html(
-                                  //       data:
-                                  //           '${_.departmentsMember[index].desc}',
-                                  //     )),
-                                  //   ],
-                                  // ),
+                                  Text(
+                                    'Description:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    _.departments[index].name.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: 5),
                                 ],
                               ),
                             ),

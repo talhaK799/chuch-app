@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/services/hasura.dart';
 import 'package:get/get.dart';
@@ -65,6 +67,27 @@ class MembersAPI {
     );
   }
 
+  Future<dynamic> getMemberStatus(churchId) async {
+    String query = """query MyQuery(\$to_church_id: Int, \$member_id: Int) {
+    member_transfer(where: {member_id: {_eq: \$member_id}, to_church_id: {_eq: \$to_church_id}}) {
+      from_church_id
+      id
+      member_id
+      status
+      to_church_id
+    }
+  }""";
+
+    Map<String, dynamic> variables = {
+      "to_church_id": churchId,
+      "member_id": profileApi.memberId,
+    };
+
+    var result = await hasura.hasuraQuery(query, variables);
+   log('mmmmmmmmmmmmmm$result');
+    return result["data"]["member_transfer"];
+  }
+
   Future<dynamic> memberTransfer(int toId) async {
     String query = """
       mutation MyMutation(\$id: Int!, \$toid: Int!, \$member: Int!,){
@@ -90,12 +113,17 @@ class MembersAPI {
     var res = await hasura.hasuraMutation(query, variables);
 
     print("res => $res");
+    if (res == null) {
+      return false;
+    } else {
+      return true;
+    }
 
-    Get.snackbar(
-      'Success',
-      'Transfer request sent',
-      snackPosition: SnackPosition.BOTTOM,
-    );
+    // Get.snackbar(
+    //   'Success',
+    //   'Transfer request sent',
+    //   snackPosition: SnackPosition.BOTTOM,
+    // );
   }
 
   Future<dynamic> getAllChurches(String name) async {

@@ -4,6 +4,7 @@ import 'package:churchappenings/api/guest_chat_api.dart';
 import 'package:churchappenings/models/add_guestbook.dart';
 import 'package:churchappenings/models/get_church_facility%20model.dart';
 import 'package:churchappenings/pages/tools/guestbook/addguest.dart';
+import 'package:churchappenings/pages/tools/guestbook/guest_book_page.dart';
 import 'package:churchappenings/utils/date-picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +12,7 @@ import 'package:intl/intl.dart';
 
 class AddGuestController extends GetxController {
   DateTime? selectedDate;
+  bool loading = true;
   //RxList<Facility> chatMessages = <Facility>[].obs;
   List facilitymodel = [];
   TextEditingController dateController = TextEditingController();
@@ -19,6 +21,7 @@ class AddGuestController extends GetxController {
     selectedDate = (await datePicker(context, selectedDate))!;
 
     dateController.text = DateFormat.yMMMd().format(selectedDate!).toString();
+
     update();
   }
 
@@ -27,8 +30,7 @@ class AddGuestController extends GetxController {
 
   onInit() async {
     getChurchAffiliation();
-    // final facilityId = int.parse(selectedFacilityId?? "");
-    // addguestm.requestedFacilityId = facilityId;
+    loading = false;
     update();
   }
 
@@ -46,6 +48,17 @@ class AddGuestController extends GetxController {
 
     facilities = response;
     log('message $facilities');
+
+    loading = false;
+    Get.to(GuestBookScreen());
+
+    update();
+  }
+
+  bool switchValue = false;
+  void toggleSwitch(bool newValue) {
+    addguestm.requestCall = newValue;
+    switchValue = newValue;
 
     update();
   }

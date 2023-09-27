@@ -31,7 +31,7 @@ class GuestChatApi {
     return res["data"]["insert_guest_messages"]["affected_rows"];
   }
 
-Future  getChurchAffiliation() async {
+  Future getChurchAffiliation() async {
     String query = """
      query MyQuery {
      facility {
@@ -43,6 +43,27 @@ Future  getChurchAffiliation() async {
 
     var response = await hasura.hasuraQuery(query);
     log('res $response');
+
+    return response["data"]["facility"];
+  }
+
+  Future getChurches() async {
+    String query = """
+    query MyQuery {
+  facility(where: {mode: {_eq: "LIVE"}}) {
+    name
+    id
+    country
+    description
+    division
+    logo
+    territory
+  }
+}
+ """;
+
+    var response = await hasura.hasuraQuery(query);
+   // log('res $response');
 
     return response["data"]["facility"];
   }

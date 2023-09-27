@@ -1,7 +1,11 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/departments/guest_chat_screen.dart';
 import 'package:churchappenings/pages/tools/guestbook/guest_book_page.dart';
 import 'package:churchappenings/routes.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:churchappenings/utils/extention.dart';
+import 'package:churchappenings/utils/truncateText.dart';
+import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -13,7 +17,12 @@ class GuestHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: transparentAppbar(),
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: navigateToWidget(),
+        ),
+      ),
       body: GetBuilder<GuestHomeController>(
         init: GuestHomeController(),
         global: false,
@@ -31,7 +40,7 @@ class GuestHomePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Hi ' + _.name,
+                            truncateText(_.churchName, 12),
                             style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.w700,
@@ -222,7 +231,7 @@ class GuestHomePage extends StatelessWidget {
                             },
                           ),
                           buildQuickMenuItem(
-                            name: 'My Departments',
+                            name: 'Departments',
                             assetUrl: 'assets/icon/034-structure.svg',
                             bgColor: redColor.withOpacity(0.2),
                             action: () {
@@ -275,8 +284,13 @@ class GuestHomePage extends StatelessWidget {
                               Get.toNamed(Routes.announcements);
                             },
                           ),
-                          Container(
-                            width: 80,
+                          buildQuickMenuItem(
+                            name: 'Chat',
+                            assetUrl: 'assets/icon/Vector (1).svg',
+                            bgColor: redColor.withOpacity(0.2),
+                            action: () {
+                              Get.to(GuestChatScreen());
+                            },
                           ),
                           Container(
                             width: 80,

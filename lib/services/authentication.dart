@@ -1,6 +1,7 @@
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/user.dart';
 import 'package:churchappenings/pages/guest-home/guest-home-page.dart';
+import 'package:churchappenings/pages/search/search-page.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/services/hasura.dart';
 import 'package:churchappenings/services/local_data.dart';
@@ -40,6 +41,7 @@ class Authentication extends GetxController {
       Get.offAllNamed(Routes.splash);
     } else {
       final HasuraService hasura = HasuraService.to;
+
       await hasura.initializeAuthenticatedConnection();
       final ProfileAPI profileApi = ProfileAPI.to;
 
@@ -48,12 +50,14 @@ class Authentication extends GetxController {
       var list = await profileApi.toCheckMember(profileApi.memberId!);
 
       if (list.length == 0) {
-        Get.offAll(GuestHomePage());
+        Get.offAllNamed(Routes.search);
+        //   Get.offAll(SearchPage());
+        // Get.offAll(GuestHomePage());
 
         localData.setMemberStatus(false);
       } else {
         Get.offAllNamed(Routes.home);
-        localData.setMemberStatus(false);
+        localData.setMemberStatus(true);
       }
     }
   }

@@ -1,14 +1,22 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/blog.dart';
+import 'package:churchappenings/api/members.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/top-carousel-menu.dart';
 import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/services/authentication.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:get/get.dart';
 
 class GuestHomeController extends GetxController {
   var categories = [];
   BlogAPI blogApi = BlogAPI();
   ProfileAPI profileApi = ProfileAPI.to;
+
+  final localData = LocalData();
+  String churchName = "";
+  int id = 0;
 
   String name = "";
   int currentCarouselSelected = 1;
@@ -59,7 +67,10 @@ class GuestHomeController extends GetxController {
     await auth.signOut();
   }
 
+ 
   onInit() async {
+    churchName = await localData.getString('Church');
+
     name = profileApi.name;
     categories = await blogApi.getBlogCategories();
     update();

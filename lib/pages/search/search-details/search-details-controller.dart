@@ -24,7 +24,7 @@ class SearchDetailsController extends GetxController {
   onInit() async {
     print("ID => ${await Get.arguments['id']}");
     id = await Get.arguments['id'];
-    church = (await googlePlace.details.get(id))!.result ?? DetailsResult();
+    church = (await googlePlace.details.get(id))?.result ?? DetailsResult();
     print("church => ${church.id}");
     api.fetchChurchByPlaceID(id).then((value) {
       if (value.length == 1) {

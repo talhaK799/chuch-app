@@ -54,7 +54,7 @@ GestureDetector buildChurchCard(
               : Container(),
           SizedBox(height: 10),
           Text(
-            church.name!.toString(),
+            church.name!.toString() ?? "",
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w700,

@@ -32,7 +32,7 @@ Container buildChurchDetails(DetailsResult church) {
             ),
             SizedBox(width: 5),
             RatingBar.builder(
-              initialRating: church.rating!,
+              initialRating: church.rating ?? 0.0,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -110,22 +110,7 @@ Container buildChurchDetails(DetailsResult church) {
                 ],
               ),
               30.height,
-              Row(
-                children: [
-                  RequestMemberShip(
-                    Icons.real_estate_agent_sharp,
-                    'Request for Membership',
-                    () {
-                      // controller.addChurchToFavourite();
-                      // Get.snackbar(
-                      //   'Success',
-                      //   'Added to for Review',
-                      //   snackPosition: SnackPosition.BOTTOM,
-                      // );
-                    },
-                  ),
-                ],
-              )
+             Center(child: Text('This Church is not currently enrolled')),
             ],
           ),
         ),

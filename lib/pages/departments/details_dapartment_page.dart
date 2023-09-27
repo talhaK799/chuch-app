@@ -70,13 +70,13 @@ class DetailsDepartment extends StatelessWidget {
               },
               child: buildBottomActionButton("Inventory"),
             ),
-            SizedBox(height: 5),
-            GestureDetector(
-              onTap: () {
-                Get.to(GuestChatScreen());
-              },
-              child: buildBottomActionButton("Guest Messages"),
-            ),
+            // SizedBox(height: 5),
+            // GestureDetector(
+            //   onTap: () {
+            //     Get.to(GuestChatScreen());
+            //   },
+            //   child: buildBottomActionButton("Guest Messages"),
+            // ),
           ],
         ),
       ),

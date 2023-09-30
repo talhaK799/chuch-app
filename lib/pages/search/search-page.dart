@@ -137,6 +137,8 @@ class _SearchPageState extends State<SearchPage> {
                                                 'Church', facility['name']);
                                             localData.setInt(
                                                 'Churchid', facility['id']);
+                                            localData.setString('churchLogo',
+                                                facility['logo'] ?? "null");
                                             // await controller.getMemberStatus();
 
                                             Get.to(
@@ -226,6 +228,7 @@ class _SearchPageState extends State<SearchPage> {
                                             controller.churches[index];
                                         final images = controller.images;
                                         return buildChurchCard(
+                                          controller.facilities,
                                           images,
                                           church,
                                           index,

@@ -77,7 +77,8 @@ class MembersAPI {
       to_church_id
     }
   }""";
-
+    log('...........${profileApi.memberId}');
+    log('.......$churchId');
     Map<String, dynamic> variables = {
       "to_church_id": churchId,
       "member_id": profileApi.memberId,

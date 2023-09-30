@@ -71,7 +71,7 @@ class SearchController extends GetxController {
   getChurches() async {
     List<dynamic> response = await GuestChatApi().getChurches();
     facilities = response;
-    //   log('message $facilities');
+    log('message $facilities');
 
     _loading = false;
     //  Get.to(GuestBookScreen());

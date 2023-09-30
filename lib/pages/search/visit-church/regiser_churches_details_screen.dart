@@ -138,7 +138,7 @@ class _ResisterChurchesDetailsScreenState
                               icon: Icons.real_estate_agent_sharp,
                               label: _.memberStatus.isNotEmpty
                                   ? _.memberStatus[0]['status']
-                                  : 'Request for Membership',
+                                  : 'Request Membership',
                               //  label: 'Request for Membership' ,
                               buttonColor: redColor,
                               onPressed: _.memberTransferr == false

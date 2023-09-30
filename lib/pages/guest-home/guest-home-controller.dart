@@ -16,6 +16,7 @@ class GuestHomeController extends GetxController {
 
   final localData = LocalData();
   String churchName = "";
+  String churchLogo = "";
   int id = 0;
 
   String name = "";
@@ -24,6 +25,10 @@ class GuestHomeController extends GetxController {
   void setCurrentActive(int i) {
     currentCarouselSelected = i;
     update();
+  }
+
+  void openDrawer() {
+    Get.toNamed(Routes.more);
   }
 
   TopCarouselMenu topCarouselMenu = TopCarouselMenu(
@@ -67,9 +72,9 @@ class GuestHomeController extends GetxController {
     await auth.signOut();
   }
 
- 
   onInit() async {
     churchName = await localData.getString('Church');
+    churchLogo = await localData.getString('churchLogo');
 
     name = profileApi.name;
     categories = await blogApi.getBlogCategories();

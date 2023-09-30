@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:churchappenings/api/members.dart';
@@ -6,6 +7,7 @@ import 'package:churchappenings/constants/api.dart';
 import 'package:churchappenings/models/church.dart';
 import 'package:churchappenings/pages/search/visit-church/visit-church-page.dart';
 import 'package:churchappenings/services/firestore.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:get/get.dart';
 import 'package:google_place/google_place.dart';
 
@@ -21,16 +23,42 @@ class SearchDetailsController extends GetxController {
   SearchChurchAPI api = SearchChurchAPI();
   bool registeredChurch = false;
 
+  final localData = LocalData();
+
+  // int churchId = 0;
+  bool? memberTransferr = false;
+  memberTransfer() async {
+    memberTransferr = await membersAPI.memberTransfer(facilityId);
+    log('nnnnnnnnnnnnnnnnnnn$memberTransferr');
+    update();
+  }
+
+  List<dynamic> memberStatus = [];
+
+  getMemberStatus() async {
+    memberStatus = await membersAPI.getMemberStatus(facilityId);
+    log('kkkkkkkkkkkkkkk${memberStatus}');
+    update();
+  }
+
   onInit() async {
+    // churchId = await localData.getInt('Churchid');
+    // log('idd $churchId');
+
+    update();
+    log('$memberStatus');
     print("ID => ${await Get.arguments['id']}");
     id = await Get.arguments['id'];
     church = (await googlePlace.details.get(id))?.result ?? DetailsResult();
     print("church => ${church.id}");
     api.fetchChurchByPlaceID(id).then((value) {
+      log('vvvvvvvvvvvvvvvvvvvvv $value');
       if (value.length == 1) {
         registeredChurch = true;
         facilityId = value[0]["id"];
+        log('facility id $facilityId');
       }
+
       loading = false;
       update();
     });
@@ -49,6 +77,8 @@ class SearchDetailsController extends GetxController {
     } else {
       image = Uint8List(0);
     }
+
+    await getMemberStatus();
     update();
 
     super.onInit();

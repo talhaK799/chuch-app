@@ -106,7 +106,7 @@ class ProfileAPI {
   }
 
   Future toCheckMember(int memberId) async {
-    // print("**** MEMBER ID **** $memberId");
+    print("**** MEMBER ID **** $memberId");
     String query = """
       query MyQuery {
        facility_member(where: {member_id: {_eq: $memberId}}) {
@@ -138,13 +138,13 @@ class ProfileAPI {
         selectedChurchId = await localData.getInt('selected_church_id');
         log("****......selected Church id**** $selectedChurchName");
       } else {
-        // Handle the case where 'facility_member' is an empty list
+       
         await localData.setInt('selected_church_id', 99999999);
         selectedChurchId = await localData.getInt('selected_church_id');
         log("****............jjjjjjjjj........................ Selected Church id ID **** $selectedChurchId");
       }
     } else {
-      // Handle the case where any of the expected properties are null
+     
       log('unexpected error');
     }
 

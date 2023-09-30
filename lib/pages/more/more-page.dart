@@ -7,20 +7,20 @@ import 'package:get/get.dart';
 import 'build-enrolled-churches.dart';
 
 class MorePage extends StatelessWidget {
-  final moreController = MoreController();
+//  final moreController = MoreController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: transparentAppbar(),
-      body: ListView(
+      body:GetBuilder<MoreController>(
+              global: false,
+              init: MoreController(),
+              builder: (controller) {
+                return ListView(
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: GetBuilder<MoreController>(
-              global: false,
-              init: MoreController(),
-              builder: (_) {
-                return Column(
+            child:  Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     navigateToWidget(),
@@ -35,7 +35,7 @@ class MorePage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      _.name,
+                      controller.name,
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w700,
@@ -55,46 +55,70 @@ class MorePage extends StatelessWidget {
                     //     },
                     //   ).toList(),
                     // ),
-                    _.churches.length > 0
+                    controller.churches.length > 0
                         ? ListView.builder(
                             shrinkWrap: true,
                             itemCount: 1,
                             itemBuilder: (context, index) {
                               return buildEnrolledChurches(
-                                  _.selectedChurchObj!, true, () {
-                                _.updateSelectedChurch(_.selectedChurch);
+                                  controller.selectedChurchObj!, true, () {
+                                controller.updateSelectedChurch(controller.selectedChurch);
                               });
                             })
                         : Container()
                   ],
-                );
-              },
-            ),
+                ),
+            //   },
+            // ),
           ),
           SizedBox(height: 30),
           Column(
-            children: moreController.moreMenuItems
-                .map(
-                  (item) => Container(
-                    margin: EdgeInsets.only(bottom: 15),
-                    child: ListTile(
-                      leading: Icon(
-                        item.icon,
+            children: controller.isMember!
+                ? controller.moreMenuItems
+                    .map(
+                      (item) => Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: ListTile(
+                          leading: Icon(
+                            item.icon,
+                          ),
+                          title: Text(
+                            item.title,
+                          ),
+                          trailing: Icon(Icons.arrow_right),
+                          onTap: () {
+                            item.action();
+                          },
+                        ),
                       ),
-                      title: Text(
-                        item.title,
+                    )
+                    .toList()
+                : controller.guestMenuItems
+                    .map(
+                      (item) => Container(
+                        margin: EdgeInsets.only(bottom: 15),
+                        child: ListTile(
+                          leading: Icon(
+                            item.icon,
+                          ),
+                          title: Text(
+                            item.title,
+                          ),
+                          trailing: Icon(Icons.arrow_right),
+                          onTap: () {
+                            item.action();
+                          },
+                        ),
                       ),
-                      trailing: Icon(Icons.arrow_right),
-                      onTap: () {
-                        item.action();
-                      },
-                    ),
-                  ),
-                )
-                .toList(),
+                    )
+                    .toList(),
           )
         ],
-      ),
+      );
+              }
+      )
+
     );
+    
   }
 }

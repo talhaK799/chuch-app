@@ -7,6 +7,8 @@ import 'package:google_place/google_place.dart';
 import 'package:get/get.dart';
 
 GestureDetector buildChurchCard(
+   final facilities,
+
   List<Uint8List> images,
   SearchResult church,
   int index,

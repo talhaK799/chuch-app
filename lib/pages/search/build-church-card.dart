@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/search/search-details/search-details-page.dart';
+import 'package:churchappenings/services/local_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_place/google_place.dart';
@@ -26,6 +27,12 @@ GestureDetector buildChurchCard(
 
   return GestureDetector(
     onTap: () {
+        final localData = LocalData();
+   localData.setString(
+                                            'Church', church.name ?? "");
+                                        localData.setString(
+                                            'Churchid', church.id ?? "");
+                    
       navigateToDetailsPage();
     },
     child: Container(

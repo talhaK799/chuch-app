@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/bulletins/permission/bulletin_permission_page.dart';
 import 'package:churchappenings/widgets/bottom-action-button.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
@@ -99,8 +100,18 @@ class AddBulletingPage extends StatelessWidget {
           controller.loading
               ? Container()
               : GestureDetector(
-                  onTap: () => {controller.createBulletin()},
+                  onTap: () => {
+                    // Navigator.push(
+                    //                     context,
+                    //                     MaterialPageRoute(
+                    //                         builder: (context) => BulletinPermission()),
+                    //                   )
+                    // Get.to(BulletinPermission()),
+
+                    //  controller.createBulletin()
+                  },
                   child: buildBottomActionButton('Create Bulletin'),
+                  
                 ),
         ],
       ),

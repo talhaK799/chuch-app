@@ -33,8 +33,7 @@ class SearchDetailsPage extends StatelessWidget {
             if (image.isEmpty) {
               imagePresent = false;
             }
-
-            return Container(
+     return Container(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

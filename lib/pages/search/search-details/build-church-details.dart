@@ -1,11 +1,14 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/search/search-details/search-details-controller.dart';
+import 'package:churchappenings/pages/splash/splash-page.dart';
+import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/utils/dial-call.dart';
 import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/utils/launch-map.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_place/google_place.dart';
 
@@ -114,6 +117,17 @@ Container buildChurchDetails(
               con.registeredChurch == false
                   ? Center(child: Text('This Church is not currently enrolled'))
                   : Text(''),
+              SizedBox(
+                height: 9,
+              ),
+              con.registeredChurch == false
+                  ? buildCTABtn(
+                      redColor,
+                      FontAwesomeIcons.plus,
+                      'Enroll Now',
+                      () => Get.toNamed(Routes.addNewChurch),
+                    )
+                  : Container(),
             ],
           ),
         ),

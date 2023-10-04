@@ -58,16 +58,16 @@ class GuestHomePage extends StatelessWidget {
                       Row(
                         //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          _.churchLogo != "null"
-                              ? Container(
-                                  width: 50,
-                                  height: 50,
-                                  child: Image(
-                                    image: NetworkImage(_.churchLogo),
-                                    fit: BoxFit.cover,
-                                    // height: 100,
-                                  ))
-                              : Container(),
+                          // _.churchLogo != "null"
+                          //     ? Container(
+                          //         width: 50,
+                          //         height: 50,
+                          //         child: Image(
+                          //           image: NetworkImage(_.churchLogo),
+                          //           fit: BoxFit.cover,
+                          //           // height: 100,
+                          //         ))
+                          //     : Container(),
 
                           Text(
                             truncateText(_.churchName, 12),

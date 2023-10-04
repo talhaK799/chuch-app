@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/bulletins/create/bulletin-created-by-me-page.dart';
+import 'package:churchappenings/pages/bulletins/permission/bulletin_permission_page.dart';
 import 'package:churchappenings/pages/bulletins/single-bulletin/single-bulletin-page.dart';
+import 'package:churchappenings/pages/permissions/permissions_screen.dart';
 import 'package:intl/intl.dart';
 
 import 'bulletins-controller.dart';
@@ -22,7 +27,6 @@ class BulletinsPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -36,18 +40,23 @@ class BulletinsPage extends StatelessWidget {
                           children: [
                             navigateToWidget(),
                             SizedBox(),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     Get.to(BulletinCreatedByMePage());
-                            //   },
-                            //   child: Text(
-                            //     'Create',
-                            //     style: TextStyle(
-                            //       fontWeight: FontWeight.w700,
-                            //       color: redColor,
-                            //     ),
-                            //   ),
-                            // ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            BulletinPermissionPage()));
+                                // Get.to(BulletinCreatedByMePage());
+                              },
+                              child: Text(
+                                'Create',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: redColor,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(height: 10),

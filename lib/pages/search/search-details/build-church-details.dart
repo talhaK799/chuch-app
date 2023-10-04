@@ -1,15 +1,19 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/search/search-details/search-details-controller.dart';
+import 'package:churchappenings/pages/splash/splash-page.dart';
+import 'package:churchappenings/routes.dart';
 import 'package:churchappenings/utils/dial-call.dart';
 import 'package:churchappenings/utils/extention.dart';
 import 'package:churchappenings/utils/launch-map.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_place/google_place.dart';
 
-Container buildChurchDetails(DetailsResult church) {
+Container buildChurchDetails(
+    DetailsResult church, SearchDetailsController con) {
   final SearchDetailsController controller = Get.find();
 
   return Container(
@@ -57,7 +61,7 @@ Container buildChurchDetails(DetailsResult church) {
           height: 10,
         ),
         Text(
-          church.formattedAddress!,
+          church.formattedAddress ?? "",
           style: TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w300,
@@ -75,14 +79,14 @@ Container buildChurchDetails(DetailsResult church) {
                     Icons.call,
                     'Call',
                     () {
-                      dialCall(church.internationalPhoneNumber!);
+                      dialCall(church.internationalPhoneNumber ?? "");
                     },
                   ),
                   buildLinks(
                     Icons.web,
                     'Website',
                     () {
-                      launchUrl(church.website!);
+                      launchUrl(church.website ?? "");
                     },
                   ),
                   buildLinks(
@@ -110,7 +114,20 @@ Container buildChurchDetails(DetailsResult church) {
                 ],
               ),
               30.height,
-             Center(child: Text('This Church is not currently enrolled')),
+              con.registeredChurch == false
+                  ? Center(child: Text('This Church is not currently enrolled'))
+                  : Text(''),
+              SizedBox(
+                height: 9,
+              ),
+              con.registeredChurch == false
+                  ? buildCTABtn(
+                      redColor,
+                      FontAwesomeIcons.plus,
+                      'Enroll Now',
+                      () => Get.toNamed(Routes.addNewChurch),
+                    )
+                  : Container(),
             ],
           ),
         ),

@@ -55,7 +55,11 @@ class Authentication extends GetxController {
         // Get.offAll(GuestHomePage());
 
         localData.setMemberStatus(false);
-      } else {
+
+      } 
+      else 
+      {
+
         Get.offAllNamed(Routes.home);
         localData.setMemberStatus(true);
       }

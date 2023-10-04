@@ -77,14 +77,15 @@ class MembersAPI {
       to_church_id
     }
   }""";
-
+    log('...........${profileApi.memberId}');
+    log('.......$churchId');
     Map<String, dynamic> variables = {
       "to_church_id": churchId,
       "member_id": profileApi.memberId,
     };
 
     var result = await hasura.hasuraQuery(query, variables);
-   log('mmmmmmmmmmmmmm$result');
+    log('mmmmmmmmmmmmmm$result');
     return result["data"]["member_transfer"];
   }
 
@@ -105,7 +106,9 @@ class MembersAPI {
     """;
 
     Map<String, dynamic> variables = {
-      "id": profileApi.selectedChurchId,
+      "id": profileApi.selectedChurchId == 99999999
+          ? toId
+          : profileApi.selectedChurchId,
       "toid": toId,
       "member": profileApi.memberId,
     };

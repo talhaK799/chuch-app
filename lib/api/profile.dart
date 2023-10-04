@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:churchappenings/models/member-of.dart';
 import 'package:churchappenings/services/hasura.dart';
@@ -14,6 +15,7 @@ class ProfileAPI {
   String name = '';
   String email = '';
   String selectedChurchName = "";
+  String selectedChurchLogo = "";
   DateTime dob = DateTime.now();
   int? memberId;
   late String uuid;
@@ -28,12 +30,6 @@ class ProfileAPI {
               email
               birthdate
               type
-            }
-
-            facility {
-              id
-              name
-              logo
             }
 
             member(where: {user: {uuid: {_eq: \$uuid}}}) {
@@ -71,15 +67,22 @@ class ProfileAPI {
 
         print("Churches => ${churches.length}");
 
+        ///
+        ///
+
         // Selected Church Id
-        int getSelectedChurchId = await localData.getInt('selected_church_id');
-        if (getSelectedChurchId != 99999999)
-          selectedChurchId = getSelectedChurchId;
-        else if (res["data"]["facility"] !=
-            null) if (res["data"]["facility"].length > 0) {
-          selectedChurchId = res["data"]["facility"][0]["id"];
-          selectedChurchName = res["data"]["facility"][0]["name"];
-        }
+        // int getSelectedChurchId = await localData.getInt('selected_church_id');
+        // if (getSelectedChurchId != 99999999){
+        //        selectedChurchId = getSelectedChurchId;
+        //     log('selected church id debug.............$selectedChurchId');
+        // }
+
+        // else if (res["data"]["facility"] !=
+        //     null) if (res["data"]["facility"].length > 0) {
+        //   selectedChurchId = res["data"]["facility"][0]["id"];
+        //   selectedChurchName = res["data"]["facility"][0]["name"];
+        //    log('selected church id else  debug.............$selectedChurchId');
+        // }
       }
     } catch (e) {
       print("Error => $e");
@@ -103,19 +106,50 @@ class ProfileAPI {
   }
 
   Future toCheckMember(int memberId) async {
-    // print("**** MEMBER ID **** $memberId");
+    print("**** MEMBER ID **** $memberId");
     String query = """
       query MyQuery {
        facility_member(where: {member_id: {_eq: $memberId}}) {
         facility_id
+        facility{
+          logo
+          name
+        }
       }
     }
     """;
-
     var res = await hasura.hasuraQuery(query);
-    // print("**** tocheck Response ==== >>> $res");
+    log("**** tocheck Response ==== >>> $res");
+
+    if (res != null &&
+        res["data"] != null &&
+        res["data"]["facility_member"] != null) {
+      var facilityMember = res["data"]["facility_member"];
+      if (facilityMember is List && facilityMember.isNotEmpty) {
+        int id = facilityMember[0]["facility_id"];
+        await localData.setInt('selected_church_id', id);
+
+        var name = facilityMember[0]["facility"]["name"];
+        await localData.setString('selected_church_name', name);
+        var logo = facilityMember[0]["facility"]["logo"];
+        await localData.setString('selected_church_logo', logo);
+        selectedChurchLogo = await localData.getString('selected_church_logo');
+        selectedChurchName = await localData.getString('selected_church_name');
+        selectedChurchId = await localData.getInt('selected_church_id');
+        log("****......selected Church id**** $selectedChurchName");
+      } else {
+       
+        await localData.setInt('selected_church_id', 99999999);
+        selectedChurchId = await localData.getInt('selected_church_id');
+        log("****............jjjjjjjjj........................ Selected Church id ID **** $selectedChurchId");
+      }
+    } else {
+     
+      log('unexpected error');
+    }
 
     return res["data"]["facility_member"];
+
     // {data: {facility_member: []}}
   }
 

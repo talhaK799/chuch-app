@@ -44,12 +44,26 @@ class HomePage extends StatelessWidget {
                         width: 20,
                       ),
                       Expanded(
-                          child: _.churchLogo != null
+                          child: _.profileApi.selectedChurchLogo != null
                               ? Image(
-                                  image: NetworkImage(_.churchLogo!),
-                                  height: 100)
+                                  image: NetworkImage(
+                                      _.profileApi.selectedChurchLogo!),
+                                  height: 100,
+                                )
                               : Container()),
                     ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    _.profileApi.selectedChurchName,
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                    ),
                   ),
                 ),
                 SizedBox(
@@ -177,7 +191,7 @@ class HomePage extends StatelessWidget {
                             },
                           ),
                           buildQuickMenuItem(
-                            name: 'Departments',
+                            name: 'My Departments',
                             assetUrl: 'assets/icon/034-structure.svg',
                             bgColor: redColor.withOpacity(0.2),
                             action: () {
@@ -219,11 +233,14 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 30),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _.categories.map(
-                    (single) {
+
+                SizedBox(
+                  height: 100,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _.categories.length,
+                    itemBuilder: (context, index) {
+                      var single = _.categories[index];
                       return GestureDetector(
                         onTap: () {
                           Get.to(BlogPage(),
@@ -264,8 +281,55 @@ class HomePage extends StatelessWidget {
                         ),
                       );
                     },
-                  ).toList(),
+                  ),
                 ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: _.categories.map(
+                //     (single) {
+                //       return GestureDetector(
+                //         onTap: () {
+                //           Get.to(BlogPage(),
+                //               arguments: {'blogName': single["name"]});
+                //         },
+                //         child: Container(
+                //           margin:
+                //               EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                //           decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(10),
+                //             image: DecorationImage(
+                //               image: AssetImage('assets/sample-bulletin.jpeg'),
+                //               fit: BoxFit.cover,
+                //             ),
+                //           ),
+                //           child: Container(
+                //             decoration: BoxDecoration(
+                //               color: Colors.black.withOpacity(0.75),
+                //               borderRadius: BorderRadius.circular(10),
+                //             ),
+                //             padding: EdgeInsets.symmetric(
+                //               horizontal: 20,
+                //               vertical: 30,
+                //             ),
+                //             child: Column(
+                //               crossAxisAlignment: CrossAxisAlignment.start,
+                //               children: [
+                //                 Text(
+                //                   single["name"],
+                //                   style: TextStyle(
+                //                     color: Colors.white,
+                //                     height: 1.5,
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       );
+                //     },
+                //   ).toList(),
+                // ),
                 SizedBox(height: 50),
               ],
             ),

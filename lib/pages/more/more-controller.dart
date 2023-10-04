@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/member-of.dart';
 import 'package:churchappenings/models/menu-item.dart';
@@ -18,9 +20,11 @@ class MoreController extends GetxController {
   List<Member> churches = [];
   Member? selectedChurchObj;
   int selectedChurch = 9999999;
-
+  bool? isMember ;
   @override
   void onInit() async {
+    isMember = await localData.getMemberStatus();
+    log('mmmmmmmmm$isMember.....');
     name = profileApi.name;
     churches = profileApi.churches;
     selectedChurch = profileApi.selectedChurchId;
@@ -49,6 +53,59 @@ class MoreController extends GetxController {
     selectedChurch = churchId;
     update();
   }
+
+  List<CMenuItem> guestMenuItems = [
+    CMenuItem(
+      title: 'Profile',
+      action: () {
+        Get.to(ProfilePage());
+      },
+      icon: Icons.build_outlined,
+    ),
+    CMenuItem(
+      title: 'About Church Happenings',
+      action: () {
+        Get.toNamed(Routes.aboutChurchappening);
+      },
+      icon: Icons.change_history_outlined,
+    ),
+    CMenuItem(
+      title: 'About SDA Church',
+      action: () {
+        Get.toNamed(Routes.aboutSDA);
+      },
+      icon: Icons.info_outline,
+    ),
+    CMenuItem(
+      title: 'Privacy Policy',
+      action: () {
+        Get.toNamed(Routes.privacyPolicy);
+      },
+      icon: Icons.privacy_tip_outlined,
+    ),
+    CMenuItem(
+      title: 'Terms of Service',
+      action: () {
+        Get.toNamed(Routes.termsOfService);
+      },
+      icon: Icons.privacy_tip_outlined,
+    ),
+    CMenuItem(
+      title: 'Help',
+      action: () {},
+      icon: Icons.help_center_outlined,
+    ),
+    CMenuItem(
+      title: 'Logout',
+      action: logOut,
+      icon: Icons.exit_to_app,
+    ),
+    CMenuItem(
+      title: 'App Version - v1.0',
+      action: onTap,
+      icon: Icons.mobile_friendly,
+    ),
+  ];
 
   List<CMenuItem> moreMenuItems = [
     CMenuItem(

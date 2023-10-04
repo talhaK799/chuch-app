@@ -108,11 +108,11 @@ class _SearchPageState extends State<SearchPage> {
                               searchController.activeSearchBy,
                               searchController.handleSubMenuTap,
                             ),
-                            buildSearchByOption(
-                              'Register',
-                              searchController.activeSearchBy,
-                              searchController.handleSubMenuTap,
-                            )
+                            // buildSearchByOption(
+                            //   'Register',
+                            //   searchController.activeSearchBy,
+                            //   searchController.handleSubMenuTap,
+                            // )
                           ],
                         ),
                         getForm(searchController.activeSearchBy),
@@ -122,110 +122,118 @@ class _SearchPageState extends State<SearchPage> {
                         Expanded(
                           child: controller.loading
                               ? Center(child: CircularProgressIndicator())
-                              : controller.registerChurch!
-                                  ? ListView.builder(
-                                      itemCount: controller.facilities.length,
-                                      itemBuilder: (context, index) {
-                                        final facility =
-                                            controller.facilities[index];
-                                        return
-                                            //  Text(facility['name']);
-                                            GestureDetector(
-                                          onTap: () async {
-                                            final localData = LocalData();
-                                            localData.setString(
-                                                'Church', facility['name']);
-                                            localData.setInt(
-                                                'Churchid', facility['id']);
-                                            // await controller.getMemberStatus();
+                              // : controller.registerChurch!
+                              //     ? ListView.builder(
+                              //         itemCount: controller.facilities.length,
+                              //         itemBuilder: (context, index) {
+                              //           final facility =
+                              //               controller.facilities[index];
+                              //           return
+                              //               //  Text(facility['name']);
+                              //               GestureDetector(
+                              //             onTap: () async {
+                              //               final localData = LocalData();
+                              //               localData.setString(
+                              //                   'Church', facility['name']);
+                              //               localData.setInt(
+                              //                   'Churchid', facility['id']);
+                              //               localData.setString('churchLogo',
+                              //                   facility['logo'] ?? "null");
+                              //               // await controller.getMemberStatus();
 
-                                            Get.to(
-                                                ResisterChurchesDetailsScreen(
-                                              facilities: facility,
-                                            ));
-                                          },
-                                          child: Container(
-                                            padding:
-                                                EdgeInsets.only(bottom: 20),
-                                            margin: EdgeInsets.only(bottom: 20),
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.grey
-                                                        .withOpacity(0.2)),
-                                              ),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                facility['logo'] != null
-                                                    ? Container(
-                                                        height: 150,
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          image:
-                                                              DecorationImage(
-                                                            image: Image.network(
-                                                                    facility[
-                                                                            'logo'] ??
-                                                                        "")
-                                                                .image,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : Container(
-                                                        height: 150,
-                                                        width: double.infinity,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          image:
-                                                              DecorationImage(
-                                                            image: Image.asset(
-                                                                    'assets/placeholder-1000.png')
-                                                                .image,
-                                                            fit: BoxFit.cover,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                //    : Container(),
-                                                SizedBox(height: 10),
-                                                Text(
-                                                  facility['name'] ?? "",
-                                                  style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontWeight: FontWeight.w700,
-                                                  ),
-                                                ),
-                                                SizedBox(height: 7),
-                                                SizedBox(height: 7),
-                                                Text(
-                                                  facility['description'] ?? "",
-                                                  style:
-                                                      TextStyle(fontSize: 16),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : ListView.builder(
+                              //               Get.to(
+                              //                   ResisterChurchesDetailsScreen(
+                              //                 facilities: facility,
+                              //               ));
+                              //             },
+                              //             child: Container(
+                              //               padding:
+                              //                   EdgeInsets.only(bottom: 20),
+                              //               margin: EdgeInsets.only(bottom: 20),
+                              //               decoration: BoxDecoration(
+                              //                 border: Border(
+                              //                   bottom: BorderSide(
+                              //                       width: 1,
+                              //                       color: Colors.grey
+                              //                           .withOpacity(0.2)),
+                              //                 ),
+                              //               ),
+                              //               child: Column(
+                              //                 crossAxisAlignment:
+                              //                     CrossAxisAlignment.start,
+                              //                 children: [
+                              //                   facility['logo'] != null
+                              //                       ? Container(
+                              //                           height: 150,
+                              //                           width: double.infinity,
+                              //                           decoration:
+                              //                               BoxDecoration(
+                              //                             borderRadius:
+                              //                                 BorderRadius
+                              //                                     .circular(10),
+                              //                             image:
+                              //                                 DecorationImage(
+                              //                               image: Image.network(
+                              //                                       facility[
+                              //                                               'logo'] ??
+                              //                                           "")
+                              //                                   .image,
+                              //                               fit: BoxFit.cover,
+                              //                             ),
+                              //                           ),
+                              //                         )
+                              //                       : Container(
+                              //                           height: 150,
+                              //                           width: double.infinity,
+                              //                           decoration:
+                              //                               BoxDecoration(
+                              //                             borderRadius:
+                              //                                 BorderRadius
+                              //                                     .circular(10),
+                              //                             image:
+                              //                                 DecorationImage(
+                              //                               image: Image.asset(
+                              //                                       'assets/placeholder-1000.png')
+                              //                                   .image,
+                              //                               fit: BoxFit.cover,
+                              //                             ),
+                              //                           ),
+                              //                         ),
+                              //                   //    : Container(),
+                              //                   SizedBox(height: 10),
+                              //                   Text(
+                              //                     facility['name'] ?? "",
+                              //                     style: TextStyle(
+                              //                       fontSize: 17,
+                              //                       fontWeight: FontWeight.w700,
+                              //                     ),
+                              //                   ),
+                              //                   SizedBox(height: 7),
+                              //                   SizedBox(height: 7),
+                              //                   Text(
+                              //                     facility['description'] ?? "",
+                              //                     style:
+                              //                         TextStyle(fontSize: 16),
+                              //                   ),
+                              //                 ],
+                              //               ),
+                              //             ),
+                              //           );
+                              //         },
+                              //       )
+                              //     : 
+                              : ListView.builder(
                                       itemCount: controller.churches.length,
                                       itemBuilder: (context, index) {
+                                      
                                         final church =
                                             controller.churches[index];
+                                     
+
                                         final images = controller.images;
+                                        
                                         return buildChurchCard(
+                                          controller.facilities,
                                           images,
                                           church,
                                           index,

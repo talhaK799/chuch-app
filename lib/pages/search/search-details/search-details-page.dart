@@ -1,6 +1,9 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/guest-home/guest-home-page.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
+import 'package:churchappenings/widgets/rectangleiconButton.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 
 import 'build-church-details.dart';
@@ -30,8 +33,7 @@ class SearchDetailsPage extends StatelessWidget {
             if (image.isEmpty) {
               imagePresent = false;
             }
-
-            return Container(
+     return Container(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -98,24 +100,53 @@ class SearchDetailsPage extends StatelessWidget {
                       SizedBox(
                         height: 15,
                       ),
-                      buildChurchDetails(church),
+                      buildChurchDetails(church, _),
                       _.registeredChurch == true
-                          ? GestureDetector(
-                              onTap: () {
-                                // _.memberInvite(_.facilityId);
-                              },
-                              child: Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width * 1,
-                                decoration: BoxDecoration(
-                                    color: redColor,
-                                    borderRadius: BorderRadius.circular(25)),
-                                child: Center(
-                                    child: Text(
-                                  "Request Membership",
-                                  style: TextStyle(color: Colors.white),
-                                )),
-                              ),
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Flexible(
+                                  child: RectangularIconButton(
+                                    icon: Icons.real_estate_agent_sharp,
+                                    label: _.memberStatus.isNotEmpty
+                                        ? _.memberStatus[0]['status']
+                                        : 'Request Membership',
+                                    //  label: 'Request for Membership' ,
+                                    buttonColor: redColor,
+                                    onPressed: _.memberTransferr == false
+                                        ? () async {
+                                            // await _.memberTransfer(widget.facilities['id']);
+                                            if (_.memberStatus.isEmpty) {
+                                              await _.memberTransfer(
+                                                 );
+                                            } else {
+                                              log('Already requested');
+                                            }
+                                          }
+                                        : () {
+                                            log('Already requested...........');
+                                          },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                Flexible(
+                                  child: RectangularIconButton(
+                                    icon: Icons.location_on,
+                                    label: 'Visit Church',
+                                    buttonColor: redColor,
+                                    onPressed: () {
+                                      //   final localData = LocalData();
+
+                                      // localData.setString('Church', widget.facilities['name']);
+                                      // localData.setInt('Churchid', widget.facilities['id']);
+
+                                      Get.off(GuestHomePage());
+                                    },
+                                  ),
+                                ),
+                              ],
                             )
                           : Container(),
                       SizedBox(height: 20),

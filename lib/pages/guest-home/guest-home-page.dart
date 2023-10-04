@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'guest-home-controller.dart';
 
 class GuestHomePage extends StatelessWidget {
+  final controller = Get.put(GuestHomeController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +23,24 @@ class GuestHomePage extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: navigateToWidget(),
         ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              controller.openDrawer();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 45,
+                height: 45,
+                child: Image(
+                  image: AssetImage('assets/icon/menu.png'),
+                  width: 75,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: GetBuilder<GuestHomeController>(
         init: GuestHomeController(),
@@ -37,8 +56,19 @@ class GuestHomePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          // _.churchLogo != "null"
+                          //     ? Container(
+                          //         width: 50,
+                          //         height: 50,
+                          //         child: Image(
+                          //           image: NetworkImage(_.churchLogo),
+                          //           fit: BoxFit.cover,
+                          //           // height: 100,
+                          //         ))
+                          //     : Container(),
+
                           Text(
                             truncateText(_.churchName, 12),
                             style: TextStyle(
@@ -47,45 +77,38 @@ class GuestHomePage extends StatelessWidget {
                               height: 1.5,
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              _.logOut();
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: redColor,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.logout,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  2.width,
-                                  Text(
-                                    'Log out',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     _.logOut();
+                          //   },
+                          //   child: Container(
+                          //     padding: EdgeInsets.all(10),
+                          //     decoration: BoxDecoration(
+                          //       color: redColor,
+                          //       borderRadius: BorderRadius.circular(10),
+                          //     ),
+                          //     child: Row(
+                          //       children: [
+                          //         Icon(
+                          //           Icons.logout,
+                          //           color: Colors.white,
+                          //           size: 20,
+                          //         ),
+                          //         2.width,
+                          //         Text(
+                          //           'Log out',
+                          //           style: TextStyle(
+                          //             fontSize: 12,
+                          //             fontWeight: FontWeight.w700,
+                          //             color: Colors.white,
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                         ],
-                      ),
-                      Text(
-                        'Welcome to Churchappenings',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300,
-                          height: 1.5,
-                        ),
                       ),
                     ],
                   ),

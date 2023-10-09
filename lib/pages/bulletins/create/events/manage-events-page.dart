@@ -1,10 +1,12 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/bulletins/add%20assignment/add_assignment.dart';
 import 'package:churchappenings/pages/bulletins/single-bulletin/build-event-item.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../widgets/custom_card.dart';
 import 'manage-events-controller.dart';
 
 class ManageEventsPage extends StatelessWidget {
@@ -30,7 +32,9 @@ class ManageEventsPage extends StatelessWidget {
                     children: [
                       navigateToWidget(),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(AddAssignmentPage());
+                        },
                         child: Text(
                           'Add Assignment',
                           style: TextStyle(
@@ -74,12 +78,90 @@ class ManageEventsPage extends StatelessWidget {
                       },
                     ).toList(),
                   ),
+                  SectionListView(
+                    title: 'Members',
+                    listView: ListView.builder(
+                      itemCount: 1,
+                      shrinkWrap:
+                          true, // Allow the ListView to be scrollable if needed
+                      physics:
+                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCard(
+                            title: 'Zainab',
+                            assignee: 'Person',
+                            datetime: 'date');
+                      },
+                    ),
+                  ),
+                  SectionListView(
+                    title: 'Department',
+                    listView: ListView.builder(
+                      itemCount: 1,
+                      shrinkWrap:
+                          true, // Allow the ListView to be scrollable if needed
+                      physics:
+                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCard(
+                            title: 'Zainab',
+                            assignee: 'Person',
+                            datetime: 'date');
+                      },
+                    ),
+                  ),
+                  SectionListView(
+                    title: 'Designation',
+                    listView: ListView.builder(
+                      itemCount: 1,
+                      shrinkWrap:
+                          true, // Allow the ListView to be scrollable if needed
+                      physics:
+                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                      itemBuilder: (BuildContext context, int index) {
+                        return CustomCard(
+                            title: 'Zainab',
+                            assignee: 'Person',
+                            datetime: 'date');
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class SectionListView extends StatelessWidget {
+  final String? title;
+
+  final ListView listView;
+  SectionListView({
+    required this.title,
+    required this.listView,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            title ?? "",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        listView ?? Container(),
+      ],
     );
   }
 }

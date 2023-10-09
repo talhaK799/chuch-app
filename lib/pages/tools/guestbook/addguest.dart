@@ -98,11 +98,10 @@ class _AddGuestBookState extends State<AddGuestBook> {
               );
             }));
   }
-
-  textFields(AddGuestController controller) {
+textFields(AddGuestController controller) {
     return Column(
       children: [
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Name',
           hintText: 'Enter your name',
           keyboardType: TextInputType.text,
@@ -116,7 +115,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             controller.addguestm.name = value;
           },
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Email',
           hintText: 'Enter your email',
           keyboardType: TextInputType.emailAddress,
@@ -131,7 +130,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             controller.addguestm.email = value;
           },
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Phone',
           hintText: 'Enter your PhoneNo',
           keyboardType: TextInputType.phone,
@@ -146,7 +145,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             controller.addguestm.phoneNo = value;
           },
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Church Affiliation',
           hintText: 'Please enter church affiliation',
           keyboardType: TextInputType.text,
@@ -185,7 +184,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             );
           }).toList(),
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Request Call',
           hintText: 'Request Call',
           keyboardType: TextInputType.text,
@@ -203,7 +202,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             ),
           ),
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Date of visit',
           controller: controller.dateController,
           hintText: ' Date of visit ${controller.dateController.text}',
@@ -217,7 +216,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             // log('message  ${controller.addguestm.dateOfVisit} ');
           },
         ),
-        CustomTextField(
+        CustomTextField2(
           readOnly: true,
           labelText: 'Country',
           hintText: 'Select your Country',
@@ -235,7 +234,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             ),
           ),
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'State',
           hintText: 'Enter your state',
           keyboardType: TextInputType.text,
@@ -250,7 +249,7 @@ class _AddGuestBookState extends State<AddGuestBook> {
             controller.addguestm.state = value;
           },
         ),
-        CustomTextField(
+        CustomTextField2(
           labelText: 'Special Requests',
           hintText: 'Enter any special requests',
           maxLines: 3,

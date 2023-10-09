@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/bulletins/create/EditBulliten/root_page.dart';
 import 'package:churchappenings/pages/bulletins/create/bulletin-created-by-me-page.dart';
 import 'package:churchappenings/pages/bulletins/permission/bulletin_permission_page.dart';
 import 'package:churchappenings/pages/bulletins/single-bulletin/single-bulletin-page.dart';
@@ -42,12 +43,8 @@ class BulletinsPage extends StatelessWidget {
                             SizedBox(),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            BulletinPermissionPage()));
-                                // Get.to(BulletinCreatedByMePage());
+                                //    Get.to(RootPageBulletinEdit());
+                                Get.to(BulletinCreatedByMePage());
                               },
                               child: Text(
                                 'Create',

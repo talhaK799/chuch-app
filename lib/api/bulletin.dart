@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/services/hasura.dart';
@@ -10,6 +11,41 @@ class BulletinAPI {
   final HasuraService hasura = HasuraService.to;
   var uuid = Uuid();
   Logger log = Logger();
+
+  Future getDesignations() async {
+    String query = """
+    query MyQuery {
+      designation {
+        title
+      }
+    }
+  """;
+
+    var response = await hasura.hasuraQuery(query);
+    print('res $response');
+
+    return response["data"]["designation"];
+  }
+
+  Future getdepartments() async {
+    String query = """
+    query MyQuery(\$facility_id: Int) {
+      department(where: {facility_id: {_eq: \$facility_id}}) {
+        name
+        id
+      }
+    }
+  """;
+
+    Map<String, dynamic> variables = {
+      "facility_id": profileApi.selectedChurchId,
+    };
+
+    var response = await hasura.hasuraQuery(query, variables);
+    print('res $response');
+
+    return response["data"]["department"];
+  }
 
   Future<dynamic> fetchUpComingBulletins(String currentDate) async {
     print("AAA99:: $currentDate");
@@ -232,14 +268,16 @@ query MyQuery {
     String image,
     String subtitle,
     String description,
+    String permission,
+    bool isdraft,
   ) async {
     String mutation = """
-      mutation MyMutation(\$id: String!, \$image: String!, \$name: String!, \$description: String!, \$facility_id: Int!, \$subtitle: String!) {
-      insert_bulletin_one(object: {id: \$id, image: \$image, name: \$name, responsibility: [], facility_id: \$facility_id, subtitle: \$subtitle, description: \$description}) {
+    mutation MyMutation(\$id: String!, \$image: String!, \$name: String!, \$description: String!, \$facility_id: Int!, \$subtitle: String!, \$permission: String!, \$createdBy: Int!, \$is_draft: Boolean!) {
+      insert_bulletin_one(object: {id: \$id, image: \$image, name: \$name, responsibility: [], facility_id: \$facility_id, subtitle: \$subtitle, description: \$description, permission: \$permission, created_by: \$createdBy, is_draft: \$is_draft}) {
         id
       }
     }
-    """;
+  """;
 
     Map<String, dynamic> variables = {
       "id": "bulletin-" +
@@ -251,6 +289,9 @@ query MyQuery {
       "facility_id": profileApi.selectedChurchId,
       "description": description,
       "subtitle": subtitle,
+      "permission": permission,
+      "createdBy": profileApi.memberId,
+      "is_draft": isdraft,
     };
 
     print(variables.toString());

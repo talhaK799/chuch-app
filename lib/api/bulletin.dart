@@ -297,6 +297,38 @@ query MyQuery {
     return res["data"]["bulletin"][0];
   }
 
+  getDeptsbyId(String id) async {
+    String query = """
+  query MyQuery(\$id: String!) {
+    bulletin(where: {id: {_eq: \$id}}) {
+      dept_assignments {
+        bulletin_id
+        dept_happening_id
+        dept_happening {
+          date_time
+          dept_id
+          description
+          id
+          title
+          department {
+          name
+        }
+      }
+      }
+    }
+  }
+  """;
+
+    Map<String, dynamic> variables = {
+      "id": id,
+    };
+
+    var res = await hasura.hasuraQuery(query, variables);
+    print('$res.....');
+
+    return res["data"]["bulletin"][0]["dept_assignments"];
+  }
+
   Future<dynamic> getEventsByBulletinId(String id) async {
     String query = """
       query MyQuery(\$id: String!) {

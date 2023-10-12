@@ -33,7 +33,9 @@ class ManageEventsPage extends StatelessWidget {
                       navigateToWidget(),
                       GestureDetector(
                         onTap: () {
-                          Get.to(AddAssignmentPage(bulletinId: _.bulletinId,));
+                          Get.to(AddAssignmentPage(
+                            bulletinId: _.bulletinId,
+                          ));
                         },
                         child: Text(
                           'Add Assignment',
@@ -67,6 +69,16 @@ class ManageEventsPage extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Member & Designation',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Column(
                     children: _.events.map<Widget>(
                       (assignment) {
@@ -78,54 +90,70 @@ class ManageEventsPage extends StatelessWidget {
                       },
                     ).toList(),
                   ),
-                  SectionListView(
-                    title: 'Members',
-                    listView: ListView.builder(
-                      itemCount: 1,
-                      shrinkWrap:
-                          true,
-                      physics:
-                          NeverScrollableScrollPhysics(), 
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCard(
-                            title: 'Zainab',
-                            assignee: 'Person',
-                            datetime: 'date');
-                      },
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      'Department',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                  SectionListView(
-                    title: 'Department',
-                    listView: ListView.builder(
-                      itemCount: 1,
-                      shrinkWrap:
-                          true, 
-                      physics:
-                          NeverScrollableScrollPhysics(), 
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCard(
-                            title: 'Zainab',
-                            assignee: 'Person',
-                            datetime: 'date');
+                  Column(
+                    children: _.deptEvents.map<Widget>(
+                      (assignment) {
+                        return buildEventItem(
+                          title: assignment["dept_happening"]["title"],
+                          assignedTo: assignment["dept_happening"]["department"]
+                              ["name"],
+                          time: assignment["dept_happening"]["date_time"],
+                        );
                       },
-                    ),
+                    ).toList(),
                   ),
-                  SectionListView(
-                    title: 'Designation',
-                    listView: ListView.builder(
-                      itemCount: 1,
-                      shrinkWrap:
-                          true, 
-                      physics:
-                          NeverScrollableScrollPhysics(), 
-                      itemBuilder: (BuildContext context, int index) {
-                        return CustomCard(
-                            title: 'Zainab',
-                            assignee: 'Person',
-                            datetime: 'date');
-                      },
-                    ),
-                  ),
+                  // SectionListView(
+                  //   title: 'Members',
+                  //   listView: ListView.builder(
+                  //     itemCount: 1,
+                  //     shrinkWrap: true,
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     itemBuilder: (BuildContext context, int index) {
+                  //       return CustomCard(
+                  //           title: 'Zainab',
+                  //           assignee: 'Person',
+                  //           datetime: 'date');
+                  //     },
+                  //   ),
+                  // ),
+                  // SectionListView(
+                  //   title: 'Department',
+                  //   listView: ListView.builder(
+                  //     itemCount: 1,
+                  //     shrinkWrap: true,
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     itemBuilder: (BuildContext context, int index) {
+                  //       return CustomCard(
+                  //           title: 'Zainab',
+                  //           assignee: 'Person',
+                  //           datetime: 'date');
+                  //     },
+                  //   ),
+                  // ),
+                  // SectionListView(
+                  //   title: 'Designation',
+                  //   listView: ListView.builder(
+                  //     itemCount: 1,
+                  //     shrinkWrap: true,
+                  //     physics: NeverScrollableScrollPhysics(),
+                  //     itemBuilder: (BuildContext context, int index) {
+                  //       return CustomCard(
+                  //           title: 'Zainab',
+                  //           assignee: 'Person',
+                  //           datetime: 'date');
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -135,8 +163,6 @@ class ManageEventsPage extends StatelessWidget {
     );
   }
 }
-
-
 
 class SectionListView extends StatelessWidget {
   final String? title;

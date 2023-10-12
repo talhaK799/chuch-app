@@ -33,7 +33,7 @@ class ManageEventsPage extends StatelessWidget {
                       navigateToWidget(),
                       GestureDetector(
                         onTap: () {
-                          Get.to(AddAssignmentPage());
+                          Get.to(AddAssignmentPage(bulletinId: _.bulletinId,));
                         },
                         child: Text(
                           'Add Assignment',
@@ -83,9 +83,9 @@ class ManageEventsPage extends StatelessWidget {
                     listView: ListView.builder(
                       itemCount: 1,
                       shrinkWrap:
-                          true, // Allow the ListView to be scrollable if needed
+                          true,
                       physics:
-                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                          NeverScrollableScrollPhysics(), 
                       itemBuilder: (BuildContext context, int index) {
                         return CustomCard(
                             title: 'Zainab',
@@ -99,9 +99,9 @@ class ManageEventsPage extends StatelessWidget {
                     listView: ListView.builder(
                       itemCount: 1,
                       shrinkWrap:
-                          true, // Allow the ListView to be scrollable if needed
+                          true, 
                       physics:
-                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                          NeverScrollableScrollPhysics(), 
                       itemBuilder: (BuildContext context, int index) {
                         return CustomCard(
                             title: 'Zainab',
@@ -115,9 +115,9 @@ class ManageEventsPage extends StatelessWidget {
                     listView: ListView.builder(
                       itemCount: 1,
                       shrinkWrap:
-                          true, // Allow the ListView to be scrollable if needed
+                          true, 
                       physics:
-                          NeverScrollableScrollPhysics(), // Disable scrolling in this ListView
+                          NeverScrollableScrollPhysics(), 
                       itemBuilder: (BuildContext context, int index) {
                         return CustomCard(
                             title: 'Zainab',
@@ -135,6 +135,8 @@ class ManageEventsPage extends StatelessWidget {
     );
   }
 }
+
+
 
 class SectionListView extends StatelessWidget {
   final String? title;

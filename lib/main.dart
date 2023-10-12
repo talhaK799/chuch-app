@@ -18,8 +18,8 @@ void main() async {
       systemNavigationBarColor: Colors.transparent,
     ),
   );
-
-  await Firebase.initializeApp();
+ 
+ await Firebase.initializeApp();
   Get.put<Authentication>(Authentication());
   Get.lazyPut(() => FirestoreService());
 //  Get.lazyPut(()=>SearchController());

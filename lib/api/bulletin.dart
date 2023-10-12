@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:churchappenings/api/profile.dart';
+import 'package:churchappenings/models/add_assignment_deparment.dart';
 import 'package:churchappenings/services/hasura.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -9,8 +10,142 @@ import 'package:uuid/uuid.dart';
 class BulletinAPI {
   final ProfileAPI profileApi = ProfileAPI.to;
   final HasuraService hasura = HasuraService.to;
+  String? deptHappeningId;
   var uuid = Uuid();
   Logger log = Logger();
+
+  assignMemDesig(InsertDepartment model) async {
+    String query = """
+    mutation InsertAssignment(\$assigne: String!, \$assigne_uuid: String!, \$bulletin_id: String!, \$happening_id: String!) {
+      insert_assignment(objects: {assigne: \$assigne, assigne_uuid: \$assigne_uuid, bulletin_id: \$bulletin_id, happening_id: \$happening_id}) {
+        affected_rows
+      }
+    }
+  """;
+
+    Map<String, dynamic> variables = {
+      "assigne": model.assignee,
+      "assigne_uuid": model.uuid,
+      "bulletin_id": model.bulletinId,
+      "happening_id": model.deptHappeningId,
+    };
+
+    var res = await hasura.hasuraMutation(query, variables);
+    print('Response: $res');
+    return res["data"]["insert_assignment"]["affected_rows"];
+  }
+
+  addMemberDesign(InsertDepartment model) async {
+    String query = """
+    mutation MyQuery(\$date_time: timestamptz!, \$description: String!, \$id: String!, \$title: String!, \$type: String!) {
+      insert_happening(objects: {date_time: \$date_time, description: \$description, id: \$id, title: \$title, type: \$type}) {
+        affected_rows
+      }
+    }
+  """;
+
+    Map<String, dynamic> variables = {
+      "date_time": model.datetime,
+      "type": model.type,
+      "description": model.description,
+      "id": model.deptHappeningId,
+      "title": model.title,
+    };
+
+    var res = await hasura.hasuraMutation(query, variables);
+    print('Response: $res');
+    return res["data"]["insert_happening"]["affected_rows"];
+  }
+
+  assigndept(InsertDepartment model) async {
+    print({model.deptHappeningId});
+    String query = """
+mutation MyMutation(\$dept_happening_id: String!, \$bulletin_id: String!) {
+  insert_dept_assignment(objects: {dept_happening_id: \$dept_happening_id, bulletin_id: \$bulletin_id}) {
+    affected_rows
+  }
+}
+
+""";
+    Map<String, dynamic> variables = {
+      "dept_happening_id": model.deptHappeningId,
+      "bulletin_id": model.bulletinId,
+    };
+    var res = await hasura.hasuraMutation(query, variables);
+    print('Response: $res');
+    return res["data"]["insert_dept_assignment"]["affected_rows"];
+  }
+
+  addAssignmentDepartment(InsertDepartment model) async {
+    // var  deptHappeningId = "dhp-" +
+    //       profileApi.selectedChurchId.toString() +
+    //       "-" +
+    //       DateTime.now().toString();
+    print('${model.deptHappeningId}................');
+
+    String query = """
+    mutation MyMutation(\$date_time: timestamptz!, \$dept_id: Int!, \$description: String!, \$id: String!, \$title: String!) {
+      insert_dept_happening(objects: {
+        date_time: \$date_time,
+        dept_id: \$dept_id,
+        description: \$description,
+        id: \$id,
+        title: \$title
+      }) {
+        affected_rows
+      }
+    }
+  """;
+
+    Map<String, dynamic> variables = {
+      "date_time": model.datetime,
+      "dept_id": model.deptid,
+      "description": model.description,
+      "id": model.deptHappeningId,
+      "title": model.title,
+    };
+
+    var res = await hasura.hasuraMutation(query, variables);
+    print('Response: $res');
+    return res["data"]["insert_dept_happening"]["affected_rows"];
+  }
+
+  Future getHintsEmail() async {
+    String query = """
+    query MyQuery(\$facility_id: Int) {
+      facility_member(where: {facility_id: {_eq: \$facility_id}}) {
+        member {
+          user {
+            email
+            uuid
+            }
+        }
+      }
+    }
+  """;
+
+    Map<String, dynamic> variables = {
+      "facility_id": profileApi.selectedChurchId,
+    };
+
+    try {
+      var response = await hasura.hasuraQuery(query, variables);
+      print('res $response');
+      if (response.containsKey("data")) {
+        List<dynamic> emailList = response["data"]["facility_member"]
+            .map((item) => item["member"]["user"])
+            .toList();
+
+        return emailList;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      print('Error: $e');
+
+      return null;
+    }
+  }
 
   Future getDesignations() async {
     String query = """

@@ -41,7 +41,7 @@ dependencies:
 
   #local storage
   shared_preferences: ^2.2.0
-# dio pakage
+  # dio pakage
   dio: ^5.0.0
 
   # Google place
@@ -64,7 +64,6 @@ dependencies:
   firebase_database: ^10.2.3
   permission_handler: ^10.0.0
   country_list_pick: ^1.0.1+6
-  
 
 dev_dependencies:
   flutter_test:

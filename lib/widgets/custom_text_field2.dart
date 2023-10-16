@@ -1,7 +1,7 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField2 extends StatelessWidget {
   final String labelText;
   final String hintText;
   final int? maxLines;
@@ -14,7 +14,7 @@ class CustomTextField extends StatelessWidget {
   Function()? onTap;
   Widget? suffixIcon;
 
-  CustomTextField({
+  CustomTextField2({
     required this.labelText,
     required this.hintText,
     this.maxLines,

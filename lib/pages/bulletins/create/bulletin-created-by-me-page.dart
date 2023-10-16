@@ -6,9 +6,9 @@ import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'add/add-bulletin-page.dart';
 import 'bulletin-created-by-me-controller.dart';
+
 
 class BulletinCreatedByMePage extends StatelessWidget {
   @override
@@ -27,6 +27,7 @@ class BulletinCreatedByMePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
@@ -52,7 +53,7 @@ class BulletinCreatedByMePage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 15,
-                      ),
+                      ),             
                       Text(
                         'Draft bulletins',
                         style: TextStyle(

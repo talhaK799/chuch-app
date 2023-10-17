@@ -67,10 +67,10 @@ class SingleBulletinPage extends StatelessWidget {
                         children: _.bulletin["assignments"].map<Widget>(
                           (assignment) {
                             return buildEventItem(
-                              title: assignment["happening"]["title"],
-                              assignedTo: assignment["assigne"],
-                              time: assignment["happening"]["date_time"],
-                            );
+                                title: assignment["happening"]["title"],
+                                assignedTo: assignment["assigne"],
+                                time: assignment["happening"]["date_time"],
+                                status: "PENDING");
                           },
                         ).toList(),
                       ),

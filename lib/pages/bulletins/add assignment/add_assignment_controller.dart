@@ -1,14 +1,8 @@
 import 'dart:developer';
-
 import 'package:churchappenings/api/bulletin.dart';
-
 import 'package:churchappenings/api/profile.dart';
-
-import 'package:churchappenings/models/add_assignment_deparment.dart';
-import 'package:churchappenings/pages/bulletins/create/add/add-bulletin-page.dart';
+import 'package:churchappenings/models/assignment.dart';
 import 'package:churchappenings/pages/home/home-page.dart';
-
-import 'package:churchappenings/utils/date-picker.dart';
 import 'package:churchappenings/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,11 +13,31 @@ class AssignmentController extends GetxController {
   RxString assignmentType = 'Member'.obs;
   HtmlEditorController descController = HtmlEditorController();
   final ProfileAPI profileApi = ProfileAPI.to;
-  InsertDepartment insrtdept = InsertDepartment();
+  Assginment assignment = Assginment();
   bool loading = false;
+  bool isStandardAssignment = true;
+  bool isPreConfirmed = false;
+  List<String> selectedAssignees = [];
+  List<int> selectedDeptIds = [];
   TextEditingController dateController = TextEditingController();
   TextEditingController assignController = TextEditingController();
   bool hint = false;
+  var truncatedName;
+  String? formattedDateTime;
+
+  @override
+  void onInit() async {
+    assignment.assignmentType = "STANDARD";
+    assignment.status = "PENDING";
+    await getdepartments();
+    await getDesignations();
+    await gethintEmails("");
+    // await BulletinAPI().addAssignmentDepartment(insrtdept);
+    loading = false;
+    update();
+    super.onInit();
+  }
+
   void setAssignmentType(String type) async {
     String name = await descController.getText();
     assignmentType.value = type;
@@ -31,7 +45,6 @@ class AssignmentController extends GetxController {
     update();
   }
 
-  String? formattedDateTime;
   Future<void> selectDateAndTime(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -63,26 +76,29 @@ class AssignmentController extends GetxController {
     }
   }
 
-  addMemDesignationAssign(context) async {
+  addMemAndDesigAssignments(context) async {
     loading = true;
-    insrtdept.deptHappeningId = "hp-" +
+    assignment.deptHappeningId = "hp-" +
         profileApi.selectedChurchId.toString() +
         "-" +
         DateTime.now().toString();
-    insrtdept.description = await descController.getText();
-    assignmentType.value = insrtdept.type!;
+    assignment.description = await descController.getText();
+    assignmentType.value = assignment.type!;
+    if (!isStandardAssignment) {
+      assignment.assignee = "";
+      print(selectedAssignees.length);
+      for (int i = 0; i < selectedAssignees.length; i++) {
+        assignment.assignee = i == 0
+            ? "${selectedAssignees[i]}"
+            : "${assignment.assignee}, ${selectedAssignees[i]}";
+      }
+    }
 
-    log('${insrtdept.description} description');
-    log('${insrtdept.assignee} AASSigee');
-    log('${insrtdept.type}type');
-    log('${insrtdept.bulletinId}bulletin id');
-    log('${insrtdept.uuid} uuid');
-    log('${insrtdept.title} title');
-
-    log('${insrtdept.datetime}');
+    log('${assignment.datetime}');
     try {
-      await BulletinAPI().addMemberDesign(insrtdept);
-      await BulletinAPI().assignMemDesig(insrtdept);
+      print("mem: ${assignment.toJson()}");
+      await BulletinAPI().addMemberDesign(assignment);
+      await BulletinAPI().assignMemDesig(assignment);
       Get.to(HomePage());
       loading = false;
     } catch (e) {
@@ -98,18 +114,31 @@ class AssignmentController extends GetxController {
 
   addAssignmentDepartment(context) async {
     loading = true;
-    insrtdept.deptHappeningId = "dhp-" +
+    assignment.deptHappeningId = "dhp-" +
         profileApi.selectedChurchId.toString() +
         "-" +
         DateTime.now().toString();
-    formattedDateTime = insrtdept.datetime;
+    formattedDateTime = assignment.datetime;
     log('$formattedDateTime}');
+    if (!isStandardAssignment) {
+      assignment.assignee = "";
+      print(selectedAssignees.length);
+      for (int i = 0; i < selectedAssignees.length; i++) {
+        assignment.assignee = i == 0
+            ? "${selectedAssignees[i]}"
+            : "${assignment.assignee}, ${selectedAssignees[i]}";
 
-    insrtdept.description = await descController.getText();
-    log('${insrtdept.description}');
+        // assignment.deptid = i == 0
+        //     ? ${selectedDeptIds[i]}
+        //     : "${assignment.assignee}, ${selectedAssignees[i]}";
+      }
+    }
+    assignment.description = await descController.getText();
+    log('${assignment.description}');
     try {
-      await BulletinAPI().addAssignmentDepartment(insrtdept);
-      await BulletinAPI().assigndept(insrtdept);
+      print(assignment.toJson());
+      await BulletinAPI().addAssignmentDepartment(assignment);
+      await BulletinAPI().assigndept(assignment);
       Get.to(HomePage());
       loading = false;
     } catch (e) {
@@ -138,19 +167,35 @@ class AssignmentController extends GetxController {
     update();
   }
 
-  List<dynamic> emailList = [];
-  List<dynamic> hintEmails = [];
+  List<UserData> emailList = [];
+  List<UserData> searchedEmails = [];
+  late List<dynamic> response;
 
   gethintEmails(String v) async {
-    loading = true;
-    List<dynamic> response = await BulletinAPI().getHintsEmail();
+    // loading = true;
 
-    hintEmails = response;
-    emailList = response.where((email) => email['email'].contains(v)).toList();
-    log('message $hintEmails');
-    log('message $emailList');
+    response = await BulletinAPI().getHintsEmail();
 
+    response.forEach((element) {
+      emailList.add(UserData(email: element["email"], uuid: element["uuid"]));
+    });
+    // emailList = response.where((email) => email['email'].contains(v)).toList();
     loading = false;
+    update();
+  }
+
+  searchByEmail(String value) {
+    print(emailList.length);
+    if (value.isEmpty) {
+      hint = false;
+    } else {
+      hint = true;
+      searchedEmails = emailList
+          .where((e) => (e.email!.toLowerCase().contains(value.toLowerCase())))
+          .toList();
+      // emailList.where((email) => emailList.contains(value)).toList();
+    }
+    print(searchedEmails.length);
     update();
   }
 
@@ -169,32 +214,25 @@ class AssignmentController extends GetxController {
     update();
   }
 
-  @override
-  void onInit() async {
-    await getdepartments();
-
-    await getDesignations();
-
-    await gethintEmails('kkk');
-
-    // await BulletinAPI().addAssignmentDepartment(insrtdept);
-    loading = false;
+  selectAssignee(int index) {
+    assignController.text = searchedEmails[index].email ?? "";
+    assignment.assignee = searchedEmails[index].email ?? "";
+    assignment.uuid = searchedEmails[index].uuid ?? "";
+    if (!isStandardAssignment) {
+      selectedAssignees.add(assignment.assignee ?? "");
+      assignController.clear();
+    }
+    log('uuid: ${assignment.uuid}........');
+    hint = false;
     update();
-    super.onInit();
   }
 
   DateTime selectedDate = DateTime.now();
+}
 
-  // Future<void> selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(2000),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null && picked != selectedDate) {
-  //     selectedDate = picked;
-  //   }
-  //   update();
-  // }
+class UserData {
+  String? email;
+  String? uuid;
+
+  UserData({this.email, this.uuid});
 }

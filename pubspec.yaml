@@ -35,6 +35,7 @@ dependencies:
   cloud_firestore: ^4.8.2
   cloud_functions: ^4.3.3
   calendar_date_picker2: ^0.5.2
+  expandable: ^5.0.1
 
   # GraphQL and REST
   hasura_connect: ^4.0.0+4

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:churchappenings/api/profile.dart';
-import 'package:churchappenings/models/add_assignment_deparment.dart';
+import 'package:churchappenings/models/assignment.dart';
 import 'package:churchappenings/services/hasura.dart';
 import 'package:logger/logger.dart';
 import 'package:uuid/uuid.dart';
@@ -14,20 +14,22 @@ class BulletinAPI {
   var uuid = Uuid();
   Logger log = Logger();
 
-  assignMemDesig(InsertDepartment model) async {
+  assignMemDesig(Assginment assignment) async {
     String query = """
-    mutation InsertAssignment(\$assigne: String!, \$assigne_uuid: String!, \$bulletin_id: String!, \$happening_id: String!) {
-      insert_assignment(objects: {assigne: \$assigne, assigne_uuid: \$assigne_uuid, bulletin_id: \$bulletin_id, happening_id: \$happening_id}) {
+    mutation InsertAssignment(\$assigne: String!, \$assigne_uuid: String!, \$bulletin_id: String!, \$happening_id: String!,\$assignment_type: String!, \$status: String!) {
+      insert_assignment(objects: {assigne: \$assigne, assigne_uuid: \$assigne_uuid, bulletin_id: \$bulletin_id, happening_id: \$happening_id,assignment_type: \$assignment_type,status: \$status}) {
         affected_rows
       }
     }
   """;
 
     Map<String, dynamic> variables = {
-      "assigne": model.assignee,
-      "assigne_uuid": model.uuid,
-      "bulletin_id": model.bulletinId,
-      "happening_id": model.deptHappeningId,
+      "assigne": assignment.assignee,
+      "assigne_uuid": assignment.uuid,
+      "bulletin_id": assignment.bulletinId,
+      "happening_id": assignment.deptHappeningId,
+      "assignment_type": assignment.assignmentType,
+      "status": assignment.status
     };
 
     var res = await hasura.hasuraMutation(query, variables);
@@ -35,7 +37,7 @@ class BulletinAPI {
     return res["data"]["insert_assignment"]["affected_rows"];
   }
 
-  addMemberDesign(InsertDepartment model) async {
+  addMemberDesign(Assginment assignment) async {
     String query = """
     mutation MyQuery(\$date_time: timestamptz!, \$description: String!, \$id: String!, \$title: String!, \$type: String!) {
       insert_happening(objects: {date_time: \$date_time, description: \$description, id: \$id, title: \$title, type: \$type}) {
@@ -45,11 +47,11 @@ class BulletinAPI {
   """;
 
     Map<String, dynamic> variables = {
-      "date_time": model.datetime,
-      "type": model.type,
-      "description": model.description,
-      "id": model.deptHappeningId,
-      "title": model.title,
+      "date_time": assignment.datetime,
+      "type": assignment.type,
+      "description": assignment.description,
+      "id": assignment.deptHappeningId,
+      "title": assignment.title,
     };
 
     var res = await hasura.hasuraMutation(query, variables);
@@ -57,31 +59,36 @@ class BulletinAPI {
     return res["data"]["insert_happening"]["affected_rows"];
   }
 
-  assigndept(InsertDepartment model) async {
-    print({model.deptHappeningId});
+  assigndept(Assginment assignment) async {
+    print({assignment.deptHappeningId});
     String query = """
-mutation MyMutation(\$dept_happening_id: String!, \$bulletin_id: String!) {
-  insert_dept_assignment(objects: {dept_happening_id: \$dept_happening_id, bulletin_id: \$bulletin_id}) {
+mutation MyMutation(\$dept_happening_id: String!, \$bulletin_id: String!, \$assignment_type: String!, \$status: String!, \$assignees: String!) {
+  insert_dept_assignment(objects: {dept_happening_id: \$dept_happening_id, bulletin_id: \$bulletin_id,assignment_type: \$assignment_type,
+        status: \$status,
+        assignees: \$assignees}) {
     affected_rows
   }
 }
 
 """;
     Map<String, dynamic> variables = {
-      "dept_happening_id": model.deptHappeningId,
-      "bulletin_id": model.bulletinId,
+      "dept_happening_id": assignment.deptHappeningId,
+      "bulletin_id": assignment.bulletinId,
+      "assignment_type": assignment.assignmentType,
+      "status": assignment.status,
+      "assignees": assignment.assignee
     };
     var res = await hasura.hasuraMutation(query, variables);
     print('Response: $res');
     return res["data"]["insert_dept_assignment"]["affected_rows"];
   }
 
-  addAssignmentDepartment(InsertDepartment model) async {
+  addAssignmentDepartment(Assginment assignment) async {
     // var  deptHappeningId = "dhp-" +
     //       profileApi.selectedChurchId.toString() +
     //       "-" +
     //       DateTime.now().toString();
-    print('${model.deptHappeningId}................');
+    print('${assignment.deptHappeningId}................');
 
     String query = """
     mutation MyMutation(\$date_time: timestamptz!, \$dept_id: Int!, \$description: String!, \$id: String!, \$title: String!) {
@@ -90,7 +97,7 @@ mutation MyMutation(\$dept_happening_id: String!, \$bulletin_id: String!) {
         dept_id: \$dept_id,
         description: \$description,
         id: \$id,
-        title: \$title
+        title: \$title,
       }) {
         affected_rows
       }
@@ -98,11 +105,11 @@ mutation MyMutation(\$dept_happening_id: String!, \$bulletin_id: String!) {
   """;
 
     Map<String, dynamic> variables = {
-      "date_time": model.datetime,
-      "dept_id": model.deptid,
-      "description": model.description,
-      "id": model.deptHappeningId,
-      "title": model.title,
+      "date_time": assignment.datetime,
+      "dept_id": assignment.deptid,
+      "description": assignment.description,
+      "id": assignment.deptHappeningId,
+      "title": assignment.title
     };
 
     var res = await hasura.hasuraMutation(query, variables);
@@ -297,13 +304,16 @@ query MyQuery {
     return res["data"]["bulletin"][0];
   }
 
-  getDeptsbyId(String id) async {
+  getDeptsbyId(String id, String type) async {
     String query = """
-  query MyQuery(\$id: String!) {
+  query MyQuery(\$id: String!,\$type: String!) {
     bulletin(where: {id: {_eq: \$id}}) {
-      dept_assignments {
+      dept_assignments(where: {assignment_type: {_eq: \$type}}) {
         bulletin_id
         dept_happening_id
+        assignees
+      assignment_type
+      status
         dept_happening {
           date_time
           dept_id
@@ -319,9 +329,7 @@ query MyQuery {
   }
   """;
 
-    Map<String, dynamic> variables = {
-      "id": id,
-    };
+    Map<String, dynamic> variables = {"id": id, "type": type};
 
     var res = await hasura.hasuraQuery(query, variables);
     print('$res.....');
@@ -329,25 +337,25 @@ query MyQuery {
     return res["data"]["bulletin"][0]["dept_assignments"];
   }
 
-  Future<dynamic> getEventsByBulletinId(String id) async {
+  Future<dynamic> getEventsByBulletinId(String id, String type) async {
     String query = """
-      query MyQuery(\$id: String!) {
-        bulletin(where: {id: {_eq: \$id}}) {
-          assignments {
-            assigne
-            happening {
-              title
-              date_time
-            }
+      query MyQuery(\$id: String!, \$type: String!) {
+      bulletin(where: {id: {_eq: \$id}}) {
+        assignments(where: {assignment_type: {_eq: \$type}}) {
+          assigne
+          assignment_type
+          status
+          happening {
+            title
+            date_time
           }
-          name
         }
+        name
       }
+    }
     """;
 
-    Map<String, dynamic> variables = {
-      "id": id,
-    };
+    Map<String, dynamic> variables = {"id": id, "type": type};
 
     var res = await hasura.hasuraQuery(query, variables);
 

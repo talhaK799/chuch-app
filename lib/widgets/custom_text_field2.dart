@@ -34,7 +34,7 @@ class CustomTextField2 extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         onTap: onTap,
-        autovalidateMode: AutovalidateMode.always,
+        // autovalidateMode: AutovalidateMode.,
         maxLines: maxLines,
         controller: controller,
         keyboardType: keyboardType,

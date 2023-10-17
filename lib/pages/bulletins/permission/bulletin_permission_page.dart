@@ -57,21 +57,21 @@ class _BulletinPermissionPageState extends State<BulletinPermissionPage> {
                   children: [
                     Obx(() => CheckboxListTile(
                           title: Text('Everyone'),
-                          value: model.everyoneChecked.value ?? false,
+                          value: model.everyoneChecked.value,
                           onChanged: (newValue) {
                             model.toggleEveryone(newValue ?? false);
                           },
                         )),
                     Obx(() => CheckboxListTile(
                           title: Text('Facility Members'),
-                          value: model.facilityMembersChecked.value ?? false,
+                          value: model.facilityMembersChecked.value,
                           onChanged: (newValue) {
                             model.toggleFacilityMembers(newValue ?? false);
                           },
                         )),
                     Obx(() => CheckboxListTile(
                           title: Text('Only Department'),
-                          value: model.onlyDepartmentChecked.value ?? false,
+                          value: model.onlyDepartmentChecked.value,
                           onChanged: (newValue) {
                             model.toggleOnlyDepartment(newValue ?? false);
                           },

@@ -1,4 +1,3 @@
-
 import 'package:churchappenings/constants/red-material-color.dart';
 
 import 'package:churchappenings/pages/tools/guestbook/addguest.dart';
@@ -6,7 +5,6 @@ import 'package:churchappenings/pages/tools/guestbook/guest_details_screen.dart'
 import 'package:churchappenings/pages/tools/guestbook/guestbook-controller.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:flutter/material.dart';
-
 
 import 'package:get/get.dart';
 
@@ -58,11 +56,12 @@ class _GuestBookScreenState extends State<GuestBookScreen> {
                     ),
                     Expanded(
                       child: ListView.builder(
-                        itemCount: _.guestData!.length ?? 2,
+                        itemCount: _.guestData!.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: (){
-                              Get.to(DetailsScreen(personData: _.guestData![index]));
+                            onTap: () {
+                              Get.to(DetailsScreen(
+                                  personData: _.guestData![index]));
                             },
                             child: Card(
                               elevation: 6.0,
@@ -72,7 +71,8 @@ class _GuestBookScreenState extends State<GuestBookScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
                                   children: [
                                     Text(
                                       'Guest Information',

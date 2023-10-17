@@ -83,7 +83,7 @@ class SectionListView extends StatelessWidget {
             ),
           ),
         ),
-        listView ?? Container(),
+        listView,
       ],
     );
   }

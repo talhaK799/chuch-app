@@ -58,7 +58,7 @@ class DetailsScreen extends StatelessWidget {
                             "Location"),
                         Divider(thickness: 2),
                         _buildInfoField(
-                            personData.age.toString() ?? "", Icons.face, 'Age'),
+                            personData.age.toString(), Icons.face, 'Age'),
                         Divider(thickness: 2),
                         _buildInfoField(personData.churchAffiliation ?? "",
                             Icons.account_balance, 'Church Affiliation'),

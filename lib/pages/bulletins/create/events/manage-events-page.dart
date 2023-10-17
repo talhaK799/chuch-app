@@ -5,8 +5,6 @@ import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../widgets/custom_card.dart';
 import 'manage-events-controller.dart';
 
 class ManageEventsPage extends StatelessWidget {
@@ -67,8 +65,14 @@ class ManageEventsPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 20,
                   ),
+
+                  ///
+                  /// assignment type selection
+                  ///
+                  assignmentTypeSelection(_),
+                  SizedBox(height: 5),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
@@ -79,17 +83,35 @@ class ManageEventsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Column(
-                    children: _.events.map<Widget>(
-                      (assignment) {
-                        return buildEventItem(
-                          title: assignment["happening"]["title"],
-                          assignedTo: assignment["assigne"],
-                          time: assignment["happening"]["date_time"],
-                        );
-                      },
-                    ).toList(),
-                  ),
+                  _.isStandardAssignment == false
+                      ? Column(
+                          children: _.dynamicEvents.map<Widget>(
+                            (assignment) {
+                              List<String> emailList =
+                                  (assignment["assigne"] as String)
+                                      .split(',')
+                                      .map((email) => email.trim())
+                                      .toList();
+                              return buildDynamicItem(
+                                  title: assignment["happening"]["title"],
+                                  assignedTo: assignment["assigne"],
+                                  time: assignment["happening"]["date_time"],
+                                  status: assignment["status"],
+                                  assignees: emailList);
+                            },
+                          ).toList(),
+                        )
+                      : Column(
+                          children: _.standardEvents.map<Widget>(
+                            (assignment) {
+                              return buildEventItem(
+                                  title: assignment["happening"]["title"],
+                                  assignedTo: assignment["assigne"],
+                                  time: assignment["happening"]["date_time"],
+                                  status: assignment["status"]);
+                            },
+                          ).toList(),
+                        ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
@@ -100,18 +122,39 @@ class ManageEventsPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Column(
-                    children: _.deptEvents.map<Widget>(
-                      (assignment) {
-                        return buildEventItem(
-                          title: assignment["dept_happening"]["title"],
-                          assignedTo: assignment["dept_happening"]["department"]
-                              ["name"],
-                          time: assignment["dept_happening"]["date_time"],
-                        );
-                      },
-                    ).toList(),
-                  ),
+                  _.isStandardAssignment == false
+                      ? Column(
+                          children: _.deptDynamicEvents.map<Widget>(
+                            (assignment) {
+                              List<String> emailList =
+                                  (assignment["assignees"] as String)
+                                      .split(',')
+                                      .map((email) => email.trim())
+                                      .toList();
+                              return buildDynamicItem(
+                                  title: assignment["dept_happening"]["title"],
+                                  assignedTo: assignment["dept_happening"]
+                                      ["department"]["name"],
+                                  time: assignment["dept_happening"]
+                                      ["date_time"],
+                                  status: assignment["status"],
+                                  assignees: emailList);
+                            },
+                          ).toList(),
+                        )
+                      : Column(
+                          children: _.deptEvents.map<Widget>(
+                            (assignment) {
+                              return buildEventItem(
+                                  title: assignment["dept_happening"]["title"],
+                                  assignedTo: assignment["dept_happening"]
+                                      ["department"]["name"],
+                                  time: assignment["dept_happening"]
+                                      ["date_time"],
+                                  status: assignment["status"]);
+                            },
+                          ).toList(),
+                        ),
                   // SectionListView(
                   //   title: 'Members',
                   //   listView: ListView.builder(
@@ -162,6 +205,62 @@ class ManageEventsPage extends StatelessWidget {
       ),
     );
   }
+
+  assignmentTypeSelection(ManageEventsController controller) {
+    return Row(
+      children: [
+        Expanded(
+            child: GestureDetector(
+          onTap: () {
+            controller.isStandardAssignment = true;
+            controller.update();
+          },
+          child: Container(
+            height: 30,
+            decoration: BoxDecoration(
+                color: controller.isStandardAssignment
+                    ? redColor
+                    : redColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4)),
+            child: Center(
+                child: Text(
+              "Standard Assignment",
+              style: TextStyle(
+                  fontSize: 13,
+                  color: controller.isStandardAssignment
+                      ? Colors.white
+                      : Colors.black),
+            )),
+          ),
+        )),
+        SizedBox(width: 20),
+        Expanded(
+            child: GestureDetector(
+          onTap: () {
+            controller.isStandardAssignment = false;
+            controller.update();
+          },
+          child: Container(
+            decoration: BoxDecoration(
+                color: controller.isStandardAssignment == false
+                    ? redColor
+                    : redColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(4)),
+            height: 30,
+            child: Center(
+                child: Text(
+              "Dynamic Assignment",
+              style: TextStyle(
+                  fontSize: 13,
+                  color: controller.isStandardAssignment == false
+                      ? Colors.white
+                      : Colors.black),
+            )),
+          ),
+        ))
+      ],
+    );
+  }
 }
 
 class SectionListView extends StatelessWidget {
@@ -188,7 +287,7 @@ class SectionListView extends StatelessWidget {
             ),
           ),
         ),
-        listView ?? Container(),
+        listView,
       ],
     );
   }

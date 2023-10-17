@@ -104,7 +104,7 @@ class AddBulletingPage extends StatelessWidget {
                           Obx(() => CheckboxListTile(
                                 activeColor: redColor,
                                 title: Text('Everyone'),
-                                value: _.everyoneChecked.value ?? false,
+                                value: _.everyoneChecked.value,
                                 onChanged: (newValue) {
                                   _.toggleEveryone(newValue ?? false);
                                 },
@@ -112,7 +112,7 @@ class AddBulletingPage extends StatelessWidget {
                           Obx(() => CheckboxListTile(
                                 activeColor: redColor,
                                 title: Text('Facility Members'),
-                                value: _.facilityMembersChecked.value ?? false,
+                                value: _.facilityMembersChecked.value,
                                 onChanged: (newValue) {
                                   _.toggleFacilityMembers(newValue ?? false);
                                 },
@@ -122,7 +122,7 @@ class AddBulletingPage extends StatelessWidget {
                                 child: CheckboxListTile(
                                   activeColor: redColor,
                                   title: Text('Save in Draft'),
-                                  value: _.isDraft.value ?? false,
+                                  value: _.isDraft.value,
                                   onChanged: (newValue) {
                                     _.toggleDraft(newValue ?? false);
                                   },

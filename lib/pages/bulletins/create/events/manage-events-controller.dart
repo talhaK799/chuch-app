@@ -8,8 +8,13 @@ class ManageEventsController extends GetxController {
   late String bulletinId;
   late String bulletinName = '';
   final BulletinAPI api = BulletinAPI();
-  var events = [];
+  var standardEvents = [];
+  var dynamicEvents = [];
+
   var deptEvents = [];
+  var deptDynamicEvents = [];
+
+  bool isStandardAssignment = true;
 
   onInit() async {
     bulletinId = Get.arguments['bulletinId'];
@@ -23,7 +28,9 @@ class ManageEventsController extends GetxController {
   Future getDeptEvents() async {
     loading = true;
     update();
-    deptEvents = await api.getDeptsbyId(bulletinId);
+    deptEvents = await api.getDeptsbyId(bulletinId, "STANDARD");
+    deptDynamicEvents = await api.getDeptsbyId(bulletinId, "DYNAMIC");
+
     print('$deptEvents........dlk;sflskkkkkkkkkkkkkk');
     loading = false;
     update();
@@ -32,7 +39,9 @@ class ManageEventsController extends GetxController {
   Future getEvents(String bulletinId) async {
     loading = true;
     update();
-    events = await api.getEventsByBulletinId(bulletinId);
+    standardEvents = await api.getEventsByBulletinId(bulletinId, "STANDARD");
+    dynamicEvents = await api.getEventsByBulletinId(bulletinId, "DYNAMIC");
+
     loading = false;
     update();
   }

@@ -20,7 +20,7 @@ class MoreController extends GetxController {
   List<Member> churches = [];
   Member? selectedChurchObj;
   int selectedChurch = 9999999;
-  bool? isMember ;
+  bool isMember = false;
   @override
   void onInit() async {
     isMember = await localData.getMemberStatus();

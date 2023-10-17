@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
                           child: _.profileApi.selectedChurchLogo != null
                               ? Image(
                                   image: NetworkImage(
-                                      _.profileApi.selectedChurchLogo!),
+                                      _.profileApi.selectedChurchLogo),
                                   height: 100,
                                 )
                               : Container()),

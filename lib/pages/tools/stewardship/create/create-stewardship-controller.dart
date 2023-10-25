@@ -2,12 +2,18 @@ import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/api/stewardship.dart';
 import 'package:churchappenings/pages/tools/stewardship/single/single-stewardship-page.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CreateStewardshipController extends GetxController {
   final departmentApi = DepartmentAPI();
   final stewardshipApi = StewardshipAPI();
   final ProfileAPI profileApi = ProfileAPI.to;
+  RxString paymentMethod = 'Card'.obs;
+  TextEditingController expiryDateController = TextEditingController();
+  TextEditingController cardNoController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController cvvController = TextEditingController();
 
   var donationDetails = [];
   var total = 0;
@@ -20,6 +26,9 @@ class CreateStewardshipController extends GetxController {
         .getDonationPrefrenceForCHurchId(profileApi.selectedChurchId);
     totalCalculator();
     loading = false;
+    cardNoController.addListener(addSpace);
+    expiryDateController.addListener(addSlash);
+
     update();
   }
 
@@ -43,8 +52,12 @@ class CreateStewardshipController extends GetxController {
 
   onSubmit() async {
     if (total > 0) {
-      int id = await stewardshipApi.createDonation(donationDetails, total);
-      Get.to(SingleStewardshipPage(), arguments: {"id": id});
+      print(cardNoController.text);
+      print(expiryDateController.text);
+      print(cvvController.text);
+      print(nameController.text);
+      // int id = await stewardshipApi.createDonation(donationDetails, total);
+      // Get.to(SingleStewardshipPage(), arguments: {"id": id});
     } else {
       Get.snackbar(
         'Donation template should be 100%',
@@ -52,5 +65,36 @@ class CreateStewardshipController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
+  }
+
+  addSlash() {
+    String text = expiryDateController.text;
+    if (text.length == 2 && !text.contains("/")) {
+      expiryDateController.text = "$text/";
+      expiryDateController.selection = TextSelection.fromPosition(
+        TextPosition(offset: expiryDateController.text.length),
+      );
+    }
+    update();
+  }
+
+  addSpace() {
+    String text = cardNoController.text;
+    if ((text.length - 4) % 5 == 0 &&
+        text.length > 0 &&
+        text[text.length - 1] != ' ' &&
+        text.length <= 20) {
+      cardNoController.text = "$text ";
+      cardNoController.selection = TextSelection.fromPosition(
+        TextPosition(offset: cardNoController.text.length),
+      );
+    } else if (text.length > 20) {
+      // Restrict input beyond the card number format
+      cardNoController.text = text.substring(0, 20);
+      cardNoController.selection = TextSelection.fromPosition(
+        TextPosition(offset: cardNoController.text.length),
+      );
+    }
+    update();
   }
 }

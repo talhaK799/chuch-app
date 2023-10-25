@@ -1,6 +1,7 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/tools/stewardship/admin/stewardship-admin-page.dart';
 import 'package:churchappenings/pages/tools/stewardship/create/create-stewardship-page.dart';
+import 'package:churchappenings/pages/tools/stewardship/create/payment_selection_page.dart';
 import 'package:churchappenings/pages/tools/stewardship/single/single-stewardship-page.dart';
 import 'package:churchappenings/pages/tools/stewardship/stewardship-controller.dart';
 import 'package:churchappenings/utils/format-date-time.dart';
@@ -44,7 +45,7 @@ class StewardshipPage extends StatelessWidget {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              Get.to(CreateStewardshipPage());
+                              Get.to(PaymentSelectionPage());
                             },
                             child: Text(
                               'New Donation',

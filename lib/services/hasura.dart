@@ -126,6 +126,8 @@ class HasuraService extends GetxController {
         log('jjjjjjjjj');
 
         final auth = Authentication();
+        Get.snackbar(
+            "Session Expired!", "Your session expired, please login again");
         await auth.signOut();
 
         // logout();

@@ -33,7 +33,7 @@ class SearchDetailsPage extends StatelessWidget {
             if (image.isEmpty) {
               imagePresent = false;
             }
-     return Container(
+            return Container(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -64,33 +64,33 @@ class SearchDetailsPage extends StatelessWidget {
                       SizedBox(
                         height: 20,
                       ),
-                      _.registeredChurch
-                          ? Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(15),
-                              decoration: BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Container(
-                                child: ListTile(
-                                  onTap: () {
-                                    _.navigateToVisitorForm();
-                                  },
-                                  title: Text(
-                                    'Sign Our Guestbook',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  trailing: Icon(
-                                    Icons.arrow_right,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : Container(),
+                      // _.registeredChurch
+                      //     ? Container(
+                      //         width: double.infinity,
+                      //         padding: const EdgeInsets.all(15),
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.black,
+                      //           borderRadius: BorderRadius.circular(10),
+                      //         ),
+                      //         child: Container(
+                      //           child: ListTile(
+                      //             onTap: () {
+                      //               _.navigateToVisitorForm();
+                      //             },
+                      //             title: Text(
+                      //               'Sign Our Guestbook',
+                      //               style: TextStyle(
+                      //                 color: Colors.white,
+                      //               ),
+                      //             ),
+                      //             trailing: Icon(
+                      //               Icons.arrow_right,
+                      //               color: Colors.white,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       )
+                      //     : Container(),
                       SizedBox(
                         height: 20,
                       ),
@@ -117,8 +117,7 @@ class SearchDetailsPage extends StatelessWidget {
                                         ? () async {
                                             // await _.memberTransfer(widget.facilities['id']);
                                             if (_.memberStatus.isEmpty) {
-                                              await _.memberTransfer(
-                                                 );
+                                              await _.memberTransfer();
                                             } else {
                                               log('Already requested');
                                             }

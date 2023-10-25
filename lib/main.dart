@@ -1,6 +1,3 @@
-import 'package:churchappenings/api/guest_chat_api.dart';
-import 'package:churchappenings/pages/search/search-controller.dart';
-import 'package:churchappenings/pages/search/search-page.dart';
 import 'package:churchappenings/services/authentication.dart';
 import 'package:churchappenings/services/firestore.dart';
 import 'package:churchappenings/services/hasura.dart';

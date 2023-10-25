@@ -15,6 +15,7 @@ class CreateStewardshipPage extends StatelessWidget {
       appBar: transparentAppbar(),
       body: GetBuilder<CreateStewardshipController>(
         init: CreateStewardshipController(),
+        global: true,
         builder: (_) {
           if (_.loading) {
             return Center(child: CircularProgressIndicator());
@@ -111,6 +112,7 @@ class CreateStewardshipPage extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
+                  print(_.paymentMethod);
                   _.onSubmit();
                 },
                 child: buildBottomActionButton('Next'),

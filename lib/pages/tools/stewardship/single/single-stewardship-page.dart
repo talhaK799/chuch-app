@@ -1,9 +1,9 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/tools/stewardship/single/refund_page.dart';
 import 'package:churchappenings/utils/format-date-time.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
 import 'single-stewardship-controller.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
@@ -43,31 +43,60 @@ class SingleStewardshipPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     navigateToWidget(),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 5,
-                        horizontal: 20,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _.data["is_verified"]
-                            ? Colors.green
-                            : Colors.orangeAccent,
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: GestureDetector(
-                        onTap: () {
-                          if (_.data["is_verified"]) {
-                            launchUrl(_.data["receipt_url"]);
-                          }
-                        },
-                        child: Text(
-                          _.data["is_verified"]
-                              ? 'Download Receipt'
-                              : 'Not Verified',
-                          style: TextStyle(color: Colors.white),
+                    Row(
+                      children: [
+                        Container(
+                          height: 30,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5,
+                            horizontal: 20,
+                          ),
+                          decoration: BoxDecoration(
+                            color: _.data["is_verified"]
+                                ? Colors.green
+                                : Colors.orangeAccent,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (_.data["is_verified"]) {
+                                launchUrl(_.data["receipt_url"]);
+                              }
+                            },
+                            child: Text(
+                              _.data["is_verified"]
+                                  ? 'Download Receipt'
+                                  : 'Not Verified',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                        SizedBox(width: 8),
+                        _.data["is_verified"]
+                            ? Container(
+                                width: 100,
+                                height: 30,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5,
+                                  horizontal: 20,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(RefundPage());
+                                  },
+                                  child: Text(
+                                    'Refund',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    )
                   ],
                 ),
                 SizedBox(height: 15),
@@ -119,7 +148,7 @@ class SingleStewardshipPage extends StatelessWidget {
                           Text('or'),
                           SizedBox(height: 30),
                           QrImage(
-                            data: _.id.toString(),
+                            data: _.data["donation_amount"].toString(),
                             version: QrVersions.auto,
                             size: 200.0,
                           ),

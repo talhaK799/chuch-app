@@ -1,9 +1,11 @@
 import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/api/stewardship.dart';
-import 'package:churchappenings/pages/tools/stewardship/single/single-stewardship-page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../../../models/department.dart';
+import '../single/single-stewardship-page.dart';
 
 class CreateStewardshipController extends GetxController {
   final departmentApi = DepartmentAPI();
@@ -14,21 +16,25 @@ class CreateStewardshipController extends GetxController {
   TextEditingController cardNoController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
-
+  List<Departments> departments = [];
   var donationDetails = [];
   var total = 0;
   bool loading = true;
+  bool isDepartmental = false;
+  bool isSpecialCauses = false;
 
   @override
   void onInit() async {
     super.onInit();
+    loading = true;
     donationDetails = await stewardshipApi
         .getDonationPrefrenceForCHurchId(profileApi.selectedChurchId);
     totalCalculator();
     loading = false;
     cardNoController.addListener(addSpace);
     expiryDateController.addListener(addSlash);
-
+    await getAllDepartments();
+    loading = false;
     update();
   }
 
@@ -50,14 +56,24 @@ class CreateStewardshipController extends GetxController {
     update();
   }
 
+  getAllDepartments() async {
+    var res = await departmentApi.getAllDepartments();
+    res.forEach((value) {
+      departments.add(Departments.fromJson(value));
+    });
+    print("departments: ${departments.length}");
+    loading = false;
+    update();
+  }
+
   onSubmit() async {
     if (total > 0) {
       print(cardNoController.text);
       print(expiryDateController.text);
       print(cvvController.text);
       print(nameController.text);
-      // int id = await stewardshipApi.createDonation(donationDetails, total);
-      // Get.to(SingleStewardshipPage(), arguments: {"id": id});
+      int id = await stewardshipApi.createDonation(donationDetails, total);
+      Get.to(SingleStewardshipPage(), arguments: {"id": id});
     } else {
       Get.snackbar(
         'Donation template should be 100%',

@@ -82,6 +82,92 @@ class CreateStewardshipPage extends StatelessWidget {
                         Column(
                           children: formInputs,
                         ),
+                        SizedBox(height: 10),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Checkbox(
+                              value: _.isDepartmental,
+                              onChanged: (value) {
+                                _.isDepartmental = !_.isDepartmental;
+                                _.update();
+                              },
+                              side: BorderSide(width: 1),
+                            ),
+                            Text(
+                              'Departmental Donations',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+
+                        ///
+                        /// show deparments if user wants
+                        ///
+                        ///
+                        _.isDepartmental
+                            ? ListView.builder(
+                                primary: false,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.zero,
+                                itemCount: _.departments.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Row(
+                                      children: [
+                                        Text("${_.departments[index].name}: "),
+                                        SizedBox(width: 10),
+                                        Expanded(
+                                          child: TextFormField(
+                                            keyboardType: TextInputType.number,
+                                            autocorrect: true,
+                                            decoration: InputDecoration(),
+                                            onChanged: (value) {
+                                              _.onChangeField(index, value);
+                                            },
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                })
+                            : Container(),
+
+                        ///
+                        /// Special causes
+                        ///
+                        ///
+                        SizedBox(height: 10),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Checkbox(
+                              value: _.isSpecialCauses,
+                              onChanged: (value) {
+                                _.isSpecialCauses = !_.isSpecialCauses;
+                                _.update();
+                              },
+                              side: BorderSide(width: 1),
+                            ),
+                            Text(
+                              'Special Causes',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                height: 1.5,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+
+                        SizedBox(height: 30),
                       ],
                     ),
                   ),

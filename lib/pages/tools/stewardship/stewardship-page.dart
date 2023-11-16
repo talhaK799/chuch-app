@@ -45,7 +45,7 @@ class StewardshipPage extends StatelessWidget {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              Get.to(PaymentSelectionPage());
+                              Get.to(CreateStewardshipPage());
                             },
                             child: Text(
                               'New Donation',
@@ -69,7 +69,7 @@ class StewardshipPage extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Donate money to the church',
+                    'My donation history',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w300,

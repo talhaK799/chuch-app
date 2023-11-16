@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 class StewardshipAdminController extends GetxController {
   var data = [];
   final stewardshipApi = StewardshipAPI();
+  bool isAllCollections = false;
 
   @override
   void onInit() async {

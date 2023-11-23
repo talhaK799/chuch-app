@@ -5,7 +5,6 @@ import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'single/single-stewardship-page.dart';
 import 'stewardship-admin-controller.dart';
 
@@ -17,6 +16,9 @@ class StewardshipAdminPage extends StatelessWidget {
       body: GetBuilder<StewardshipAdminController>(
         init: StewardshipAdminController(),
         builder: (_) {
+          if (_.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
@@ -89,11 +91,63 @@ class StewardshipAdminPage extends StatelessWidget {
                 ),
                 SizedBox(height: 30),
                 _.isAllCollections == false
+
+                    ///
+                    /// Show current period collections
+                    ///
                     ? Expanded(
-                        child: Center(
-                          child: Text(""),
+                        child: ListView(
+                          children: _.data2.map<Widget>(
+                            (item) {
+                              List dateTime = formatDateTime(
+                                  DateTime.parse(item["date_time"]));
+
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey.withOpacity(0.5),
+                                    ),
+                                  ),
+                                ),
+                                child: ListTile(
+                                  onTap: () {
+                                    Get.to(SingleAdminStewardshipPage(),
+                                        arguments: {"id": item["id"]});
+                                  },
+                                  title: Text(dateTime[0]),
+                                  subtitle: Text(
+                                    '\$' + item["donation_amount"].toString(),
+                                  ),
+                                  trailing: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: item["is_verified"]
+                                          ? Colors.green
+                                          : Colors.orangeAccent,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      item["is_verified"]
+                                          ? 'Verified'
+                                          : 'Not Verified',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList(),
                         ),
                       )
+
+                    ///
+                    /// Show all period collections
+                    ///
                     : Expanded(
                         child: ListView(
                           children: _.data.map<Widget>(
@@ -146,7 +200,13 @@ class StewardshipAdminPage extends StatelessWidget {
                 SizedBox(height: 10),
                 _.isAllCollections
                     ? Container()
-                    : customButton(title: "Check in Collections", onTap: () {}),
+                    : customButton(
+                        title: "Check in Collections",
+                        onTap: () {
+                          if (_.data2.length > 0) {
+                            _.checkInCollection();
+                          }
+                        }),
                 SizedBox(height: 10)
               ],
             ),

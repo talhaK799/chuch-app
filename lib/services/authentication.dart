@@ -42,26 +42,26 @@ class Authentication extends GetxController {
     } else {
       final HasuraService hasura = HasuraService.to;
 
-      await hasura.initializeAuthenticatedConnection();
-      final ProfileAPI profileApi = ProfileAPI.to;
+      bool isInitialized = await hasura.initializeAuthenticatedConnection();
+      if (isInitialized) {
+        final ProfileAPI profileApi = ProfileAPI.to;
 
-      await profileApi.storeProfileInLocal(await getUserId);
+        await profileApi.storeProfileInLocal(await getUserId);
 
-      var list = await profileApi.toCheckMember(profileApi.memberId!);
+        var list = await profileApi.toCheckMember(profileApi.memberId!);
 
-      if (list.length == 0) {
-        Get.offAllNamed(Routes.search);
-        //   Get.offAll(SearchPage());
-        // Get.offAll(GuestHomePage());
+        if (list.length == 0) {
+          Get.offAllNamed(Routes.search);
+          //   Get.offAll(SearchPage());
+          // Get.offAll(GuestHomePage());
 
-        localData.setMemberStatus(false);
-
-      } 
-      else 
-      {
-
-        Get.offAllNamed(Routes.home);
-        localData.setMemberStatus(true);
+          localData.setMemberStatus(false);
+        } else {
+          Get.offAllNamed(Routes.home);
+          localData.setMemberStatus(true);
+        }
+      } else {
+        Get.snackbar("Error!", "An unexpected error occured, try again later");
       }
     }
   }

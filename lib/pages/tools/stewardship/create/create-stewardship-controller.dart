@@ -1,6 +1,7 @@
 import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/api/stewardship.dart';
+import 'package:churchappenings/constants/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -72,7 +73,10 @@ class CreateStewardshipController extends GetxController {
       print(expiryDateController.text);
       print(cvvController.text);
       print(nameController.text);
-      int id = await stewardshipApi.createDonation(donationDetails, total);
+      String actAs = donar;
+      String paymentType = paymentMethod == "Card".obs ? "card" : "cash";
+      int id = await stewardshipApi.createDonation(
+          donationDetails, total, actAs, paymentType, null);
       Get.to(SingleStewardshipPage(), arguments: {"id": id});
     } else {
       Get.snackbar(

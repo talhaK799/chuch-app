@@ -45,7 +45,7 @@ class StewardshipPage extends StatelessWidget {
                           SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
-                              Get.to(CreateStewardshipPage());
+                              Get.to(PaymentSelectionPage());
                             },
                             child: Text(
                               'New Donation',

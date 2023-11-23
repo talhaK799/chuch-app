@@ -4,6 +4,7 @@ import 'package:churchappenings/utils/format-date-time.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../../../home/home-page.dart';
 import 'single-stewardship-controller.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
@@ -125,34 +126,64 @@ class SingleStewardshipPage extends StatelessWidget {
                     ? Text("")
                     : Column(
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: redColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ListTile(
-                                title: Text(
-                                  "Pay online",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_right,
-                                  color: Colors.white,
-                                ),
-                                onTap: () {
-                                  _.onPayOnline();
-                                }),
+                          // Container(
+                          //   padding: EdgeInsets.symmetric(horizontal: 10),
+                          //   decoration: BoxDecoration(
+                          //     color: redColor,
+                          //     borderRadius: BorderRadius.circular(10),
+                          //   ),
+                          //   child: ListTile(
+                          //       title: Text(
+                          //         "Pay online",
+                          //         style: TextStyle(color: Colors.white),
+                          //       ),
+                          //       trailing: Icon(
+                          //         Icons.arrow_right,
+                          //         color: Colors.white,
+                          //       ),
+                          //       onTap: () {
+                          //         _.onPayOnline();
+                          //       }),
+                          // ),
+                          // SizedBox(height: 30),
+                          // Text('or'),
+                          // SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              QrImage(
+                                data: _.id.toString(),
+                                version: QrVersions.auto,
+                                size: 200.0,
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 30),
-                          Text('or'),
-                          SizedBox(height: 30),
-                          QrImage(
-                            data: _.data["donation_amount"].toString(),
-                            version: QrVersions.auto,
-                            size: 200.0,
+                          SizedBox(height: 20),
+                          Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: redColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: ListTile(
+                                    title: Text(
+                                      "Done",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    trailing: Icon(
+                                      Icons.arrow_right,
+                                      color: Colors.white,
+                                    ),
+                                    onTap: () {
+                                      Get.offAll(HomePage());
+                                      // _.onVerify();
+                                    }),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 30),
+                          SizedBox(height: 10),
                         ],
                       )
               ],

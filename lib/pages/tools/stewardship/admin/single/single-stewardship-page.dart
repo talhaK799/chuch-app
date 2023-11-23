@@ -1,4 +1,5 @@
 import 'package:churchappenings/constants/red-material-color.dart';
+import 'package:churchappenings/pages/home/home-page.dart';
 import 'package:churchappenings/utils/format-date-time.dart';
 import 'package:churchappenings/utils/launch-url.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
@@ -134,7 +135,7 @@ class SingleAdminStewardshipPage extends StatelessWidget {
                             ),
                             child: ListTile(
                                 title: Text(
-                                  "Verify",
+                                  "Done",
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 trailing: Icon(
@@ -142,7 +143,8 @@ class SingleAdminStewardshipPage extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                                 onTap: () {
-                                  _.onVerify();
+                                  Get.offAll(HomePage());
+                                  // _.onVerify();
                                 }),
                           ),
                           SizedBox(height: 30),

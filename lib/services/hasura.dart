@@ -49,10 +49,12 @@ class HasuraService extends GetxController {
         },
       );
       print("hasuraConnect => ${hasuraConnect.url}");
+      return true;
     } on FirebaseFunctionsException catch (e) {
       print("Code :" + e.code);
       // print("Details :" + e.details);
       print("Message :" + e.message.toString());
+      return false;
     }
   }
 

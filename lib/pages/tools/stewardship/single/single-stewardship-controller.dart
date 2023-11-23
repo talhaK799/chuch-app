@@ -18,7 +18,11 @@ class SingleStewardshipController extends GetxController {
     super.onInit();
 
     id = Get.arguments["id"];
+    print("id ::===:: $id");
     data = await stewardshipApi.getOwnDonationHistoryById(id);
+    if (data["payment_type"] == "card") {
+      onPayOnline();
+    }
 
     loading = false;
     update();

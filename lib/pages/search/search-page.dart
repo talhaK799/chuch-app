@@ -2,7 +2,7 @@ import 'package:churchappenings/pages/search/visit-church/regiser_churches_detai
 import 'package:churchappenings/services/local_data.dart';
 import 'package:churchappenings/widgets/Dialogues/dialogue.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
-import './search-controller.dart';
+import './search-controller.dart' as sc;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
@@ -17,7 +17,7 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  final searchController = Get.put(SearchController());
+  final searchController = Get.put(sc.SearchController());
   @override
   void initState() {
     // searchController.getMemberStatus();
@@ -79,7 +79,7 @@ class _SearchPageState extends State<SearchPage> {
               height: 20,
             ),
             Expanded(
-              child: GetBuilder<SearchController>(
+              child: GetBuilder<sc.SearchController>(
                 builder: (controller) {
                   return Container(
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -221,26 +221,23 @@ class _SearchPageState extends State<SearchPage> {
                               //           );
                               //         },
                               //       )
-                              //     : 
+                              //     :
                               : ListView.builder(
-                                      itemCount: controller.churches.length,
-                                      itemBuilder: (context, index) {
-                                      
-                                        final church =
-                                            controller.churches[index];
-                                     
+                                  itemCount: controller.churches.length,
+                                  itemBuilder: (context, index) {
+                                    final church = controller.churches[index];
 
-                                        final images = controller.images;
-                                        
-                                        return buildChurchCard(
-                                          controller.facilities,
-                                          images,
-                                          church,
-                                          index,
-                                          controller.fetchedImages,
-                                        );
-                                      },
-                                    ),
+                                    final images = controller.images;
+
+                                    return buildChurchCard(
+                                      controller.facilities,
+                                      images,
+                                      church,
+                                      index,
+                                      controller.fetchedImages,
+                                    );
+                                  },
+                                ),
                         ),
                       ],
                     ),

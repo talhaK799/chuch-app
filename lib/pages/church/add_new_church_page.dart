@@ -58,8 +58,12 @@ class AddNewChurchPage extends StatelessWidget {
                             model.uploadEventImage();
                           },
                           child: Container(
-                            height: 35,
-                            width: 110,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
+                            // height: 35,
+                            // width: 110,
                             decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),
@@ -213,8 +217,12 @@ class AddNewChurchPage extends StatelessWidget {
                                 await Get.to(() => SelectLocation()) ?? '';
                           },
                           child: Container(
-                            height: 38,
-                            width: 130,
+                            // height: 38,
+                            // width: 130,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
                             decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),
@@ -235,8 +243,12 @@ class AddNewChurchPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () => model.getCurrentLocation(),
                           child: Container(
-                            height: 38,
-                            width: 152,
+                            // height: 38,
+                            // width: 152,
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10,
+                              horizontal: 10,
+                            ),
                             decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(8),

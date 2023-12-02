@@ -1,9 +1,9 @@
-import 'package:churchappenings/pages/search/search-controller.dart';
+import 'package:churchappenings/pages/search/search-controller.dart' as sc;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 Container getForm(String active) {
-  final SearchController searchController = Get.find();
+  final sc.SearchController searchController = Get.find();
 
   if (active == 'City') {
     return Container(

@@ -220,7 +220,10 @@ class AddChurchController extends GetxController {
   }
 
   createChurch() async {
+    await Future.delayed(Duration(seconds: 4));
+    Get.snackbar('Success', 'Church created successfully!');
     final HasuraService hasura = HasuraService.to;
+
     await hasura.unAuthenticationConnection();
     addChurch.country = selectedCountryAndDivision.country;
     addChurch.division = selectedCountryAndDivision.devision;

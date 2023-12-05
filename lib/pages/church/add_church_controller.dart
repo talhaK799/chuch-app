@@ -219,9 +219,18 @@ class AddChurchController extends GetxController {
     update();
   }
 
+  bool isLoaded = false;
   createChurch() async {
+    update();
+    isLoaded = true;
     await Future.delayed(Duration(seconds: 4));
+
+    isLoaded = false;
+
+    Get.back();
+    update();
     Get.snackbar('Success', 'Church created successfully!');
+
     final HasuraService hasura = HasuraService.to;
 
     await hasura.unAuthenticationConnection();
@@ -230,7 +239,6 @@ class AddChurchController extends GetxController {
     addChurch.address = addressController.text;
     addChurch.territory = territoryController.text;
     addChurch.mode = 'test';
-
     // addChurch.location?.lat = currentLocation!.latitude;
     // addChurch.location?.lng = currentLocation!.longitude;
     // currentLocation != null

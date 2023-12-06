@@ -1,10 +1,15 @@
 import 'package:churchappenings/api/department.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/department.dart';
+import 'package:churchappenings/pages/home/home-page.dart';
 import 'package:churchappenings/utils/date-picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../../../api/facility_member.dart';
+import '../../../models/member_facility.dart';
+import '../../../services/local_data.dart';
 
 class ProfileController extends GetxController {
   bool loading = true;
@@ -13,8 +18,15 @@ class ProfileController extends GetxController {
   String selectedSkill = "None";
   String email = "None";
   DepartmentAPI departmentApi = DepartmentAPI();
+  FacilityMemberApi facilityMember = FacilityMemberApi();
   var response;
+  var facilityResponse;
   List<Departments> departments = [];
+  List<MemberFacility> memberFacility = [];
+
+  final localData = LocalData();
+  String selectedCurch = '';
+
   int isEmployed = 0;
   int isUnemployed = 0;
   bool isNewJobNoti = false;
@@ -27,10 +39,11 @@ class ProfileController extends GetxController {
   @override
   onInit() async {
     super.onInit();
-
+    selectedCurch = await localData.getString('selected_church_name');
     var data = await profileAPI.getProfileData();
     var tempSkills = await profileAPI.getSkills();
     await getMyDepartments();
+    await getMyFacilities();
     name = profileAPI.name;
     email = profileAPI.email;
     selectedDate = profileAPI.dob;
@@ -76,6 +89,32 @@ class ProfileController extends GetxController {
     update();
   }
 
+  getMyFacilities() async {
+    facilityResponse = await facilityMember.getMembersFacilities();
+    // response = await departmentApi.getAllDepartments();
+    print("**** facility Response ==== >>> $facilityResponse");
+    for (int i = 0; i < facilityResponse.length; i++) {
+      memberFacility
+          .add(MemberFacility.fromJson(facilityResponse[i]["facility"]));
+    }
+    loading = false;
+    update();
+  }
+
+  visitChurch(index) async {
+    selectedCurch = memberFacility[index].name ?? '';
+
+    await localData.setString(
+        'selected_church_name', memberFacility[index].name ?? '');
+    profileAPI.selectedChurchName = memberFacility[index].name ?? '';
+
+    await localData.setInt('selected_church_id', memberFacility[index].id ?? 0);
+    update();
+    Get.offAll(
+      HomePage(),
+    );
+  }
+
   void onChangeSelectedSkill(String? value) {
     selectedSkill = value!;
     update();
@@ -105,6 +144,4 @@ class ProfileController extends GetxController {
     isNewJobNoti = !isNewJobNoti;
     update();
   }
-
- 
 }

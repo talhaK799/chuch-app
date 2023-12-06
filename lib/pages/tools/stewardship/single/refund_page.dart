@@ -20,9 +20,10 @@ class RefundPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 50),
-              Text("Contain support using below email for refund"),
-              SizedBox(height: 8),
-              Text("support@churchappeings.com"),
+              Text(
+                  "Please contact your church administrator regarding the refunds."),
+              // SizedBox(height: 8),
+              // Text("support@churchappeings.com"),
             ],
           ),
         )));

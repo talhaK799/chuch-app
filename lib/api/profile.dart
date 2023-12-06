@@ -138,13 +138,11 @@ class ProfileAPI {
         selectedChurchId = await localData.getInt('selected_church_id');
         log("****......selected Church id**** $selectedChurchName");
       } else {
-       
         await localData.setInt('selected_church_id', 99999999);
         selectedChurchId = await localData.getInt('selected_church_id');
         log("****............jjjjjjjjj........................ Selected Church id ID **** $selectedChurchId");
       }
     } else {
-     
       log('unexpected error');
     }
 

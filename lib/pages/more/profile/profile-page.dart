@@ -32,9 +32,7 @@ class ProfilePage extends StatelessWidget {
                       navigateToWidget(),
                       GestureDetector(
                         onTap: () {
-                          Get.to(EditProfilePage(
-                          
-                          ));
+                          Get.to(EditProfilePage());
                         },
                         child: Text(
                           'Edit',
@@ -186,7 +184,7 @@ class ProfilePage extends StatelessWidget {
                         ListView.builder(
                           primary: false,
                           shrinkWrap: true,
-                          itemCount: _.profileAPI.churches.length,
+                          itemCount: _.memberFacility.length,
                           itemBuilder: (context, index) {
                             return Column(
                               children: [
@@ -195,13 +193,42 @@ class ProfilePage extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Flexible(
-                                      child: Text(
-                                        "${index + 1}) ${_.profileAPI.churches[index].name}",
-                                        style: TextStyle(
-                                          overflow: TextOverflow.ellipsis,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "${index + 1}) ${_.memberFacility[index].name}",
+                                              style: TextStyle(
+                                                overflow: TextOverflow.ellipsis,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          _.selectedCurch ==
+                                                  _.memberFacility[index].name
+                                              ? Container()
+                                              : GestureDetector(
+                                                  onTap: () {
+                                                    _.visitChurch(index);
+                                                  },
+                                                  child: Container(
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Text(
+                                                      'Visit',
+                                                      style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        height: 1.5,
+                                                        color: redColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                        ],
                                       ),
                                     ),
                                   ],

@@ -61,7 +61,7 @@ class StewardshipAdminPage extends StatelessWidget {
                               _.scanQrCodeDetails();
                             },
                             child: Text(
-                              'Scan',
+                              'Start Collection',
                               style: TextStyle(
                                 color: redColor,
                                 fontWeight: FontWeight.w700,

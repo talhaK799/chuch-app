@@ -70,7 +70,7 @@ class PhotoGalleryPage extends StatelessWidget {
                         suffixIcon: IconButton(
                           icon: Icon(Icons.send),
                           onPressed: () {
-                            _.fetchPhotos();
+                            _.searchImages(_.searchQueryController.text);
                           },
                         ),
                       ),
@@ -82,15 +82,32 @@ class PhotoGalleryPage extends StatelessWidget {
                     crossAxisSpacing: 15,
                     mainAxisSpacing: 15,
                     shrinkWrap: true,
-                    itemCount: _.photos.length,
+                    itemCount: _.isSearching == true
+                        ? _.searchedPhotos.length
+                        : _.photos.length,
                     itemBuilder: (context, index) {
                       return Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                         height: 100,
                         width: 100,
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                            image: NetworkImage(_.photos[index]["image_uri"]),
+                            image: _.isSearching
+                                ? NetworkImage(
+                                    _.searchedPhotos[index].image_uri ?? '')
+                                : NetworkImage(_.photos[index].image_uri ?? ''),
                             fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: Text(
+                          _.isSearching
+                              ? _.searchedPhotos[index].title ?? ''
+                              : _.photos[index].title ?? '',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                            fontSize: 16,
                           ),
                         ),
                       );

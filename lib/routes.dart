@@ -36,6 +36,8 @@ import 'package:churchappenings/pages/tools/stewardship/stewardship-page.dart';
 import 'package:churchappenings/pages/tools/tools-page.dart';
 import 'package:get/get.dart';
 
+import 'pages/live_stream/live_stream_page.dart';
+
 class Routes {
   //Auth
   static const String initial = '/initial';
@@ -72,6 +74,10 @@ class Routes {
   // Search
   static const String search = '/search';
   static const String favChurches = '/favChurches';
+
+  // Live stream
+  static const String live = '/live';
+
 
   // Bulleting
   static const String bulletins = '/bulletins';
@@ -133,6 +139,7 @@ class Routes {
     GetPage(name: members, page: () => MembersPage()),
     GetPage(name: communityOutreach, page: () => CommunityOutreachPage()),
     GetPage(name: memberTransfer, page: () => MemberTransferPage()),
-    GetPage(name: addNewChurch, page: () => AddNewChurchPage())
+    GetPage(name: addNewChurch, page: () => AddNewChurchPage()),
+    GetPage(name: live, page: () => LiveStreamPage()),
   ];
 }

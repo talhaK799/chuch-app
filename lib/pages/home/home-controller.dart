@@ -18,8 +18,6 @@ class HomeController extends GetxController {
   String? churchLogo;
   Rx<bool> isLoading = false.obs;
 
-  
-
   int currentCarouselSelected = 1;
 
   String name = "";
@@ -162,6 +160,7 @@ class HomeController extends GetxController {
         Child(
           title: "Live Stream",
           icon: "assets/icon/036-live-streaming.svg",
+          path: Routes.live,
         ),
         Child(
           title: "Prayometer",

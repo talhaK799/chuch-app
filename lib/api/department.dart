@@ -30,19 +30,21 @@ class DepartmentAPI {
 
   Future getDepartmentsYourMemberOff() async {
     print(profileApi.selectedChurchId);
-    int? id = profileApi.memberId;
-    print("Member ID => $id");
-    if (id != null) {
+    int? memberId = profileApi.memberId;
+    int? churchId = profileApi.selectedChurchId;
+    print("Member ID => $memberId");
+    if (memberId != null) {
       String query = """
         query MyQuery {
-          department_join_req(where: {status: {_eq: "APPROVED"}, member_id: {_eq: $id}}) {
-            department {
-              name
-              desc
-              id
-            }
-          }
-        }
+  department_join_req(where: {status: {_eq: "APPROVED"}, member_id: {_eq: $memberId}, department: {facility_id: {_eq: $churchId}}}) {
+    department {
+      name
+      desc
+      id
+      facility_id
+    }
+  }
+}
     """;
 
       // Map<String, dynamic> variables = {"uuid": id};

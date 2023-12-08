@@ -107,8 +107,11 @@ class ProfileController extends GetxController {
     await localData.setString(
         'selected_church_name', memberFacility[index].name ?? '');
     profileAPI.selectedChurchName = memberFacility[index].name ?? '';
+    profileAPI.selectedChurchId = memberFacility[index].id ?? 0;
 
     await localData.setInt('selected_church_id', memberFacility[index].id ?? 0);
+    print("memeber Id ==> ${profileAPI.memberId}");
+    print("memeber Id ==> ${profileAPI.selectedChurchId}");
     update();
     Get.offAll(
       HomePage(),

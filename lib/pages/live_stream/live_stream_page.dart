@@ -60,6 +60,7 @@ class LiveStreamPage extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             // _.visitChurch(index);
+                            _.visitUrl(index);
                           },
                           child: Container(
                             padding: EdgeInsets.all(10),

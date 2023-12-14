@@ -1,3 +1,4 @@
+import 'package:churchappenings/utils/launch-url.dart';
 import 'package:get/get.dart';
 
 import '../../api/live_stream.dart';
@@ -25,5 +26,16 @@ class LiveStreamController extends GetxController {
     }
     loading = false;
     update();
+  }
+
+  visitUrl(index) async {
+    final uri = Uri.parse(
+      links[index],
+    );
+    print('url ===> $uri');
+    bool launched = await launchUrl(uri.toString());
+    if (!launched) {
+      throw Exception('Could not launch $uri');
+    }
   }
 }

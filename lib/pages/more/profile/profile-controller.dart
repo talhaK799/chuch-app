@@ -1,4 +1,5 @@
 import 'package:churchappenings/api/department.dart';
+import 'package:churchappenings/api/designation.dart';
 import 'package:churchappenings/api/profile.dart';
 import 'package:churchappenings/models/department.dart';
 import 'package:churchappenings/pages/home/home-page.dart';
@@ -19,9 +20,12 @@ class ProfileController extends GetxController {
   String email = "None";
   DepartmentAPI departmentApi = DepartmentAPI();
   FacilityMemberApi facilityMember = FacilityMemberApi();
+  DesginationAPI designation = DesginationAPI();
   var response;
   var facilityResponse;
+  var designationResponse;
   List<Departments> departments = [];
+  List designations = [];
   List<MemberFacility> memberFacility = [];
 
   final localData = LocalData();
@@ -44,6 +48,7 @@ class ProfileController extends GetxController {
     var tempSkills = await profileAPI.getSkills();
     await getMyDepartments();
     await getMyFacilities();
+    await getDesignations();
     name = profileAPI.name;
     email = profileAPI.email;
     selectedDate = profileAPI.dob;
@@ -89,6 +94,17 @@ class ProfileController extends GetxController {
     update();
   }
 
+  getDesignations() async {
+    designationResponse = await designation.getMemberDesignation();
+    // response = await departmentApi.getAllDepartments();
+    print("**** designation Response ==== >>> $designationResponse");
+    for (int i = 0; i < designationResponse.length; i++) {
+      designations.add(designationResponse[i]);
+    }
+    loading = false;
+    update();
+  }
+
   getMyFacilities() async {
     facilityResponse = await facilityMember.getMembersFacilities();
     // response = await departmentApi.getAllDepartments();
@@ -111,7 +127,7 @@ class ProfileController extends GetxController {
 
     await localData.setInt('selected_church_id', memberFacility[index].id ?? 0);
     print("memeber Id ==> ${profileAPI.memberId}");
-    print("memeber Id ==> ${profileAPI.selectedChurchId}");
+    print("selected church Id ==> ${profileAPI.selectedChurchId}");
     update();
     Get.offAll(
       HomePage(),

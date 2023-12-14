@@ -34,11 +34,11 @@ class HasuraService extends GetxController {
           .call();
       print("INITIALIZED");
       final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-      String token = await _firebaseAuth.currentUser!.getIdToken();
+      String? token = await _firebaseAuth.currentUser!.getIdToken();
       print("Toaken----->$token");
       final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
       pattern
-          .allMatches(token)
+          .allMatches(token!)
           .forEach((match) => print("match group => ${match.group(0)}"));
 
       hasuraConnect = HasuraConnect(

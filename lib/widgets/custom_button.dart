@@ -6,7 +6,7 @@ customButton({onTap, title, buttonColor, textColor}) {
   return GestureDetector(
     onTap: onTap,
     child: Container(
-      height: 50,
+      padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: buttonColor ?? redColor),

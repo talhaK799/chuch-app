@@ -1,6 +1,8 @@
 import 'package:churchappenings/constants/red-material-color.dart';
 import 'package:churchappenings/pages/more/profile/edit_profile/edit_profile_page.dart';
 import 'package:churchappenings/pages/more/profile/profile-controller.dart';
+import 'package:churchappenings/pages/more/profile/request_churches/request_church_screen.dart';
+import 'package:churchappenings/widgets/custom_button.dart';
 import 'package:churchappenings/widgets/navigate-back-widget.dart';
 import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
@@ -173,12 +175,29 @@ class ProfilePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "My Churchs: ",
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "My Churchs: ",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            _.designations.isNotEmpty
+                                ? _.memberFacility.length <= 10
+                                    ? Container()
+                                    : customButton(
+                                        onTap: () {
+                                          Get.to(
+                                            RequestChurchPage(),
+                                          );
+                                        },
+                                        title: 'Request More',
+                                      )
+                                : Container(),
+                          ],
                         ),
                         SizedBox(height: 5),
                         ListView.builder(

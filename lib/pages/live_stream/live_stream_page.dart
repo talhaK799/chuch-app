@@ -65,7 +65,7 @@ class LiveStreamPage extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsets.all(10),
                             child: Text(
-                              'Visit',
+                              'Attend',
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

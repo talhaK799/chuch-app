@@ -116,6 +116,13 @@ class MoreController extends GetxController {
       icon: Icons.build_outlined,
     ),
     CMenuItem(
+      title: 'Notifications',
+      action: () {
+        // Get.to(ProfilePage());
+      },
+      icon: Icons.notifications,
+    ),
+    CMenuItem(
       title: 'About Church Happenings',
       action: () {
         Get.toNamed(Routes.aboutChurchappening);

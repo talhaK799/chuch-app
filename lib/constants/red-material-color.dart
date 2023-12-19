@@ -15,3 +15,4 @@ Map<int, Color> color = {
 
 MaterialColor redColor = MaterialColor(0xFF800020, color);
 const Color primaryWhite = Color(0xffffffff);
+const Color greyColor = Color.fromARGB(255, 203, 173, 173);

@@ -1,25 +1,24 @@
-import 'package:churchappenings/constants/red-material-color.dart';
-import 'package:churchappenings/pages/tools/prayerometer/prayerometer-controller.dart';
-import 'package:churchappenings/pages/tools/prayerometer/requests/request_screen.dart';
-import 'package:churchappenings/widgets/navigate-back-widget.dart';
-import 'package:churchappenings/widgets/transparentAppbar.dart';
+import 'package:churchappenings/pages/tools/prayerometer/requests/request_controller.dart';
 import 'package:comment_box/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import '../../../widgets/custom_button.dart';
-import '../../../widgets/white_button.dart';
+import '../../../../constants/red-material-color.dart';
+import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/navigate-back-widget.dart';
+import '../../../../widgets/transparentAppbar.dart';
+import '../../../../widgets/white_button.dart';
+import 'add_request_screen.dart';
 
-class PrayeroMeterPage extends StatelessWidget {
-  const PrayeroMeterPage({Key? key}) : super(key: key);
+class RequestScreen extends StatelessWidget {
+  const RequestScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: transparentAppbar(),
-      body: GetBuilder<PrayerometerController>(
-        init: PrayerometerController(),
+      body: GetBuilder<RequestController>(
+        init: RequestController(),
         global: false,
         builder: (_) {
           return Padding(
@@ -31,49 +30,37 @@ class PrayeroMeterPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     navigateToWidget(),
+                  ],
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    // customButton(title: 'Previous Request'),
+                    // SizedBox(
+                    //   width: 10,
+                    // ),
                     customButton(
-                        title: 'My Requests',
+                        title: 'New Request',
                         onTap: () {
-                          Get.to(RequestScreen());
+                          Get.to(
+                            AddRequestScreen(),
+                          );
                         }),
                   ],
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    customWhiteButton(
-                        title: 'All Requests',
-                        isActive: _.isall,
-                        onTap: () {
-                          _.changeTab(true);
-                        }),
-                    // SizedBox(
-                    //   width: 10,
-                    // ),
-                    customWhiteButton(
-                        title: 'Prayometer',
-                        isActive: _.isPray,
-                        onTap: () {
-                          _.changeTab(false);
-                        }),
-                  ],
-                ),
-                SizedBox(height: 10),
-                _.isPray.value == true
-                    ? _praymeter(_)
-                    : Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          // primary: false,
-                          itemCount: 3,
-                          itemBuilder: (context, index) =>
-                              _postSection(context, _),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 15,
-                          ),
-                        ),
-                      )
+                Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    // primary: false,
+                    itemCount: 3,
+                    itemBuilder: (context, index) => _postSection(context, _),
+                    separatorBuilder: (context, index) => SizedBox(
+                      height: 15,
+                    ),
+                  ),
+                )
               ],
             ),
           );
@@ -137,7 +124,7 @@ class PrayeroMeterPage extends StatelessWidget {
                   builder: (context) {
                     return CommentBox(
                       userImage: AssetImage('assets/placeholder-1000.png'),
-                      child: commentChild(_),
+                      child: commentSection(_),
                       labelText: 'Write a comment...',
                       errorText: 'Comment cannot be blank',
                       withBorder: false,
@@ -178,7 +165,7 @@ class PrayeroMeterPage extends StatelessWidget {
     );
   }
 
-  commentChild(PrayerometerController _) {
+  commentSection(RequestController _) {
     return ListView.builder(
       itemCount: _.filedata.length,
       itemBuilder: (context, index) {
@@ -214,75 +201,6 @@ class PrayeroMeterPage extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-   _praymeter(PrayerometerController _) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Prayer Meter',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.w700,
-            height: 1.5,
-          ),
-        ),
-        Text(
-          'Church prayer meter',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w300,
-            height: 1.5,
-          ),
-        ),
-        SizedBox(height: 100),
-        SfRadialGauge(
-          axes: <RadialAxis>[
-            RadialAxis(
-              minimum: 0,
-              maximum: 100,
-              ranges: <GaugeRange>[
-                GaugeRange(
-                  startValue: 0,
-                  endValue: 33,
-                  color: Colors.red,
-                ),
-                GaugeRange(
-                  startValue: 33,
-                  endValue: 66,
-                  color: Colors.orange,
-                ),
-                GaugeRange(
-                  startValue: 66,
-                  endValue: 100,
-                  color: Colors.green,
-                ),
-              ],
-              pointers: <GaugePointer>[
-                NeedlePointer(value: _.score),
-                MarkerPointer(value: _.score)
-              ],
-              annotations: <GaugeAnnotation>[
-                GaugeAnnotation(
-                  widget: Container(
-                    child: Text(
-                      _.score.toString() + ' %',
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  angle: 90,
-                  positionFactor: 0.5,
-                )
-              ],
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

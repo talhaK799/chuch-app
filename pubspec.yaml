@@ -66,6 +66,7 @@ dependencies:
   permission_handler: ^10.0.0
   country_list_pick: ^1.0.1+6
   modal_progress_hud_nsn: ^0.3.0
+  comment_box: ^0.0.18
 
 dev_dependencies:
   flutter_test:

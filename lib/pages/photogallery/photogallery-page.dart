@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 
+import '../../constants/red-material-color.dart';
+import '../../widgets/custom_button.dart';
+import 'upload_image_screen.dart';
+
 class PhotoGalleryPage extends StatelessWidget {
   const PhotoGalleryPage({Key? key}) : super(key: key);
 
@@ -30,16 +34,13 @@ class PhotoGalleryPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       navigateToWidget(),
-                      // GestureDetector(
-                      //   child: Text(
-                      //     'Create',
-                      //     style: TextStyle(
-                      //       fontWeight: FontWeight.w700,
-                      //       color: redColor,
-                      //       fontSize: 17,
-                      //     ),
-                      //   ),
-                      // ),
+                      customButton(
+                          onTap: () {
+                            Get.to(
+                              UploadImageScreen(),
+                            );
+                          },
+                          title: "Upload Image,"),
                     ],
                   ),
                   SizedBox(height: 10),

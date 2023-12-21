@@ -19,80 +19,146 @@ class HomePage extends StatelessWidget {
         global: false,
         builder: (_) {
           return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _.openDrawer();
-                        },
-                        child: Container(
-                          width: 45,
-                          height: 45,
-                          child: Image(
-                            image: AssetImage('assets/icon/menu.png'),
-                            width: 75,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    // padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _.openDrawer();
+                          },
+                          child: Container(
+                            width: 45,
+                            height: 45,
+                            child: Image(
+                              image: AssetImage('assets/logo3.png'),
+                              width: 75,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                          child: _.profileApi.selectedChurchLogo != null
-                              ? Image(
-                                  image: NetworkImage(
-                                      _.profileApi.selectedChurchLogo),
-                                  height: 100,
-                                )
-                              : Container()),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Text(
-                    _.profileApi.selectedChurchName,
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      height: 1.5,
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Expanded(
+                          child: Text(
+                            _.profileApi.selectedChurchName,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: redColor,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                        // SizedBox(
+                        //   width: 20,
+                        // ),
+                        _.profileApi.selectedChurchLogo != null
+                            ? Image(
+                                image: NetworkImage(
+                                  _.profileApi.selectedChurchLogo,
+                                  scale: 5,
+                                ),
+                                // height: 60,
+                              )
+                            : Container(),
+                      ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _.topCarouselMenu.map<Widget>((single) {
+
+                  SizedBox(
+                    height: 20,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _.topCarouselMenu.map<Widget>((single) {
+                        return GestureDetector(
+                          onTap: () {
+                            _.setCurrentActive(single.id);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 25, vertical: 15),
+                            margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                              color: single.id == _.currentCarouselSelected
+                                  ? redColor
+                                  : lightGreyColor,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    single.icon,
+                                    color:
+                                        single.id == _.currentCarouselSelected
+                                            ? Colors.white
+                                            : greyColor2,
+                                    width: 20,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    single.title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color:
+                                          single.id == _.currentCarouselSelected
+                                              ? Colors.white
+                                              : greyColor2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        children: _
+                            .topCarouselMenu[_.currentCarouselSelected - 1]
+                            .child
+                            .map<Widget>((single) {
                       return GestureDetector(
                         onTap: () {
-                          _.setCurrentActive(single.id);
+                          Get.toNamed(single.path);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
+                            horizontal: 20,
+                            vertical: 10,
+                          ),
                           margin: const EdgeInsets.symmetric(horizontal: 5),
                           decoration: BoxDecoration(
-                            color: single.id == _.currentCarouselSelected
-                                ? Colors.black
-                                : redColor,
-                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              width: 1,
+                              color: redColor,
+                            ),
+                            borderRadius: BorderRadius.circular(30),
                           ),
                           child: Center(
                             child: Row(
                               children: [
                                 SvgPicture.asset(
                                   single.icon,
-                                  color: Colors.white,
+                                  color: redColor,
                                   width: 23,
                                 ),
                                 SizedBox(
@@ -104,7 +170,7 @@ class HomePage extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
-                                    color: Colors.white,
+                                    color: redColor,
                                   ),
                                 ),
                               ],
@@ -112,226 +178,159 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }).toList()),
                   ),
-                ),
-                SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: _
-                          .topCarouselMenu[_.currentCarouselSelected - 1].child
-                          .map<Widget>((single) {
-                    return GestureDetector(
-                      onTap: () {
-                        Get.toNamed(single.path);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 15,
-                        ),
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                            color: redColor,
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Row(
-                            children: [
-                              SvgPicture.asset(
-                                single.icon,
-                                color: redColor,
-                                width: 23,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                single.title,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: redColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                  SizedBox(height: 30),
+                  bulletinsFeed(_),
+                  SizedBox(height: 30),
+                  Container(
+                    height: 250,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 1.6 / 2,
                       ),
-                    );
-                  }).toList()),
-                ),
-                SizedBox(height: 30),
-                bulletinsFeed(_),
-                SizedBox(height: 30),
-                Container(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          buildQuickMenuItem(
-                            name: 'Sermon Notes',
-                            assetUrl: 'assets/icon/039-writing.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.sermonNotes);
-                            },
-                          ),
-                          buildQuickMenuItem(
-                            name: 'Bulletins',
-                            assetUrl: 'assets/icon/024-planning.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.bulletins);
-                            },
-                          ),
-                          buildQuickMenuItem(
-                            name: 'My Departments',
-                            assetUrl: 'assets/icon/034-structure.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.department);
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          buildQuickMenuItem(
-                            name: 'Announcements',
-                            assetUrl: 'assets/icon/028-megaphone.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.announcements);
-                            },
-                          ),
-                          buildQuickMenuItem(
-                            name: 'Events',
-                            assetUrl: 'assets/icon/027-calendar-2.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.myevent);
-                            },
-                          ),
-                          buildQuickMenuItem(
-                            name: 'Calendar',
-                            assetUrl: 'assets/icon/025-calendar.svg',
-                            bgColor: redColor.withOpacity(0.2),
-                            action: () {
-                              Get.toNamed(Routes.calendar);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                      children: [
+                        buildQuickMenuItem(
+                          name: 'Sermon Notes',
+                          assetUrl: 'assets/icon/Notes.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.sermonNotes);
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'Bulletins',
+                          assetUrl: 'assets/icon/bulletins.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.bulletins);
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'My Departments',
+                          assetUrl: 'assets/icon/department.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.department);
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'Announcements',
+                          assetUrl: 'assets/icon/announcement.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.announcements);
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'Events',
+                          assetUrl: 'assets/icon/events.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.myevent);
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'Calendar',
+                          assetUrl: 'assets/icon/Calendar2.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.calendar);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(height: 30),
+                  SizedBox(height: 30),
 
-                SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _.categories.length,
-                    itemBuilder: (context, index) {
-                      var single = _.categories[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(BlogPage(),
-                              arguments: {'blogName': single["name"]});
-                        },
-                        child: Container(
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: AssetImage('assets/sample-bulletin.jpeg'),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                  Container(
+                    height: 50,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _.categories.length,
+                      itemBuilder: (context, index) {
+                        var single = _.categories[index];
+                        return GestureDetector(
+                          onTap: () {
+                            Get.to(BlogPage(),
+                                arguments: {'blogName': single["name"]});
+                          },
                           child: Container(
+                            margin: EdgeInsets.only(right: 20),
+                            alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.75),
-                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(30),
                             ),
                             padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 30,
+                              horizontal: 25,
+                              vertical: 10,
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  single["name"],
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    height: 1.5,
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              single["name"],
+                              style: TextStyle(
+                                color: Colors.white,
+                                height: 1.5,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
-                ),
-                // Row(
-                //   crossAxisAlignment: CrossAxisAlignment.center,
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: _.categories.map(
-                //     (single) {
-                //       return GestureDetector(
-                //         onTap: () {
-                //           Get.to(BlogPage(),
-                //               arguments: {'blogName': single["name"]});
-                //         },
-                //         child: Container(
-                //           margin:
-                //               EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                //           decoration: BoxDecoration(
-                //             borderRadius: BorderRadius.circular(10),
-                //             image: DecorationImage(
-                //               image: AssetImage('assets/sample-bulletin.jpeg'),
-                //               fit: BoxFit.cover,
-                //             ),
-                //           ),
-                //           child: Container(
-                //             decoration: BoxDecoration(
-                //               color: Colors.black.withOpacity(0.75),
-                //               borderRadius: BorderRadius.circular(10),
-                //             ),
-                //             padding: EdgeInsets.symmetric(
-                //               horizontal: 20,
-                //               vertical: 30,
-                //             ),
-                //             child: Column(
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: [
-                //                 Text(
-                //                   single["name"],
-                //                   style: TextStyle(
-                //                     color: Colors.white,
-                //                     height: 1.5,
-                //                   ),
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ),
-                //       );
-                //     },
-                //   ).toList(),
-                // ),
-                SizedBox(height: 50),
-              ],
+                  // Row(
+                  //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   mainAxisAlignment: MainAxisAlignment.center,
+                  //   children: _.categories.map(
+                  //     (single) {
+                  //       return GestureDetector(
+                  //         onTap: () {
+                  //           Get.to(BlogPage(),
+                  //               arguments: {'blogName': single["name"]});
+                  //         },
+                  //         child: Container(
+                  //           margin:
+                  //               EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  //           decoration: BoxDecoration(
+                  //             borderRadius: BorderRadius.circular(10),
+                  //             image: DecorationImage(
+                  //               image: AssetImage('assets/sample-bulletin.jpeg'),
+                  //               fit: BoxFit.cover,
+                  //             ),
+                  //           ),
+                  //           child: Container(
+                  //             decoration: BoxDecoration(
+                  //               color: Colors.black.withOpacity(0.75),
+                  //               borderRadius: BorderRadius.circular(10),
+                  //             ),
+                  //             padding: EdgeInsets.symmetric(
+                  //               horizontal: 20,
+                  //               vertical: 30,
+                  //             ),
+                  //             child: Column(
+                  //               crossAxisAlignment: CrossAxisAlignment.start,
+                  //               children: [
+                  //                 Text(
+                  //                   single["name"],
+                  //                   style: TextStyle(
+                  //                     color: Colors.white,
+                  //                     height: 1.5,
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ).toList(),
+                  // ),
+                  SizedBox(height: 50),
+                ],
+              ),
             ),
           );
         },
@@ -340,46 +339,57 @@ class HomePage extends StatelessWidget {
   }
 }
 
-Expanded buildQuickMenuItem({
+buildQuickMenuItem({
   required String name,
   required String assetUrl,
   required Color bgColor,
   required Function action,
 }) {
-  return Expanded(
-    child: Center(
-      child: GestureDetector(
-        onTap: () {
-          action();
-        },
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                width: 80,
-                padding: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    assetUrl,
-                    color: redColor,
-                    width: 50,
-                  ),
-                ),
-              ),
-              SizedBox(height: 7),
-              Text(
-                name,
-                style: TextStyle(
-                  fontSize: 12,
-                ),
-              ),
-            ],
+  return GestureDetector(
+    onTap: () {
+      action();
+    },
+    child: Container(
+      width: 115,
+      padding: EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: 5,
+      ),
+      decoration: BoxDecoration(
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: greyColor,
+        //     offset: Offset(1, 2),
+        //   ),
+        //   BoxShadow(
+        //     color: greyColor,
+        //     offset: Offset(2, 1),
+        //   ),
+        // ],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Image.asset(
+              assetUrl,
+              color: redColor,
+              scale: 4,
+              // width: 50,
+            ),
           ),
-        ),
+          SizedBox(height: 7),
+          Text(
+            name,
+            style: TextStyle(
+              fontSize: 9,
+              color: redColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
       ),
     ),
   );
@@ -392,12 +402,10 @@ Container bulletinsFeed(HomeController _) {
         child: _.isLoading.value == true
             ? Center(child: CircularProgressIndicator())
             : _.bulletins.isEmpty
-                ? Center(
-                    child: Text(
-                      "Not Found Upcoming Bulletins",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                      ),
+                ? Text(
+                    "Not Found Upcoming Bulletins",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
                     ),
                   )
                 : Column(

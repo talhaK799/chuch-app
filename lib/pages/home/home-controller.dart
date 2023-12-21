@@ -28,8 +28,8 @@ class HomeController extends GetxController {
   List<TopCarouselMenu> topCarouselMenu = [
     TopCarouselMenu(
       id: 1,
-      title: "Search",
-      icon: "assets/icon/004-search.svg",
+      title: "Home",
+      icon: "assets/icon/home.png",
       child: [
         Child(
           title: "Find a church",
@@ -60,7 +60,7 @@ class HomeController extends GetxController {
     TopCarouselMenu(
       id: 2,
       title: "Show Gratitude",
-      icon: "assets/icon/006-plant.svg",
+      icon: "assets/icon/Gratitude.png",
       child: [
         Child(
           title: "Stewardship",
@@ -80,7 +80,7 @@ class HomeController extends GetxController {
     TopCarouselMenu(
       id: 3,
       title: "Information",
-      icon: "assets/icon/007-news.svg",
+      icon: "assets/icon/information.png",
       child: [
         Child(
           title: "Bulletin",
@@ -128,7 +128,7 @@ class HomeController extends GetxController {
     TopCarouselMenu(
       id: 4,
       title: "Operations",
-      icon: "assets/icon/008-teamwork.svg",
+      icon: "assets/icon/mask.png",
       child: [
         Child(
           title: "My Departments",
@@ -150,7 +150,7 @@ class HomeController extends GetxController {
     TopCarouselMenu(
       id: 5,
       title: "Fellowship",
-      icon: "assets/icon/009-group.svg",
+      icon: "assets/icon/fellow.png",
       child: [
         Child(
           title: "Polling",

@@ -165,7 +165,7 @@ class HomeController extends GetxController {
         Child(
           title: "Prayometer",
           icon: "assets/icon/038-speedometer.svg",
-          path: Routes.prayerometer,
+          path: Routes.prayer,
         ),
         Child(
           title: "Sermon Notes",

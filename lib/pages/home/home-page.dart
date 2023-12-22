@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../constants/strings.dart';
 import '../bulletins/single-bulletin/single-bulletin-page.dart';
 import 'home-controller.dart';
 
@@ -27,54 +28,62 @@ class HomePage extends StatelessWidget {
                   Container(
                     // padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
                           onTap: () {
                             _.openDrawer();
                           },
-                          child: Container(
-                            width: 45,
-                            height: 45,
-                            child: Image(
-                              image: AssetImage('assets/logo3.png'),
-                              width: 75,
-                            ),
+                          child: Image.asset(
+                            '$icons/sidebar.png',
+                            scale: 3.5,
                           ),
                         ),
                         SizedBox(
                           width: 15,
                         ),
-                        Expanded(
-                          child: Text(
-                            _.profileApi.selectedChurchName,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: redColor,
-                              height: 1.5,
-                            ),
-                          ),
+                        Image.asset(
+                          'assets/logo3.png',
+                          scale: 3,
                         ),
-                        // SizedBox(
-                        //   width: 20,
-                        // ),
-                        _.profileApi.selectedChurchLogo != null
-                            ? Image(
-                                image: NetworkImage(
-                                  _.profileApi.selectedChurchLogo,
-                                  scale: 5,
-                                ),
-                                // height: 60,
-                              )
-                            : Container(),
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          _.profileApi.selectedChurchName,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: redColor,
+                            height: 1.5,
+                          ),
+                        ),
+                      ),
+                      _.profileApi.selectedChurchLogo != null
+                          ? Image(
+                              image: NetworkImage(
+                                _.profileApi.selectedChurchLogo,
+                                scale: 5,
+                              ),
+                              // height: 60,
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  // SizedBox(
+                  //   width: 20,
+                  // ),
 
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
@@ -246,40 +255,78 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 30),
 
-                  Container(
-                    height: 50,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _.categories.length,
-                      itemBuilder: (context, index) {
-                        var single = _.categories[index];
-                        return GestureDetector(
+                  // Container(
+                  //   height: 50,
+                  //   child: ListView.builder(
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemCount: _.categories.length,
+                  //     itemBuilder: (context, index) {
+                  //       var single = _.categories[index];
+                  //       return
+                  //     },
+                  //   ),
+                  // ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        child: GestureDetector(
                           onTap: () {
-                            Get.to(BlogPage(),
-                                arguments: {'blogName': single["name"]});
+                            Get.to(BlogPage(), arguments: {
+                              'blogName': _.categories[0]["name"]
+                            });
                           },
                           child: Container(
-                            margin: EdgeInsets.only(right: 20),
+                            // margin: EdgeInsets.only(right: 20),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.black,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             padding: EdgeInsets.symmetric(
-                              horizontal: 25,
+                              horizontal: 20,
                               vertical: 10,
                             ),
                             child: Text(
-                              single["name"],
+                              _.categories[0]["name"],
                               style: TextStyle(
                                 color: Colors.white,
                                 height: 1.5,
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      ),
+                      Container(
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.to(BlogPage(), arguments: {
+                              'blogName': _.categories[1]["name"]
+                            });
+                          },
+                          child: Container(
+                            // margin: EdgeInsets.only(right: 20),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            child: Text(
+                              _.categories[1]["name"],
+                              style: TextStyle(
+                                color: Colors.white,
+                                height: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -328,6 +375,7 @@ class HomePage extends StatelessWidget {
                   //     },
                   //   ).toList(),
                   // ),
+
                   SizedBox(height: 50),
                 ],
               ),

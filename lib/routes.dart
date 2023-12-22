@@ -78,7 +78,6 @@ class Routes {
   // Live stream
   static const String live = '/live';
 
-
   // Bulleting
   static const String bulletins = '/bulletins';
   static const String singleBulletin = '/singleBulletin';

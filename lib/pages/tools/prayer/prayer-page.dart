@@ -5,6 +5,9 @@ import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../widgets/custom_button.dart';
+import '../prayerometer/prayerometer-page.dart';
+
 class PrayerPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -24,18 +27,40 @@ class PrayerPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       navigateToWidget(),
-                      GestureDetector(
-                        onTap: () {
-                          _.navigateToOutgoing();
-                        },
-                        child: Text(
-                          'Outgoing',
-                          style: TextStyle(
-                            color: redColor,
-                            fontWeight: FontWeight.w700,
+                      Row(
+                        children: [
+                          customButton(
+                            title: 'Prayerometer',
+                            onTap: () {
+                              Get.to(
+                                PrayeroMeterPage(),
+                              );
+                            },
                           ),
-                        ),
-                      ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          customButton(
+                            title: 'Outgoing',
+                            onTap: () {
+                              _.navigateToOutgoing();
+                            },
+                          ),
+                        ],
+                      )
+
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     _.navigateToOutgoing();
+                      //   },
+                      //   child: Text(
+                      //     'Outgoing',
+                      //     style: TextStyle(
+                      //       color: redColor,
+                      //       fontWeight: FontWeight.w700,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                   SizedBox(height: 10),
@@ -88,7 +113,7 @@ class PrayerPage extends StatelessWidget {
                               SizedBox(height: 20),
                               GestureDetector(
                                 onTap: () {
-                                  _.openBottomShit(e["id"]);
+                                  _.openBottomShit(e["id"], context);
                                 },
                                 child: Text(
                                   'Pray',

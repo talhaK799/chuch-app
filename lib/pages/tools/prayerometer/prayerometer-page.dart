@@ -31,49 +31,51 @@ class PrayeroMeterPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     navigateToWidget(),
-                    customButton(
-                        title: 'My Requests',
-                        onTap: () {
-                          Get.to(RequestScreen());
-                        }),
+                    // customButton(
+                    //     title: 'My Requests',
+                    //     onTap: () {
+                    //       Get.to(RequestScreen());
+                    //     }),
                   ],
                 ),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    customWhiteButton(
-                        title: 'All Requests',
-                        isActive: _.isall,
-                        onTap: () {
-                          _.changeTab(true);
-                        }),
-                    // SizedBox(
-                    //   width: 10,
-                    // ),
-                    customWhiteButton(
-                        title: 'Prayometer',
-                        isActive: _.isPray,
-                        onTap: () {
-                          _.changeTab(false);
-                        }),
-                  ],
-                ),
-                SizedBox(height: 10),
-                _.isPray.value == true
-                    ? _praymeter(_)
-                    : Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          // primary: false,
-                          itemCount: 3,
-                          itemBuilder: (context, index) =>
-                              _postSection(context, _),
-                          separatorBuilder: (context, index) => SizedBox(
-                            height: 15,
-                          ),
-                        ),
-                      )
+                _praymeter(_)
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     customWhiteButton(
+                //         title: 'All Requests',
+                //         isActive: _.isall,
+                //         onTap: () {
+                //           _.changeTab(true);
+                //         }),
+                //     // SizedBox(
+                //     //   width: 10,
+                //     // ),
+                //     customWhiteButton(
+                //         title: 'Prayometer',
+                //         isActive: _.isPray,
+                //         onTap: () {
+                //           _.changeTab(false);
+                //         }),
+                //   ],
+                // ),
+                // SizedBox(height: 10),
+                // _.isPray.value == true
+                // ?
+
+                // : Expanded(
+                //     child: ListView.separated(
+                //       shrinkWrap: true,
+                //       // primary: false,
+                //       itemCount: 3,
+                //       itemBuilder: (context, index) =>
+                //           _postSection(context, _),
+                //       separatorBuilder: (context, index) => SizedBox(
+                //         height: 15,
+                //       ),
+                //     ),
+                //   )
               ],
             ),
           );
@@ -82,101 +84,101 @@ class PrayeroMeterPage extends StatelessWidget {
     );
   }
 
-  _postSection(context, _) {
-    return Container(
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        bottom: 5,
-        top: 16,
-      ),
-      decoration: BoxDecoration(
-          color: greyColor, borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                // You can replace the image with the user's profile picture
-                backgroundImage: AssetImage('assets/placeholder-1000.png'),
-                radius: 30.0,
-              ),
-              SizedBox(width: 16.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'John Doe',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  Text('@johndoe'),
-                ],
-              ),
-            ],
-          ),
-          Container(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-              style: TextStyle(fontSize: 16.0),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  useSafeArea: true,
-                  // isScrollControlled: true,
+  // _postSection(context, _) {
+  //   return Container(
+  //     padding: EdgeInsets.only(
+  //       left: 16,
+  //       right: 16,
+  //       bottom: 5,
+  //       top: 16,
+  //     ),
+  //     decoration: BoxDecoration(
+  //         color: greyColor, borderRadius: BorderRadius.circular(12)),
+  //     child: Column(
+  //       children: [
+  //         Row(
+  //           children: [
+  //             CircleAvatar(
+  //               // You can replace the image with the user's profile picture
+  //               backgroundImage: AssetImage('assets/placeholder-1000.png'),
+  //               radius: 30.0,
+  //             ),
+  //             SizedBox(width: 16.0),
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   'John Doe',
+  //                   style: TextStyle(
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 18.0,
+  //                   ),
+  //                 ),
+  //                 Text('@johndoe'),
+  //               ],
+  //             ),
+  //           ],
+  //         ),
+  //         Container(
+  //           padding: EdgeInsets.all(20.0),
+  //           child: Text(
+  //             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  //             style: TextStyle(fontSize: 16.0),
+  //           ),
+  //         ),
+  //         Container(
+  //           padding: EdgeInsets.all(16.0),
+  //           child: ElevatedButton(
+  //             onPressed: () {
+  //               showModalBottomSheet(
+  //                 context: context,
+  //                 useSafeArea: true,
+  //                 // isScrollControlled: true,
 
-                  enableDrag: true,
-                  builder: (context) {
-                    return CommentBox(
-                      userImage: AssetImage('assets/placeholder-1000.png'),
-                      child: commentChild(_),
-                      labelText: 'Write a comment...',
-                      errorText: 'Comment cannot be blank',
-                      withBorder: false,
-                      sendButtonMethod: () {
-                        if (_.formKey.currentState!.validate()) {
-                          print(_.commentController.text);
-                          // setState(() {
-                          //   var value = {
-                          //     'name': 'New User',
-                          //     'pic':
-                          //         'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
-                          //     'message': commentController.text,
-                          //     'date': '2021-01-01 12:00:00'
-                          //   };
-                          //   filedata.insert(0, value);
-                          // });
-                          _.commentController.clear();
-                          FocusScope.of(context).unfocus();
-                        } else {
-                          print("Not validated");
-                        }
-                      },
-                      formKey: _.formKey,
-                      commentController: _.commentController,
-                      backgroundColor: redColor,
-                      textColor: Colors.white,
-                      sendWidget:
-                          Icon(Icons.send_sharp, size: 30, color: Colors.white),
-                    );
-                  },
-                );
-              },
-              child: Text('Comments'),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //                 enableDrag: true,
+  //                 builder: (context) {
+  //                   return CommentBox(
+  //                     userImage: AssetImage('assets/placeholder-1000.png'),
+  //                     child: commentChild(_),
+  //                     labelText: 'Write a comment...',
+  //                     errorText: 'Comment cannot be blank',
+  //                     withBorder: false,
+  //                     sendButtonMethod: () {
+  //                       if (_.formKey.currentState!.validate()) {
+  //                         print(_.commentController.text);
+  //                         // setState(() {
+  //                         //   var value = {
+  //                         //     'name': 'New User',
+  //                         //     'pic':
+  //                         //         'https://lh3.googleusercontent.com/a-/AOh14GjRHcaendrf6gU5fPIVd8GIl1OgblrMMvGUoCBj4g=s400',
+  //                         //     'message': commentController.text,
+  //                         //     'date': '2021-01-01 12:00:00'
+  //                         //   };
+  //                         //   filedata.insert(0, value);
+  //                         // });
+  //                         _.commentController.clear();
+  //                         FocusScope.of(context).unfocus();
+  //                       } else {
+  //                         print("Not validated");
+  //                       }
+  //                     },
+  //                     formKey: _.formKey,
+  //                     commentController: _.commentController,
+  //                     backgroundColor: redColor,
+  //                     textColor: Colors.white,
+  //                     sendWidget:
+  //                         Icon(Icons.send_sharp, size: 30, color: Colors.white),
+  //                   );
+  //                 },
+  //               );
+  //             },
+  //             child: Text('Comments'),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   commentChild(PrayerometerController _) {
     return ListView.builder(
@@ -217,7 +219,7 @@ class PrayeroMeterPage extends StatelessWidget {
     );
   }
 
-   _praymeter(PrayerometerController _) {
+  _praymeter(PrayerometerController _) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

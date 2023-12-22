@@ -8,6 +8,7 @@ class OutgoingController extends GetxController {
   PrayAPI api = PrayAPI();
   bool loading = true;
   dynamic _data = [];
+  dynamic recents = [];
   dynamic get data => _data;
 
   onInit() async {
@@ -27,6 +28,11 @@ class OutgoingController extends GetxController {
     await api.togglePrayAsAnswered(!updateStatus, id);
     _data = await api.getOwnPrays(0);
     loading = false;
+    for (var element in _data) {
+      if (element["mark_answered"] == true) {
+        if (!recents.contain(element)) recents.add(element);
+      }
+    }
     update();
   }
 

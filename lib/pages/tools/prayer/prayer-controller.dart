@@ -59,43 +59,53 @@ class PrayerController extends GetxController {
     update();
     // TextEditingController noteController = TextEditingController();
     Get.bottomSheet(
-      Column(
-        children: [
-          Text(
-            'Comments',
-            style: TextStyle(
-              color: redColor,
-              fontWeight: FontWeight.bold,
+      Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text(
+                'Comments',
+                style: TextStyle(
+                  color: redColor,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-          Expanded(
-            child: CommentBox(
-              userImage: AssetImage('assets/placeholder-1000.png'),
-              child: commentChild(),
-              labelText: 'Write a comment...',
-              errorText: 'Comment cannot be blank',
-              withBorder: false,
-              sendButtonMethod: () {
-                if (formKey.currentState!.validate()) {
-                  print(commentController.text);
+            Expanded(
+              child: CommentBox(
+                userImage: AssetImage('assets/person.png'),
+                child: commentChild(),
+                labelText: 'Write a comment...',
+                errorText: 'Comment cannot be blank',
+                withBorder: false,
+                sendButtonMethod: () {
+                  if (formKey.currentState!.validate()) {
+                    print(commentController.text);
 
-                  addPray(id, commentController.text);
+                    addPray(id, commentController.text);
 
-                  commentController.clear();
-                  FocusScope.of(context).unfocus();
-                } else {
-                  print("Not validated");
-                }
-                update();
-              },
-              formKey: formKey,
-              commentController: commentController,
-              backgroundColor: redColor,
-              textColor: Colors.white,
-              sendWidget: Icon(Icons.send_sharp, size: 30, color: Colors.white),
+                    commentController.clear();
+                    FocusScope.of(context).unfocus();
+                  } else {
+                    print("Not validated");
+                  }
+                  update();
+                },
+                formKey: formKey,
+                commentController: commentController,
+                backgroundColor: redColor,
+                textColor: Colors.grey,
+                sendWidget:
+                    Icon(Icons.send_sharp, size: 30, color: Colors.grey),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       backgroundColor: Colors.white,
       // Container(

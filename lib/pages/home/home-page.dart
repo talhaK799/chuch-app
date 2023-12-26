@@ -5,7 +5,6 @@ import 'package:churchappenings/widgets/transparentAppbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-
 import '../../constants/strings.dart';
 import '../bulletins/single-bulletin/single-bulletin-page.dart';
 import 'home-controller.dart';
@@ -20,13 +19,15 @@ class HomePage extends StatelessWidget {
         global: false,
         builder: (_) {
           return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 10),
                   Container(
-                    // padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -39,12 +40,13 @@ class HomePage extends StatelessWidget {
                             scale: 3.5,
                           ),
                         ),
-                        SizedBox(
-                          width: 15,
-                        ),
-                        Image.asset(
-                          'assets/logo3.png',
-                          scale: 3,
+                        SizedBox(width: 15),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5.0),
+                          child: Image.asset(
+                            'assets/logo.png',
+                            scale: 3,
+                          ),
                         ),
                       ],
                     ),
@@ -53,30 +55,33 @@ class HomePage extends StatelessWidget {
                     height: 10,
                   ),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          _.profileApi.selectedChurchName,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            color: redColor,
-                            height: 1.5,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            _.profileApi.selectedChurchName,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: redColor,
+                              height: 1.5,
+                            ),
                           ),
                         ),
-                      ),
-                      _.profileApi.selectedChurchLogo != null
-                          ? Image(
-                              image: NetworkImage(
-                                _.profileApi.selectedChurchLogo,
-                                scale: 5,
-                              ),
-                              // height: 60,
-                            )
-                          : Container(),
-                    ],
+                        SizedBox(width: 2),
+                        _.profileApi.selectedChurchLogo != null
+                            ? Image(
+                                image: NetworkImage(
+                                    _.profileApi.selectedChurchLogo,
+                                    scale: 5.5),
+                                // height: 60,
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
                   // SizedBox(
                   //   width: 20,
@@ -85,34 +90,95 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: _.topCarouselMenu.map<Widget>((single) {
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: _.topCarouselMenu.map<Widget>((single) {
+                          return GestureDetector(
+                            onTap: () {
+                              _.setCurrentActive(single.id);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 25, vertical: 15),
+                              margin: const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                color: single.id == _.currentCarouselSelected
+                                    ? redColor
+                                    : lightGreyColor,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      single.icon,
+                                      color:
+                                          single.id == _.currentCarouselSelected
+                                              ? Colors.white
+                                              : greyColor2,
+                                      width: 20,
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Text(
+                                      single.title,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                        color: single.id ==
+                                                _.currentCarouselSelected
+                                            ? Colors.white
+                                            : greyColor2,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                          children: _
+                              .topCarouselMenu[_.currentCarouselSelected - 1]
+                              .child
+                              .map<Widget>((single) {
                         return GestureDetector(
                           onTap: () {
-                            _.setCurrentActive(single.id);
+                            Get.toNamed(single.path);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 15),
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
                             margin: const EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
-                              color: single.id == _.currentCarouselSelected
-                                  ? redColor
-                                  : lightGreyColor,
+                              border: Border.all(
+                                width: 1,
+                                color: redColor,
+                              ),
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
                               child: Row(
                                 children: [
-                                  Image.asset(
+                                  SvgPicture.asset(
                                     single.icon,
-                                    color:
-                                        single.id == _.currentCarouselSelected
-                                            ? Colors.white
-                                            : greyColor2,
-                                    width: 20,
+                                    color: redColor,
+                                    width: 23,
                                   ),
                                   SizedBox(
                                     width: 10,
@@ -123,10 +189,7 @@ class HomePage extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w700,
-                                      color:
-                                          single.id == _.currentCarouselSelected
-                                              ? Colors.white
-                                              : greyColor2,
+                                      color: redColor,
                                     ),
                                   ),
                                 ],
@@ -134,67 +197,20 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                         );
-                      }).toList(),
+                      }).toList()),
                     ),
                   ),
-                  SizedBox(height: 10),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                        children: _
-                            .topCarouselMenu[_.currentCarouselSelected - 1]
-                            .child
-                            .map<Widget>((single) {
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(single.path);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
-                          ),
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: 1,
-                              color: redColor,
-                            ),
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                SvgPicture.asset(
-                                  single.icon,
-                                  color: redColor,
-                                  width: 23,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  single.title,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700,
-                                    color: redColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList()),
+                  SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: bulletinsFeed(_),
                   ),
                   SizedBox(height: 30),
-                  bulletinsFeed(_),
-                  SizedBox(height: 30),
-                  Container(
-                    height: 250,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: GridView(
+                      shrinkWrap: true,
+                      primary: false,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 10,
@@ -267,66 +283,71 @@ class HomePage extends StatelessWidget {
                   //   ),
                   // ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(BlogPage(), arguments: {
-                              'blogName': _.categories[0]["name"]
-                            });
-                          },
-                          child: Container(
-                            // margin: EdgeInsets.only(right: 20),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            child: Text(
-                              _.categories[0]["name"],
-                              style: TextStyle(
-                                color: Colors.white,
-                                height: 1.5,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: _.categories.isEmpty
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(BlogPage(), arguments: {
+                                      'blogName': _.categories[0]["name"]
+                                    });
+                                  },
+                                  child: Container(
+                                    // margin: EdgeInsets.only(right: 20),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 15,
+                                    ),
+                                    child: Text(
+                                      _.categories[0]["name"],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Container(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(BlogPage(), arguments: {
+                                      'blogName': _.categories[1]["name"]
+                                    });
+                                  },
+                                  child: Container(
+                                    // margin: EdgeInsets.only(right: 20),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 15,
+                                    ),
+                                    child: Text(
+                                      _.categories[1]["name"],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                      ),
-                      Container(
-                        child: GestureDetector(
-                          onTap: () {
-                            Get.to(BlogPage(), arguments: {
-                              'blogName': _.categories[1]["name"]
-                            });
-                          },
-                          child: Container(
-                            // margin: EdgeInsets.only(right: 20),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 10,
-                            ),
-                            child: Text(
-                              _.categories[1]["name"],
-                              style: TextStyle(
-                                color: Colors.white,
-                                height: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
                   ),
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
@@ -404,6 +425,13 @@ buildQuickMenuItem({
         horizontal: 5,
       ),
       decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+              color: Colors.grey.withOpacity(0.05),
+              blurRadius: 4,
+              spreadRadius: 3,
+              offset: Offset(0, 0))
+        ],
         // boxShadow: [
         //   BoxShadow(
         //     color: greyColor,

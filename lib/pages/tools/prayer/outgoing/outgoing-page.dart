@@ -66,7 +66,7 @@ class OutgoingPage extends StatelessWidget {
                           text: "New Prayers",
                         ),
                         Tab(
-                          text: "Recent Prayers",
+                          text: "Previous Prayers",
                         )
                       ],
                     ),

@@ -163,7 +163,7 @@ class HomeController extends GetxController {
           path: Routes.live,
         ),
         Child(
-          title: "Prayometer",
+          title: "Prayerometer",
           icon: "assets/icon/038-speedometer.svg",
           path: Routes.prayer,
         ),

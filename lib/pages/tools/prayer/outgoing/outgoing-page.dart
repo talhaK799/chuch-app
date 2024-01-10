@@ -42,21 +42,21 @@ class OutgoingPage extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Outgoing prayers',
+                      'My Outgoing prayers',
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.w700,
                         height: 1.5,
                       ),
                     ),
-                    Text(
-                      'Church prayer request payers',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w300,
-                        height: 1.5,
-                      ),
-                    ),
+                    // Text(
+                    //   'Church prayer request payers',
+                    //   style: TextStyle(
+                    //     fontSize: 18,
+                    //     fontWeight: FontWeight.w300,
+                    //     height: 1.5,
+                    //   ),
+                    // ),
                     SizedBox(height: 10),
                     TabBar(
                       indicatorColor: redColor,

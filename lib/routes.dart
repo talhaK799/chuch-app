@@ -105,7 +105,7 @@ class Routes {
     GetPage(name: initial, page: () => InitialPage()),
     GetPage(name: splash, page: () => SplashPage()),
     GetPage(name: photoGallery, page: () => PhotoGalleryPage()),
-    GetPage(name: prayerometer, page: () => PrayeroMeterPage()),
+    // GetPage(name: prayerometer, page: () => PrayeroMeterPage()),
     GetPage(name: invite, page: () => InvitePage()),
     GetPage(name: transfer, page: () => MemberTransferPage()),
     GetPage(name: jobs, page: () => JobsPage()),

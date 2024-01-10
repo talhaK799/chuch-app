@@ -11,6 +11,7 @@ class CreatePrayController extends GetxController {
 
   bool anonymous = false;
   bool globalCommunity = false;
+  bool localCommunity = false;
 
   handleOnChnageGCommunity(bool? value) {
     globalCommunity = value ?? false;
@@ -19,6 +20,11 @@ class CreatePrayController extends GetxController {
 
   handleOnChnageAnonymus(bool? value) {
     anonymous = value ?? false;
+    update();
+  }
+
+  handleOnChnageLocal(bool? value) {
+    localCommunity = value ?? false;
     update();
   }
 

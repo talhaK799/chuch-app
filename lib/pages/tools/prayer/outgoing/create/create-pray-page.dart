@@ -76,18 +76,20 @@ class CreatePrayPage extends StatelessWidget {
                                   _.handleOnChnageAnonymus(value);
                                 },
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Post as annonymus',
-                                    style: TextStyle(fontSize: 17.0),
-                                  ),
-                                  Text(
-                                    'If selected, your name will not be displayed.',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                ],
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Post as annonymus',
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    Text(
+                                      'If selected, your name will not be displayed.',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -113,6 +115,35 @@ class CreatePrayPage extends StatelessWidget {
                                     ),
                                     Text(
                                       'If selected, your pray will get posted outside your church.',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Checkbox(
+                                checkColor: Colors.white,
+                                activeColor: redColor,
+                                value: _.localCommunity,
+                                onChanged: (bool? value) {
+                                  _.handleOnChnageLocal(value);
+                                },
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Post in local community',
+                                      style: TextStyle(fontSize: 17.0),
+                                    ),
+                                    Text(
+                                      'If selected, your pray will get posted inside your church.',
                                       style: TextStyle(color: Colors.grey),
                                     ),
                                   ],

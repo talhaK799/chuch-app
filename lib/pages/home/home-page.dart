@@ -266,6 +266,34 @@ class HomePage extends StatelessWidget {
                             Get.toNamed(Routes.calendar);
                           },
                         ),
+                        buildQuickMenuItem(
+                          name: _.categories[0]["name"],
+                          assetUrl: 'assets/icon/Calendar2.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.to(BlogPage(), arguments: {
+                              'blogName': _.categories[0]["name"]
+                            });
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: _.categories[1]["name"],
+                          assetUrl: 'assets/icon/Calendar2.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.to(BlogPage(), arguments: {
+                              'blogName': _.categories[1]["name"]
+                            });
+                          },
+                        ),
+                        buildQuickMenuItem(
+                          name: 'birthday Board',
+                          assetUrl: 'assets/icon/Calendar2.png',
+                          bgColor: redColor.withOpacity(0.2),
+                          action: () {
+                            Get.toNamed(Routes.birthdayBoard);
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -283,72 +311,72 @@ class HomePage extends StatelessWidget {
                   //   ),
                   // ),
 
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: _.categories.isEmpty
-                        ? Container()
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.to(BlogPage(), arguments: {
-                                      'blogName': _.categories[0]["name"]
-                                    });
-                                  },
-                                  child: Container(
-                                    // margin: EdgeInsets.only(right: 20),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 15,
-                                    ),
-                                    child: Text(
-                                      _.categories[0]["name"],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.to(BlogPage(), arguments: {
-                                      'blogName': _.categories[1]["name"]
-                                    });
-                                  },
-                                  child: Container(
-                                    // margin: EdgeInsets.only(right: 20),
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(30),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 20,
-                                      vertical: 15,
-                                    ),
-                                    child: Text(
-                                      _.categories[1]["name"],
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        height: 1.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  //   child: _.categories.isEmpty
+                  //       ? Container()
+                  //       : Row(
+                  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //           children: [
+                  //             Container(
+                  //               child: GestureDetector(
+                  //                 onTap: () {
+                  //                   Get.to(BlogPage(), arguments: {
+                  //                     'blogName': _.categories[0]["name"]
+                  //                   });
+                  //                 },
+                  //                 child: Container(
+                  //                   // margin: EdgeInsets.only(right: 20),
+                  //                   alignment: Alignment.center,
+                  //                   decoration: BoxDecoration(
+                  //                     color: Colors.black,
+                  //                     borderRadius: BorderRadius.circular(30),
+                  //                   ),
+                  //                   padding: EdgeInsets.symmetric(
+                  //                     horizontal: 20,
+                  //                     vertical: 15,
+                  //                   ),
+                  //                   child: Text(
+                  //                     _.categories[0]["name"],
+                  //                     style: TextStyle(
+                  //                       color: Colors.white,
+                  //                       height: 1.5,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //             Container(
+                  //               child: GestureDetector(
+                  //                 onTap: () {
+                  //                   Get.to(BlogPage(), arguments: {
+                  //                     'blogName': _.categories[1]["name"]
+                  //                   });
+                  //                 },
+                  //                 child: Container(
+                  //                   // margin: EdgeInsets.only(right: 20),
+                  //                   alignment: Alignment.center,
+                  //                   decoration: BoxDecoration(
+                  //                     color: Colors.black,
+                  //                     borderRadius: BorderRadius.circular(30),
+                  //                   ),
+                  //                   padding: EdgeInsets.symmetric(
+                  //                     horizontal: 20,
+                  //                     vertical: 15,
+                  //                   ),
+                  //                   child: Text(
+                  //                     _.categories[1]["name"],
+                  //                     style: TextStyle(
+                  //                       color: Colors.white,
+                  //                       height: 1.5,
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             )
+                  //           ],
+                  //         ),
+                  // ),
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
                   //   mainAxisAlignment: MainAxisAlignment.center,

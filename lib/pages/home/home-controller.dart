@@ -145,6 +145,11 @@ class HomeController extends GetxController {
           icon: "assets/icon/035-email.svg",
           path: Routes.transfer,
         ),
+        Child(
+          title: "Attendance",
+          icon: "assets/icon/039-writing.svg",
+          path: Routes.attendance,
+        ),
       ],
     ),
     TopCarouselMenu(

@@ -37,6 +37,7 @@ import 'package:churchappenings/pages/tools/tools-page.dart';
 import 'package:get/get.dart';
 
 import 'pages/live_stream/live_stream_page.dart';
+import 'pages/tools/attendance/attendance_page.dart';
 
 class Routes {
   //Auth
@@ -67,6 +68,7 @@ class Routes {
   static const String jobs = '/jobs';
   static const String invite = '/invite';
   static const String transfer = '/transfer';
+  static const String attendance = '/attendance';
 
   // -- My Events
   static const String myevent = '/myevent';
@@ -108,6 +110,7 @@ class Routes {
     // GetPage(name: prayerometer, page: () => PrayeroMeterPage()),
     GetPage(name: invite, page: () => InvitePage()),
     GetPage(name: transfer, page: () => MemberTransferPage()),
+    GetPage(name: attendance, page: () => AttendancePage()),
     GetPage(name: jobs, page: () => JobsPage()),
     GetPage(name: guestbook, page: () => GuestBookPage()),
     GetPage(name: login, page: () => LoginPage()),

@@ -266,26 +266,26 @@ class HomePage extends StatelessWidget {
                             Get.toNamed(Routes.calendar);
                           },
                         ),
-                        buildQuickMenuItem(
-                          name: _.categories[0]["name"],
-                          assetUrl: 'assets/icon/Calendar2.png',
-                          bgColor: redColor.withOpacity(0.2),
-                          action: () {
-                            Get.to(BlogPage(), arguments: {
-                              'blogName': _.categories[0]["name"]
-                            });
-                          },
-                        ),
-                        buildQuickMenuItem(
-                          name: _.categories[1]["name"],
-                          assetUrl: 'assets/icon/Calendar2.png',
-                          bgColor: redColor.withOpacity(0.2),
-                          action: () {
-                            Get.to(BlogPage(), arguments: {
-                              'blogName': _.categories[1]["name"]
-                            });
-                          },
-                        ),
+                        // buildQuickMenuItem(
+                        //   name: _.categories[0]["name"],
+                        //   assetUrl: 'assets/icon/Calendar2.png',
+                        //   bgColor: redColor.withOpacity(0.2),
+                        //   action: () {
+                        //     Get.to(BlogPage(), arguments: {
+                        //       'blogName': _.categories[0]["name"]
+                        //     });
+                        //   },
+                        // ),
+                        // buildQuickMenuItem(
+                        //   name: _.categories[1]["name"],
+                        //   assetUrl: 'assets/icon/Calendar2.png',
+                        //   bgColor: redColor.withOpacity(0.2),
+                        //   action: () {
+                        //     Get.to(BlogPage(), arguments: {
+                        //       'blogName': _.categories[1]["name"]
+                        //     });
+                        //   },
+                        // ),
                         buildQuickMenuItem(
                           name: 'birthday Board',
                           assetUrl: 'assets/icon/Calendar2.png',
